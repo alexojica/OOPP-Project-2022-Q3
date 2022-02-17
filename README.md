@@ -11,7 +11,7 @@ Add your own name (do not add the names for others!) to the section below.
 | Profile Picture                                                                                         | Name                    | Email                           |
 |---------------------------------------------------------------------------------------------------------|-------------------------|---------------------------------|
 | ![](https://eu.ui-avatars.com/api/?name=OOPP&length=4&size=50&color=DDD&background=777&font-size=0.325) | Your Name Here| Y.NameHere@student.tudelft.nl   |
-| ![](https://www.gravatar.com/avatar/826172ea0204ce87877995c5d4b06752) | Alexandru-Nicolae Ojica | A.N.Ojica-1@student.tudelft.nl  |
+| ![](https://secure.gravatar.com/avatar/826172ea0204ce87877995c5d4b06752?s=45&d=identicon) | Alexandru-Nicolae Ojica | A.N.Ojica-1@student.tudelft.nl  |
 | ![](https://secure.gravatar.com/avatar/9f35036d93b61d5bf3eeffe3fa7d51e0?s=45&d=identicon) | Andrei Simionescu | A.Simionescu@student.tudelft.nl |
 | ![](https://secure.gravatar.com/avatar/3d340087427982dadb88d80e548e5d5a?s=45&d=identicon) | Arda Cengaver | A.Cengaver@student.tudelft.nl   |
 | ![](https://secure.gravatar.com/avatar/7ab8a5321bca063528703654c1a975c8?s=45&d=identicon) | Ilias McAuliffe| I.McAuliffe@student.tudelft.nl  |
