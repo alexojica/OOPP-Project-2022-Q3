@@ -15,12 +15,8 @@ Add your own name (do not add the names for others!) to the section below.
 | ![](https://secure.gravatar.com/avatar/9f35036d93b61d5bf3eeffe3fa7d51e0?s=45&d=identicon) | Andrei Simionescu | A.Simionescu@student.tudelft.nl |
 | ![](https://secure.gravatar.com/avatar/3d340087427982dadb88d80e548e5d5a?s=45&d=identicon) | Arda Cengaver | A.Cengaver@student.tudelft.nl   |
 | ![](https://secure.gravatar.com/avatar/7ab8a5321bca063528703654c1a975c8?s=45&d=identicon) | Ilias McAuliffe| I.McAuliffe@student.tudelft.nl  |
+| ![](https://secure.gravatar.com/avatar/79607ed839f267b4da9815c5ea20a0bd?s=45&d=identicon) | Dragos Dumitrescu| D.Dumitrescu@student.tudelft.nl  |
 
-<!-- Instructions (remove once assignment has been completed -->
-<!-- - Add (only!) your own name to the table above (use Markdown formatting) -->
-<!-- - Mention your *student* email address -->
-<!-- - Preferably add a recognizable photo, otherwise add your GitLab photo -->
-<!-- - (please make sure the photos have the same size) --> 
 
 ## How to run it
 
