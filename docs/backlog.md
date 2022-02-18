@@ -3,7 +3,6 @@
 * As a system, each question must have 3 distinct answers
 * As a player I must receive points for each question based on whether the question was answered correctly.
 * As a player I must be able to play single player games.
-* As a player, I must be able to see other people’s names and points in the on-going game
 * As a player, I must have limited time to answer each question (10 seconds)
 * As a player I must be able to quit the game whenever I want to
 * As a system I must have enough different questions so the player engagement is preserved
@@ -20,6 +19,7 @@
 * (NFR*) As a player I want multiplayer games to be synchronous.
 * As a player, I should be able to join a lobby of on-line players, and start the game whenever the lobby is full
 * As a player I should have 1 main lobby for multiplayer games, in which any player can start the game, which will then be started with all the players that are currently in that lobby.
+* As a player, I must be able to see other people’s names and points in the on-going game
 * As a player I should have a unique name in the game
 * As a system, I want the same activity not to be shown twice in the same game
 * As a player I should see my current score at all times during the game.
