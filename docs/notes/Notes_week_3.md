@@ -50,7 +50,7 @@ Date: 22/02/2022
 
 ## Scrum
 
-*One of the goals for the meetings is that each one of us knows what they will do this week according to scrum
+* One of the goals for the meetings is that each one of us knows what they will do this week according to scrum
 
 
 ## Extra Notes
