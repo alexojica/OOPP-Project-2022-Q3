@@ -12,6 +12,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: e6e6e6;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.GameMCQCtrl">
    <children>
+      <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" />
       <Pane layoutX="32.0" layoutY="223.0" prefHeight="82.0" prefWidth="110.0" style="-fx-background-color: ffffff;">
          <children>
             <ImageView fitHeight="67.0" fitWidth="98.0" layoutX="7.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true" />
