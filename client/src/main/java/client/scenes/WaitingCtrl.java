@@ -38,7 +38,7 @@ public class WaitingCtrl {
     }
 
     public void leaveLobby(){
-
+        mainCtrl.showGameModeSelection();
     }
 
     public void startGame(){

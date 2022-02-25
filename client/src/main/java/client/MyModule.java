@@ -15,20 +15,24 @@
  */
 package client;
 
+import client.scenes.*;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
-
-import client.scenes.AddQuoteCtrl;
-import client.scenes.MainCtrl;
-import client.scenes.QuoteOverviewCtrl;
 
 public class MyModule implements Module {
 
     @Override
     public void configure(Binder binder) {
         binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(AddQuoteCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(QuoteOverviewCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(HomeCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(LeaderboardCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(EstimationQuestionCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(GameMCQCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(GameOverCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(GameModeSelectionCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(MultiplayerMenuCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(TempLeaderboardCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(WaitingCtrl.class).in(Scopes.SINGLETON);
     }
 }

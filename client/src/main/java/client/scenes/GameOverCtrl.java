@@ -15,10 +15,10 @@ public class GameOverCtrl {
     }
 
     public void playAgain() {
-
+        mainCtrl.showGameModeSelection();
     }
 
     public void leaveGame() {
-
+        mainCtrl.showHome();
     }
 }

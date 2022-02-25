@@ -38,12 +38,18 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
 
-        var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
-        var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
+
+        var home = FXML.load(HomeCtrl.class, "client", "scenes", "Home.fxml");
+        var gameModeSelection = FXML.load(GameModeSelectionCtrl.class, "client", "scenes", "GameModeSelection.fxml");
+        var leaderboard = FXML.load(LeaderboardCtrl.class, "client", "scenes", "Leaderboard.fxml");
         var waiting = FXML.load(WaitingCtrl.class, "client", "scenes", "Waiting.fxml");
         var gameMCQ = FXML.load(GameMCQCtrl.class, "client", "scenes", "GameMCQ.fxml");
+        var estimationQuestion = FXML.load(EstimationQuestionCtrl.class, "client", "scenes", "EstimationQuestion.fxml");
+        var tempLeaderboard = FXML.load(TempLeaderboardCtrl.class, "client", "scenes", "TempLeaderboard.fxml");
+        var gameOver = FXML.load(GameOverCtrl.class, "client", "scenes", "GameOver.fxml");
+        var multiPlayerMenu = FXML.load(MultiplayerMenuCtrl.class, "client", "scenes", "MultiplayerMenu.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, overview, add, waiting, gameMCQ);
+        mainCtrl.initialize(primaryStage, home, leaderboard, gameModeSelection, multiPlayerMenu, estimationQuestion, gameMCQ, gameOver, waiting, tempLeaderboard);
     }
 }
