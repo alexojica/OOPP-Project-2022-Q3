@@ -30,8 +30,14 @@ public class MainCtrl {
     private AddQuoteCtrl addCtrl;
     private Scene add;
 
+    private WaitingCtrl waitingCtrl;
+    private Scene waiting;
+
+    private GameMCQCtrl gameMCQCtrl;
+    private Scene mcq;
+
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add) {
+                           Pair<AddQuoteCtrl, Parent> add, Pair<WaitingCtrl, Parent> waiting, Pair<GameMCQCtrl, Parent> mcq) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -39,7 +45,13 @@ public class MainCtrl {
         this.addCtrl = add.getKey();
         this.add = new Scene(add.getValue());
 
-        showOverview();
+        this.waitingCtrl = waiting.getKey();
+        this.waiting = new Scene(waiting.getValue());
+
+        this.gameMCQCtrl = mcq.getKey();
+        this.mcq = new Scene(mcq.getValue());
+
+        showWaiting();
         primaryStage.show();
     }
 
@@ -53,5 +65,16 @@ public class MainCtrl {
         primaryStage.setTitle("Quotes: Adding Quote");
         primaryStage.setScene(add);
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
+    }
+
+    public void showWaiting(){
+        primaryStage.setTitle("Waiting screen");
+        primaryStage.setScene(waiting);
+        waitingCtrl.load();
+    }
+
+    public void showGameMCQ(){
+        primaryStage.setTitle("Game screen");
+        primaryStage.setScene(mcq);
     }
 }
