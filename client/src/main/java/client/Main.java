@@ -20,7 +20,6 @@ import static com.google.inject.Guice.createInjector;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import client.scenes.HomeCtrl;
 import com.google.inject.Injector;
 
 import client.scenes.AddQuoteCtrl;
