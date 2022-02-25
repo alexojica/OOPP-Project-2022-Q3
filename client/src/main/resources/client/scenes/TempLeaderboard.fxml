@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.TempLeaderboardCtrl">
+   <children>
+      <Button layoutX="14.0" layoutY="343.0" mnemonicParsing="false" onAction="#leaveGame" prefHeight="45.0" prefWidth="50.0" text="Leave Game" wrapText="true" />
+      <TableView layoutX="164.0" layoutY="115.0" prefHeight="198.0" prefWidth="272.0">
+        <columns>
+          <TableColumn prefWidth="40.0" text="#rank" />
+          <TableColumn prefWidth="60.0" text="avatar" />
+            <TableColumn prefWidth="120.0" text="username" />
+            <TableColumn prefWidth="50.0" text="score" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>
