@@ -24,6 +24,6 @@ public class GameMCQCtrl {
     }
 
     public void leaveGame(){
-
+        mainCtrl.showHome();
     }
 }

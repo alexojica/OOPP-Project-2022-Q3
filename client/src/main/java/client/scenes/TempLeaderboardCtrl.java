@@ -15,7 +15,7 @@ public class TempLeaderboardCtrl {
     }
 
     public void leaveGame() {
-
+        mainCtrl.showHome();
     }
 
 }
