@@ -1,10 +1,7 @@
 package client.scenes;
 
-import client.Main;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 
 public class TempLeaderboardCtrl {
 
@@ -18,7 +15,7 @@ public class TempLeaderboardCtrl {
     }
 
     public void leaveGame() {
-        mainCtrl.showOverview(); //should go to splash screen
+
     }
 
 }

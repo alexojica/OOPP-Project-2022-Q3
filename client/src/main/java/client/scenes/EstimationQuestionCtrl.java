@@ -3,7 +3,6 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
 public class EstimationQuestionCtrl {
@@ -21,10 +20,10 @@ public class EstimationQuestionCtrl {
     }
 
     public void submit() {
-        //should send answer from answer field to somewhere (and then disable)
+
     }
 
     public void leaveGame() {
-        mainCtrl.showOverview(); //should go to splash screen
+
     }
 }

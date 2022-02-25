@@ -2,8 +2,6 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 
 public class GameOverCtrl {
 
@@ -17,10 +15,10 @@ public class GameOverCtrl {
     }
 
     public void playAgain() {
-        mainCtrl.showOverview(); //keep username + needs to go to lobby instead of overview
+
     }
 
     public void leaveGame() {
-        mainCtrl.showOverview(); //should go to splash screen
+
     }
 }
