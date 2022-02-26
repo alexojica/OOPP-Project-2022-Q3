@@ -34,8 +34,7 @@ public class Player {
     @Column(name = "lobbyId")
     public int lobbyId;
 
-    @SuppressWarnings("unused")
-    private Player() {
+    public Player() {
         // for object mapper
     }
 
