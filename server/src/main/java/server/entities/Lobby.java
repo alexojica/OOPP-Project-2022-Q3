@@ -76,12 +76,12 @@ public class Lobby {
         this.hostId = hostId;
     }
 
-    public ArrayList<Integer> getPlayers() {
+    public ArrayList<Integer> getPlayerIds() {
         return playerIds;
     }
 
-    public void setPlayers(ArrayList<Integer> players) {
-        this.playerIds = players;
+    public void setPlayerIds(ArrayList<Integer> playerIds) {
+        this.playerIds = playerIds;
     }
 
     @Override
