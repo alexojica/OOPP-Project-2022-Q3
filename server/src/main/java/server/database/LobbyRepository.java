@@ -6,5 +6,5 @@ import server.entities.Lobby;
 import javax.transaction.Transactional;
 
 @Transactional
-public interface LobbyRepository extends JpaRepository<Lobby, Integer> {
+public interface LobbyRepository extends JpaRepository<Lobby, Long> {
 }
