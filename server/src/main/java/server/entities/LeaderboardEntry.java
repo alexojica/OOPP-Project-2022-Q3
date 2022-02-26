@@ -1,17 +1,23 @@
 package server.entities;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "Leadearboard")
 public class LeaderboardEntry {
 
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     public long id;
 
+    @Column(name = "score")
     public int score;
+
+    @Column(name = "name")
     public String name;
+
+    @Column(name = "avatar")
     public String avatarPath;
 
     @SuppressWarnings("unused")

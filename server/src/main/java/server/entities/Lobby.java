@@ -4,24 +4,31 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
+@Entity
+@Table(name = "Lobby")
 public class Lobby {
 
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     public long id;
 
+    @Column(name = "token")
     public Integer token;
+
+    @Column(name = "isPublic")
     public Boolean isPublic;
+
+    @Column(name = "hostId")
     public Integer hostId;
-    public List<Player> players;
+
+    @Column(name = "listOfPlayers")
+    public ArrayList<Integer> playerIds;
 
     @SuppressWarnings("unused")
     private Lobby() {
@@ -36,7 +43,7 @@ public class Lobby {
     public Lobby(Integer token) {
         this.token = token;
         this.isPublic = true;
-        this.players = new ArrayList<>();
+        this.playerIds = new ArrayList<>();
         this.hostId = null;
     }
 
@@ -49,7 +56,7 @@ public class Lobby {
     {
         this.token = token;
         this.hostId = hostId;
-        this.players = new ArrayList<>();
+        this.playerIds = new ArrayList<>();
         this.isPublic = false;
     }
 
@@ -69,12 +76,12 @@ public class Lobby {
         this.hostId = hostId;
     }
 
-    public List<Player> getPlayers() {
-        return players;
+    public ArrayList<Integer> getPlayers() {
+        return playerIds;
     }
 
-    public void setPlayers(List<Player> players) {
-        this.players = players;
+    public void setPlayers(ArrayList<Integer> players) {
+        this.playerIds = players;
     }
 
     @Override

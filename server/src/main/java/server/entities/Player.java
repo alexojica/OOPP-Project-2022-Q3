@@ -4,25 +4,34 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
-
+@Entity
+@Table(name = "Player")
 public class Player {
+
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     public long id;
 
+    @Column(name = "name")
     public String name;
+
+    @Column(name = "avatar")
     public String avatar; //folder path
+
+    @Column(name = "score")
     public Integer score;
-    public List<Boolean> usedPowerups;
+
+    @Column(name = "jokers")
+    public ArrayList<Boolean> usedPowerups;
+
+    @Column(name = "lobbyId")
     public int lobbyId;
 
     @SuppressWarnings("unused")
@@ -81,7 +90,7 @@ public class Player {
         this.score = score;
     }
 
-    public List<Boolean> getUsedPowerups() {
+    public ArrayList<Boolean> getUsedPowerups() {
         return usedPowerups;
     }
 
@@ -94,7 +103,7 @@ public class Player {
         usedPowerups.set(id,true);
     }
 
-    public void setUsedPowerups(List<Boolean> usedPowerups) {
+    public void setUsedPowerups(ArrayList<Boolean> usedPowerups) {
         this.usedPowerups = usedPowerups;
     }
 
