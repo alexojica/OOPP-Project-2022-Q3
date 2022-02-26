@@ -14,6 +14,11 @@ public class LeaderboardEntry {
     public String name;
     public String avatarPath;
 
+    @SuppressWarnings("unused")
+    private LeaderboardEntry() {
+        // for object mapper
+    }
+
     public LeaderboardEntry(int score, String name, String avatarPath) {
         this.score = score;
         this.name = name;
