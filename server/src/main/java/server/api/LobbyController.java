@@ -11,33 +11,33 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import server.database.PlayerRepository;
-import server.entities.Player;
+import server.database.LobbyRepository;
+import server.entities.Lobby;
 
 @RestController
-public class PlayerController {
+public class LobbyController {
     
     @Autowired
-    private PlayerRepository repository;
+    private LobbyRepository repository;
 
-    @PostMapping("/api/addPlayer")
+    @PostMapping("/api/addLobby")
     @ResponseBody
-    public String addPlayer(@RequestBody Player newPlayer){
-        repository.save(newPlayer);
-        return "Saved Player";
+    public String addLobby(@RequestBody Lobby newLobby){
+        repository.save(newLobby);
+        return "Saved Lobby";
     }
 
-    @GetMapping("/api/getAllPlayers")
+    @GetMapping("/api/getAllLobbies")
     @ResponseBody
-    public List<Player> getAllPlayers(){
-        List<Player> lis = repository.findAll();
+    public List<Lobby> getAllLobbies(){
+        List<Lobby> lis = repository.findAll();
         return lis;
     }
 
-    @GetMapping("/api/getPlayer")
+    @GetMapping("/api/getLobby")
     @ResponseBody
-    public Optional<Player> getPlayer(@RequestParam Long playerId){
-        Optional<Player> found = repository.findById(playerId);
+    public Optional<Lobby> getLobby(@RequestParam Long lobbyId){
+        Optional<Lobby> found = repository.findById(lobbyId);
         return found;
     }
 
