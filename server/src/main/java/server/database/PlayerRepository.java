@@ -6,5 +6,5 @@ import server.entities.Player;
 import javax.transaction.Transactional;
 
 @Transactional
-public interface PlayerRepository extends JpaRepository<Player, Integer> {
+public interface PlayerRepository extends JpaRepository<Player, Long> {
 }

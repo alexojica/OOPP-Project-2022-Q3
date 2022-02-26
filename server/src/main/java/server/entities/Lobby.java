@@ -19,7 +19,7 @@ public class Lobby {
     public long id;
 
     @Column(name = "token")
-    public Integer token;
+    public String token;
 
     @Column(name = "isPublic")
     public Boolean isPublic;
@@ -40,7 +40,7 @@ public class Lobby {
      * hostId remains null, as there is no host of a public lobby
      * @param token
      */
-    public Lobby(Integer token) {
+    public Lobby(String token) {
         this.token = token;
         this.isPublic = true;
         this.playerIds = new ArrayList<>();
@@ -52,7 +52,7 @@ public class Lobby {
      * @param token
      * @param hostId
      */
-    public Lobby(Integer token, Integer hostId)
+    public Lobby(String token, Integer hostId)
     {
         this.token = token;
         this.hostId = hostId;
@@ -60,11 +60,11 @@ public class Lobby {
         this.isPublic = false;
     }
 
-    public Integer getToken() {
+    public String getToken() {
         return token;
     }
 
-    public void setToken(Integer token) {
+    public void setToken(String token) {
         this.token = token;
     }
 
@@ -76,12 +76,12 @@ public class Lobby {
         this.hostId = hostId;
     }
 
-    public ArrayList<Integer> getPlayers() {
+    public ArrayList<Integer> getPlayerIds() {
         return playerIds;
     }
 
-    public void setPlayers(ArrayList<Integer> players) {
-        this.playerIds = players;
+    public void setPlayerIds(ArrayList<Integer> playerIds) {
+        this.playerIds = playerIds;
     }
 
     @Override
