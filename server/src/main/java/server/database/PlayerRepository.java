@@ -7,6 +7,4 @@ import javax.transaction.Transactional;
 
 @Transactional
 public interface PlayerRepository extends JpaRepository<Player, Long> {
-
-    //Optional<Player> findPlayerById(long playerId)
 }
