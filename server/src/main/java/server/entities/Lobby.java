@@ -30,8 +30,7 @@ public class Lobby {
     @Column(name = "listOfPlayers")
     public ArrayList<Integer> playerIds;
 
-    @SuppressWarnings("unused")
-    private Lobby() {
+    public Lobby() {
         // for object mapper
     }
 
