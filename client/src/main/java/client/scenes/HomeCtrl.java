@@ -55,7 +55,10 @@ public class HomeCtrl {
 
     private Player getPlayer()
     {
-        var p = new Player(name.getText());
+        String userName = name.getText();
+        if(userName.length() == 0)
+            userName = "testUserX";
+        var p = new Player(userName);
         return p;
     }
 
