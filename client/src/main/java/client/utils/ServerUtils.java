@@ -30,6 +30,8 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 
+import server.entities.Player;
+
 public class ServerUtils {
 
     private static final String SERVER = "http://localhost:8080/";
@@ -44,19 +46,20 @@ public class ServerUtils {
         }
     }
 
-    public List<Quote> getQuotes() {
+    public List<Player> getPlayers() {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/quotes") //
+                .target(SERVER).path("api/getAllPlayers") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .get(new GenericType<List<Quote>>() {});
+                .get(new GenericType<List<Player>>() {});
     }
 
-    public Quote addQuote(Quote quote) {
+
+    public Player addPlayer(Player player) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/quotes") //
+                .target(SERVER).path("api/addPlayer") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
+                .post(Entity.entity(player, APPLICATION_JSON), Player.class);
     }
 }
