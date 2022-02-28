@@ -24,34 +24,108 @@ public class MainCtrl {
 
     private Stage primaryStage;
 
-    private QuoteOverviewCtrl overviewCtrl;
-    private Scene overview;
+    private WaitingCtrl waitingCtrl;
+    private Scene waiting;
 
-    private AddQuoteCtrl addCtrl;
-    private Scene add;
+    private GameMCQCtrl gameMCQCtrl;
+    private Scene gameMCQ;
 
-    public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add) {
+    private GameModeSelectionCtrl gameModeSelectionCtrl;
+    private Scene gameModeSelection;
+
+    private EstimationQuestionCtrl estimationQuestionCtrl;
+    private Scene estimation;
+
+    private GameOverCtrl gameOverCtrl;
+    private Scene gameOver;
+
+    private HomeCtrl homeCtrl;
+    private Scene home;
+
+    private LeaderboardCtrl leaderboardCtrl;
+    private Scene leaderboard;
+
+    private MultiplayerMenuCtrl multiplayerMenuCtrl;
+    private Scene multiplayerMenu;
+
+    private TempLeaderboardCtrl tempLeaderboardCtrl;
+    private Scene tempLeaderboard;
+
+    public void initialize(Stage primaryStage, Pair<HomeCtrl, Parent> home, Pair<LeaderboardCtrl, Parent> leaderboard,
+                           Pair<GameModeSelectionCtrl, Parent> gameModeSelection, Pair<MultiplayerMenuCtrl, Parent> multiplayerMenu,
+                           Pair<EstimationQuestionCtrl, Parent> estimationQuestion, Pair<GameMCQCtrl, Parent> gameMCQ, Pair<GameOverCtrl, Parent> gameOver,
+                           Pair<WaitingCtrl, Parent> waiting, Pair<TempLeaderboardCtrl, Parent> tempLeaderboard) {
         this.primaryStage = primaryStage;
-        this.overviewCtrl = overview.getKey();
-        this.overview = new Scene(overview.getValue());
 
-        this.addCtrl = add.getKey();
-        this.add = new Scene(add.getValue());
 
-        showOverview();
+        this.waitingCtrl = waiting.getKey();
+        this.waiting = new Scene(waiting.getValue());
+
+        this.gameMCQCtrl = gameMCQ.getKey();
+        this.gameMCQ = new Scene(gameMCQ.getValue());
+
+        this.gameModeSelectionCtrl = gameModeSelection.getKey();
+        this.gameModeSelection = new Scene(gameModeSelection.getValue());
+
+        this.estimationQuestionCtrl = estimationQuestion.getKey();
+        this.estimation = new Scene(estimationQuestion.getValue());
+
+        this.gameOverCtrl = gameOver.getKey();
+        this.gameOver = new Scene(gameOver.getValue());
+
+        this.homeCtrl = home.getKey();
+        this.home = new Scene(home.getValue());
+
+        this.leaderboardCtrl = leaderboard.getKey();
+        this.leaderboard = new Scene(leaderboard.getValue());
+
+        this.multiplayerMenuCtrl = multiplayerMenu.getKey();
+        this.multiplayerMenu = new Scene(multiplayerMenu.getValue());
+
+        this.tempLeaderboardCtrl = tempLeaderboard.getKey();
+        this.tempLeaderboard = new Scene(tempLeaderboard.getValue());
+
+        showHome();
         primaryStage.show();
     }
 
-    public void showOverview() {
-        primaryStage.setTitle("Quotes: Overview");
-        primaryStage.setScene(overview);
-        overviewCtrl.refresh();
+    public void showWaiting(){
+        primaryStage.setTitle("WaitingScreen");
+        primaryStage.setScene(waiting);
+        waitingCtrl.load();
     }
 
-    public void showAdd() {
-        primaryStage.setTitle("Quotes: Adding Quote");
-        primaryStage.setScene(add);
-        add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
+    public void showGameMCQ(){
+        primaryStage.setTitle("GameScreen");
+        primaryStage.setScene(gameMCQ);
+    }
+
+    public void showHome(){
+        primaryStage.setTitle("Home");
+        primaryStage.setScene(home);
+    }
+
+    public void showLeaderboard(){
+        primaryStage.setTitle("Leaderboard");
+        primaryStage.setScene(leaderboard);
+    }
+    public void showGameModeSelection(){
+        primaryStage.setTitle("GameModeSelection");
+        primaryStage.setScene(gameModeSelection);
+    }
+
+    public void showGameOver(){
+        primaryStage.setTitle("GameOver");
+        primaryStage.setScene(home);
+    }
+
+    public void showMultiplayerMenu(){
+        primaryStage.setTitle("MultiplayerMenu");
+        primaryStage.setScene(multiplayerMenu);
+    }
+
+    public void showTempLeaderboard(){
+        primaryStage.setTitle("TempLeaderboard");
+        primaryStage.setScene(tempLeaderboard);
     }
 }
