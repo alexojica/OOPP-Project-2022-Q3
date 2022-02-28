@@ -1,12 +1,16 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 
 import javax.inject.Inject;
-import java.awt.*;
 
-import server.entities.Player;
+import javafx.scene.control.Alert;
+import javafx.scene.control.TextField;
+
+import commons.Player;
+import javafx.stage.Modality;
 
 public class HomeCtrl {
 
@@ -24,7 +28,23 @@ public class HomeCtrl {
 
     public void play(){
 
-        server.addPlayer(getPlayer());
+        try
+        {
+            Player p = getPlayer();
+            System.out.println("Hello player: " + p);
+
+            server.addPlayer(p);
+
+        }
+        catch (WebApplicationException e)
+        {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            return;
+        }
+
 
         mainCtrl.showGameModeSelection();
     }
