@@ -25,12 +25,11 @@ import java.util.List;
 
 import org.glassfish.jersey.client.ClientConfig;
 
-import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 
-import server.entities.Player;
+import commons.Player;
 
 public class ServerUtils {
 
