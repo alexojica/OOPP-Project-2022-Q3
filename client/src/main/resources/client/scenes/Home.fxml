@@ -12,7 +12,7 @@
         <ImageView fitHeight="92.0" fitWidth="123.0" layoutX="226.0" layoutY="108.0" pickOnBounds="true" preserveRatio="true" />
         <Button focusTraversable="false" layoutX="349.0" layoutY="108.0" mnemonicParsing="false" prefHeight="92.0" prefWidth="25.0" text="&gt;" />
         <Button focusTraversable="false" layoutX="200.0" layoutY="108.0" mnemonicParsing="false" prefHeight="92.0" prefWidth="25.0" text="&lt;" />
-        <TextField alignment="CENTER" layoutX="213.0" layoutY="216.0" promptText="Username" />
+        <TextField fx:id="name" alignment="CENTER" layoutX="213.0" layoutY="216.0" promptText="Username" />
         <Button focusTraversable="false" layoutX="226.0" layoutY="248.0" mnemonicParsing="false" onAction="#play" prefHeight="26.0" prefWidth="123.0" text="Play" />
         <Label layoutX="270.0" layoutY="48.0" text="Quizzz" AnchorPane.topAnchor="48.0" />
       <Button focusTraversable="false" layoutX="234.0" layoutY="281.0" mnemonicParsing="false" onAction="#leaderboard" prefHeight="18.0" prefWidth="107.0" text="Leaderboard" />
