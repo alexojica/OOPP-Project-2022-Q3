@@ -20,6 +20,9 @@ public class MultiplayerMenuCtrl {
     }
 
     public void joinPublicLobby(){
+
+        //sends in also common lobby token
+
         mainCtrl.showWaiting();
     }
 

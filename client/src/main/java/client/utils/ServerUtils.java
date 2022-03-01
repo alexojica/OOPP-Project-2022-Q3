@@ -30,6 +30,7 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 
 import commons.Player;
+import commons.Lobby;
 
 public class ServerUtils {
 
@@ -60,5 +61,21 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(player, APPLICATION_JSON), Player.class);
+    }
+
+    public Lobby addLobby(Lobby lobby) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/addLobby") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(lobby, APPLICATION_JSON), Lobby.class);
+    }
+
+    public List<Lobby> getAllLobbies() {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/getAllLobbies") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<List<Lobby>>() {});
     }
 }
