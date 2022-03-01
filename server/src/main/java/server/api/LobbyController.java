@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import server.database.LobbyRepository;
-import server.entities.Lobby;
+import commons.Lobby;
 
 @RestController
 public class LobbyController {
@@ -22,9 +22,9 @@ public class LobbyController {
 
     @PostMapping("/api/addLobby")
     @ResponseBody
-    public String addLobby(@RequestBody Lobby newLobby){
+    public Lobby addLobby(@RequestBody Lobby newLobby){
         repository.save(newLobby);
-        return "Saved Lobby";
+        return newLobby;
     }
 
     @GetMapping("/api/getAllLobbies")
@@ -38,6 +38,13 @@ public class LobbyController {
     @ResponseBody
     public Optional<Lobby> getLobby(@RequestParam Long lobbyId){
         Optional<Lobby> found = repository.findById(lobbyId);
+        return found;
+    }
+
+    @GetMapping("/api/getLobbyByToken")
+    @ResponseBody
+    public Optional<Lobby> getLobbyByToken(@RequestParam String token){
+        Optional<Lobby> found = repository.findByToken(token);
         return found;
     }
 
