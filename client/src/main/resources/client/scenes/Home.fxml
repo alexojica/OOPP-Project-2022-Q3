@@ -8,7 +8,7 @@
 
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.HomeCtrl">
     <children>
-        <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" />
+        <ImageView fx:id="bgImage" fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" />
         <ImageView fitHeight="92.0" fitWidth="123.0" layoutX="226.0" layoutY="108.0" pickOnBounds="true" preserveRatio="true" />
         <Button focusTraversable="false" layoutX="349.0" layoutY="108.0" mnemonicParsing="false" prefHeight="92.0" prefWidth="25.0" text="&gt;" />
         <Button focusTraversable="false" layoutX="200.0" layoutY="108.0" mnemonicParsing="false" prefHeight="92.0" prefWidth="25.0" text="&lt;" />
