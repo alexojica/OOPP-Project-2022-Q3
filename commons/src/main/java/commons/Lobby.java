@@ -1,5 +1,6 @@
-package server.entities;
+package commons;
 
+import commons.Player;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -28,7 +29,7 @@ public class Lobby {
     public Integer hostId;
 
     @Column(name = "listOfPlayers")
-    public ArrayList<Integer> playerIds;
+    public ArrayList<Long> playerIds;
 
     public Lobby() {
         // for object mapper
@@ -59,6 +60,11 @@ public class Lobby {
         this.isPublic = false;
     }
 
+    public void addPlayerToLobby(Player player)
+    {
+        playerIds.add(player.getId());
+    }
+
     public String getToken() {
         return token;
     }
@@ -75,11 +81,11 @@ public class Lobby {
         this.hostId = hostId;
     }
 
-    public ArrayList<Integer> getPlayerIds() {
+    public ArrayList<Long> getPlayerIds() {
         return playerIds;
     }
 
-    public void setPlayerIds(ArrayList<Integer> playerIds) {
+    public void setPlayerIds(ArrayList<Long> playerIds) {
         this.playerIds = playerIds;
     }
 
