@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.ClientData;
 import client.utils.ServerUtils;
 import commons.Player;
 import javafx.beans.property.SimpleStringProperty;
@@ -37,6 +38,8 @@ public class WaitingCtrl implements Initializable {
     @FXML
     private Text lobbyCode;
 
+    private List<Player> activePlayers;
+
     @Inject
     public WaitingCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
@@ -54,9 +57,15 @@ public class WaitingCtrl implements Initializable {
         showActivePlayers();
     }
 
+    /**
+     * Method that shows active players in a given lobby
+     * The lobby field from CliendData should have been filled/updated prior to calling this method
+     * Is error prone, if not done correctly
+     */
+
     public void showActivePlayers()
     {
-        List<Player> activePlayers = server.getPlayers();
+        activePlayers = ClientData.getClientLobby().getPlayersInLobby();
 
         refresh();
     }
@@ -70,8 +79,7 @@ public class WaitingCtrl implements Initializable {
 
     public void refresh()
     {
-        var players = server.getPlayers();
-        playerData = FXCollections.observableList(players);
+        playerData = FXCollections.observableList(activePlayers);
         tableView.setItems(playerData);
     }
 
