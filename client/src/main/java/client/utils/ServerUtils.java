@@ -78,4 +78,13 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Lobby>>() {});
     }
+
+    public Lobby getLobbyByToken(String token){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/getLobbyByToken")
+                .queryParam("token",token)//
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<Lobby>() {});
+    }
 }
