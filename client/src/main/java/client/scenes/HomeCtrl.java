@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.ClientData;
 import client.utils.ServerUtils;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
@@ -60,6 +61,10 @@ public class HomeCtrl {
         if(userName.length() == 0)
             userName = "testUserX";
         var p = new Player(userName);
+
+        //store client player info
+        ClientData.setPlayer(p);
+
         return p;
     }
 
