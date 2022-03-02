@@ -112,15 +112,15 @@ public class Player {
         this.usedPowerups = usedPowerups;
     }
 
-    /*
+
     public int getLobbyId() {
-        return lobbyId;
+        return 5;
     }
 
     public void setLobbyId(int lobbyId) {
-        this.lobbyId = lobbyId;
+        return;
     }
-    */
+
 
     @Override
     public boolean equals(Object obj) {
