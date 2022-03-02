@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.ClientData;
 import client.utils.ServerUtils;
+import commons.Lobby;
 import commons.Player;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -84,6 +85,18 @@ public class WaitingCtrl implements Initializable {
     }
 
     public void leaveLobby(){
+        Lobby currentLobbby = ClientData.getClientLobby();
+        Player clientPlayer = ClientData.getClientPlayer();
+
+        //set client lobby to exited
+        ClientData.setLobby(null);
+
+        //removes player from lobby (client sided)
+        currentLobbby.removePlayerFromLobby(clientPlayer);
+
+        //save the new state of the lobby to the repository again
+        server.addLobby(currentLobbby);
+
         mainCtrl.showGameModeSelection();
     }
 

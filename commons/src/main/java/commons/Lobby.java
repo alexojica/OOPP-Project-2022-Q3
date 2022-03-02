@@ -74,6 +74,12 @@ public class Lobby {
         playersInLobby.add(player);
     }
 
+    public void removePlayerFromLobby(Player player)
+    {
+        playerIds.remove(player.getId());
+        playersInLobby.remove(player);
+    }
+
     public List<Player> getPlayersInLobby()
     {
         return playersInLobby;
