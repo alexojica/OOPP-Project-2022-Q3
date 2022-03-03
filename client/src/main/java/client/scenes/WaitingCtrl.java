@@ -13,7 +13,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.text.Text;
-import org.checkerframework.checker.units.qual.C;
 
 import javax.inject.Inject;
 import java.net.URL;
