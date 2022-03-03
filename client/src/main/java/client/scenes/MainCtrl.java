@@ -103,6 +103,7 @@ public class MainCtrl {
     public void showHome(){
         primaryStage.setTitle("Home");
         primaryStage.setScene(home);
+        homeCtrl.onLoad();
     }
 
     public void showLeaderboard(){

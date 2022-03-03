@@ -1,4 +1,4 @@
-package server.entities;
+package commons;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
@@ -28,7 +29,13 @@ public class Lobby {
     public Integer hostId;
 
     @Column(name = "listOfPlayers")
-    public ArrayList<Integer> playerIds;
+    public ArrayList<Long> playerIds;
+
+    //might delete later
+    //saves computation power when translating from ids to Players;
+    //its even safer if we keep it can't hurt as if we don't store it in database
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    public List<Player> playersInLobby;
 
     public Lobby() {
         // for object mapper
@@ -43,6 +50,7 @@ public class Lobby {
         this.token = token;
         this.isPublic = true;
         this.playerIds = new ArrayList<>();
+        this.playersInLobby = new ArrayList<>();
         this.hostId = null;
     }
 
@@ -56,7 +64,25 @@ public class Lobby {
         this.token = token;
         this.hostId = hostId;
         this.playerIds = new ArrayList<>();
+        this.playersInLobby = new ArrayList<>();
         this.isPublic = false;
+    }
+
+    public void addPlayerToLobby(Player player)
+    {
+        playerIds.add(player.getId());
+        playersInLobby.add(player);
+    }
+
+    public void removePlayerFromLobby(Player player)
+    {
+        playerIds.remove(player.getId());
+        playersInLobby.remove(player);
+    }
+
+    public List<Player> getPlayersInLobby()
+    {
+        return playersInLobby;
     }
 
     public String getToken() {
@@ -75,11 +101,11 @@ public class Lobby {
         this.hostId = hostId;
     }
 
-    public ArrayList<Integer> getPlayerIds() {
+    public ArrayList<Long> getPlayerIds() {
         return playerIds;
     }
 
-    public void setPlayerIds(ArrayList<Integer> playerIds) {
+    public void setPlayerIds(ArrayList<Long> playerIds) {
         this.playerIds = playerIds;
     }
 

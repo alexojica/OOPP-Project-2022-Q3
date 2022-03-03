@@ -44,6 +44,13 @@ public class Quote {
         // for object mappers
     }
 
+    //testing packages and classes
+    public Quote(String name)
+    {
+        this.person = null;
+        this.quote = name;
+    }
+
     public Quote(Person person, String quote) {
         this.person = person;
         this.quote = quote;

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import server.database.PlayerRepository;
-import server.entities.Player;
+import commons.Player;
 
 @RestController
 public class PlayerController {
@@ -22,9 +22,9 @@ public class PlayerController {
 
     @PostMapping("/api/addPlayer")
     @ResponseBody
-    public String addPlayer(@RequestBody Player newPlayer){
+    public Player addPlayer(@RequestBody Player newPlayer){
         repository.save(newPlayer);
-        return "Saved Player";
+        return newPlayer;
     }
 
     @GetMapping("/api/getAllPlayers")
