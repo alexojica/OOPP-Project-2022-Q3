@@ -13,11 +13,14 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.text.Text;
+import org.checkerframework.checker.units.qual.C;
 
 import javax.inject.Inject;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class WaitingCtrl implements Initializable {
 
@@ -61,7 +64,6 @@ public class WaitingCtrl implements Initializable {
     /**
      * Method that shows active players in a given lobby
      * The lobby field from CliendData should have been filled/updated prior to calling this method
-     * Is error prone, if not done correctly
      */
 
     public void showActivePlayers()
@@ -76,12 +78,32 @@ public class WaitingCtrl implements Initializable {
     {
         usernameColumn.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().name));
         //also initialization done for the avatar path/ logo directly
+
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                refresh();
+            }
+        }, 0, 500);
+    }
+
+    public boolean isInLobby()
+    {
+        if(ClientData.getClientLobby() == null) return false;
+        return true;
     }
 
     public void refresh()
     {
-        playerData = FXCollections.observableList(activePlayers);
-        tableView.setItems(playerData);
+        if(activePlayers != null && isInLobby())
+        {
+            String token = ClientData.getClientLobby().getToken();
+            Lobby current = server.getLobbyByToken(token);
+            ClientData.setLobby(current);
+            activePlayers = current.getPlayersInLobby();
+            playerData = FXCollections.observableList(activePlayers);
+            tableView.setItems(playerData);
+        }
     }
 
     public void leaveLobby(){

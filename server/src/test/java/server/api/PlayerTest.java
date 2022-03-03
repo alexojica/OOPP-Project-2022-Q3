@@ -57,13 +57,4 @@ public class PlayerTest {
         player1.setScore(5);
         assertEquals(5, player1.getScore());
     }
-
-    /*
-    @Test
-    void setAndGetLobbyId(){
-        Player player1 = player;
-        player1.setLobbyId(5);
-        assertEquals(5, player1.getLobbyId());
-    }
-    */
 }
