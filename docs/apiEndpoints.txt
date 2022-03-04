@@ -1,0 +1,10 @@
+/api
+    /lobby
+        /addLobby
+        /getAllLobbies
+        /getLobby
+        /getLobbyByToken
+    /player
+        /addPlayer
+        /getAllPlayers
+        /getPlayer

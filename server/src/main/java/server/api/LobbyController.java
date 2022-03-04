@@ -10,33 +10,34 @@ import server.database.LobbyRepository;
 import commons.Lobby;
 
 @RestController
+@RequestMapping("/api/lobby")
 public class LobbyController {
     
     @Autowired
     private LobbyRepository repository;
 
-    @PostMapping("/api/addLobby")
+    @PostMapping("/addLobby")
     @ResponseBody
     public Lobby addLobby(@RequestBody Lobby newLobby){
         repository.save(newLobby);
         return newLobby;
     }
 
-    @GetMapping("/api/getAllLobbies")
+    @GetMapping("/getAllLobbies")
     @ResponseBody
     public List<Lobby> getAllLobbies(){
         List<Lobby> lis = repository.findAll();
         return lis;
     }
 
-    @GetMapping("/api/getLobby")
+    @GetMapping("/getLobby")
     @ResponseBody
     public Optional<Lobby> getLobby(@RequestParam Long lobbyId){
         Optional<Lobby> found = repository.findById(lobbyId);
         return found;
     }
 
-    @GetMapping("/api/getLobbyByToken")
+    @GetMapping("/getLobbyByToken")
     @ResponseBody
     public Optional<Lobby> getLobbyByToken(@RequestParam String token){
         Optional<Lobby> found = repository.findByToken(token);
