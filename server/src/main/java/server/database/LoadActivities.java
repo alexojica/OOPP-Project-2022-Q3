@@ -24,11 +24,11 @@ public class LoadActivities {
                 TypeReference<List<Activity>> typeReference = new TypeReference<List<Activity>>(){};
                 InputStream inputStream = TypeReference.class.getResourceAsStream("/activities.json");
                 try {
-                    List<Activity> users = mapper.readValue(inputStream,typeReference);
-                    repository.saveAll(users);
-                    System.out.println("Users Saved!");
+                    List<Activity> activities = mapper.readValue(inputStream,typeReference);
+                    repository.saveAll(activities);
+                    System.out.println("Activities Saved!");
                 } catch (IOException e){
-                    System.out.println("Unable to save users: " + e.getMessage());
+                    System.out.println("Unable to save activities: " + e.getMessage());
                 }
             }
         };
