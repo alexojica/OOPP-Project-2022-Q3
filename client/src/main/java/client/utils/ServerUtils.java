@@ -48,7 +48,7 @@ public class ServerUtils {
 
     public List<Player> getPlayers() {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/getAllPlayers") //
+                .target(SERVER).path("api/player/getAllPlayers") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Player>>() {});
@@ -57,7 +57,7 @@ public class ServerUtils {
 
     public Player addPlayer(Player player) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/addPlayer") //
+                .target(SERVER).path("api/player/addPlayer") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(player, APPLICATION_JSON), Player.class);
@@ -65,7 +65,7 @@ public class ServerUtils {
 
     public Lobby addLobby(Lobby lobby) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/addLobby") //
+                .target(SERVER).path("api/lobby/addLobby") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(lobby, APPLICATION_JSON), Lobby.class);
@@ -73,7 +73,7 @@ public class ServerUtils {
 
     public List<Lobby> getAllLobbies() {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/getAllLobbies") //
+                .target(SERVER).path("api/lobby/getAllLobbies") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Lobby>>() {});
@@ -81,7 +81,7 @@ public class ServerUtils {
 
     public Lobby getLobbyByToken(String token){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/getLobbyByToken")
+                .target(SERVER).path("api/lobby/getLobbyByToken")
                 .queryParam("token",token)//
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
