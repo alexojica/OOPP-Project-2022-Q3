@@ -1,6 +1,7 @@
-package client.scenes;
+package client.scenes.menus;
 
 import client.ClientData;
+import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;

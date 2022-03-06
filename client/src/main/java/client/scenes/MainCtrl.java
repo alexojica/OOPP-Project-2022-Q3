@@ -15,6 +15,14 @@
  */
 package client.scenes;
 
+import client.scenes.leaderboards.LeaderboardCtrl;
+import client.scenes.leaderboards.TempLeaderboardCtrl;
+import client.scenes.menus.GameModeSelectionCtrl;
+import client.scenes.menus.HomeCtrl;
+import client.scenes.menus.MultiplayerMenuCtrl;
+import client.scenes.menus.WaitingCtrl;
+import client.scenes.questions.EstimationQuestionCtrl;
+import client.scenes.questions.GameMCQCtrl;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
