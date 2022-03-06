@@ -20,17 +20,21 @@ public class LoadActivities {
         return new ApplicationRunner() {
             @Override
             public void run(ApplicationArguments args) throws Exception {
-                ObjectMapper mapper = new ObjectMapper();
-                TypeReference<List<Activity>> typeReference = new TypeReference<List<Activity>>(){};
-                InputStream inputStream = TypeReference.class.getResourceAsStream("/activities.json");
-                try {
-                    List<Activity> activities = mapper.readValue(inputStream,typeReference);
-                    repository.saveAll(activities);
-                    System.out.println("Activities Saved!");
-                } catch (IOException e){
-                    System.out.println("Unable to save activities: " + e.getMessage());
-                }
+                saveIntoDatabase(repository);
             }
         };
+    }
+
+    public void saveIntoDatabase(ActivitiesRepository repository){
+        ObjectMapper mapper = new ObjectMapper();
+        TypeReference<List<Activity>> typeReference = new TypeReference<List<Activity>>(){};
+        InputStream inputStream = TypeReference.class.getResourceAsStream("/activities.json");
+        try {
+            List<Activity> activities = mapper.readValue(inputStream,typeReference);
+            repository.saveAll(activities);
+            System.out.println("Activities Saved!");
+        } catch (IOException e){
+            System.out.println("Unable to save activities: " + e.getMessage());
+        }
     }
 }
