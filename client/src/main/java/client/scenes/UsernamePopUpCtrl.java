@@ -1,7 +1,6 @@
 package client.scenes;
 
 import client.ClientData;
-import client.utils.ServerUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
@@ -28,6 +27,5 @@ public class UsernamePopUpCtrl {
     }
     public void showWaiting(){
         mainCtrl.closePopUp();
-        //multiplayerMenuCtrl.joinPublicLobby();
     }
 }
