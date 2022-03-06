@@ -37,5 +37,20 @@ public class PlayerController {
         return found;
     }
 
+    @GetMapping("/clear")
+    protected String clear(){
+        repository.deleteAll();
+        return "Cleared";
+    }
 
+    @GetMapping("/delete")
+    public String deletePlayer(@RequestParam long id){
+        Optional<Player> player = repository.findById(id);
+        if(player.isEmpty()){
+            return "Player not found";
+        }
+
+        repository.deleteById(id);
+        return "Success";
+    }
 }
