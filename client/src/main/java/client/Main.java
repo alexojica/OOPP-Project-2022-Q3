@@ -48,8 +48,9 @@ public class Main extends Application {
         var tempLeaderboard = FXML.load(TempLeaderboardCtrl.class, "client", "scenes", "TempLeaderboard.fxml");
         var gameOver = FXML.load(GameOverCtrl.class, "client", "scenes", "GameOver.fxml");
         var multiPlayerMenu = FXML.load(MultiplayerMenuCtrl.class, "client", "scenes", "MultiplayerMenu.fxml");
+        var usernamePopUp = FXML.load(UsernamePopUpCtrl.class, "client", "scenes", "UsernamePopUp.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, home, leaderboard, gameModeSelection, multiPlayerMenu, estimationQuestion, gameMCQ, gameOver, waiting, tempLeaderboard);
+        mainCtrl.initialize(primaryStage, home, leaderboard, gameModeSelection, multiPlayerMenu, estimationQuestion, gameMCQ, gameOver, waiting, tempLeaderboard, usernamePopUp);
     }
 }

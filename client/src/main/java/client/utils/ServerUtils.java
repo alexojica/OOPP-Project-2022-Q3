@@ -82,9 +82,19 @@ public class ServerUtils {
     public Lobby getLobbyByToken(String token){
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/lobby/getLobbyByToken")
-                .queryParam("token",token)//
+                .queryParam("token", token)//
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<Lobby>() {});
+    }
+
+    public int getConnectPermission(String token, String playerUsername){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/lobby/getConnectPermission") //
+                .queryParam("token", token)//
+                .queryParam("playerUsername", playerUsername)
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<Integer>(){});
     }
 }
