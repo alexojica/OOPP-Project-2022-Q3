@@ -36,7 +36,10 @@ public class HomeCtrl {
         {
             Player p = getPlayer();
 
-            server.addPlayer(p);
+            Player serverPlayer = server.addPlayer(p);
+
+            //store client player info received from the server
+            ClientData.setPlayer(serverPlayer);
         }
         catch (WebApplicationException e)
         {
@@ -61,9 +64,6 @@ public class HomeCtrl {
         if(userName.length() == 0)
             userName = "testUserX";
         var p = new Player(userName);
-
-        //store client player info
-        ClientData.setPlayer(p);
 
         return p;
     }
