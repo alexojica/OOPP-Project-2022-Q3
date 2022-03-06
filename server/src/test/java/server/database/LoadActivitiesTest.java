@@ -23,24 +23,27 @@ class LoadActivitiesTest {
         ObjectMapper mapper = new ObjectMapper();
         TypeReference<List<Activity>> typeReference = new TypeReference<List<Activity>>(){};
         InputStream inputStream = TypeReference.class.getResourceAsStream("/activities.json");
-        try {
-            activities = mapper.readValue(inputStream,typeReference);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(activities != null){
+            try {
+                activities = mapper.readValue(inputStream,typeReference);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     @Test
     void initDatabase() {
-        // given
-        LoadActivities loadActivities =  new LoadActivities();
+        if(activities != null) {
+            // given
+            LoadActivities loadActivities = new LoadActivities();
 
-        // when
-        when(mockRepository.saveAll(activities)).thenReturn(activities);
-        loadActivities.saveIntoDatabase(mockRepository);
+            // when
+            when(mockRepository.saveAll(activities)).thenReturn(activities);
+            loadActivities.saveIntoDatabase(mockRepository);
 
-        // then
-        verify(mockRepository).saveAll(activities);
-
+            // then
+            verify(mockRepository).saveAll(activities);
+        }
     }
 }
