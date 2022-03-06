@@ -52,8 +52,10 @@ public class MainCtrl {
     private Scene tempLeaderboard;
 
     public void initialize(Stage primaryStage, Pair<HomeCtrl, Parent> home, Pair<LeaderboardCtrl, Parent> leaderboard,
-                           Pair<GameModeSelectionCtrl, Parent> gameModeSelection, Pair<MultiplayerMenuCtrl, Parent> multiplayerMenu,
-                           Pair<EstimationQuestionCtrl, Parent> estimationQuestion, Pair<GameMCQCtrl, Parent> gameMCQ, Pair<GameOverCtrl, Parent> gameOver,
+                           Pair<GameModeSelectionCtrl, Parent> gameModeSelection,
+                           Pair<MultiplayerMenuCtrl, Parent> multiplayerMenu,
+                           Pair<EstimationQuestionCtrl, Parent> estimationQuestion, 
+                           Pair<GameMCQCtrl, Parent> gameMCQ, Pair<GameOverCtrl, Parent> gameOver,
                            Pair<WaitingCtrl, Parent> waiting, Pair<TempLeaderboardCtrl, Parent> tempLeaderboard) {
         this.primaryStage = primaryStage;
 
