@@ -6,16 +6,23 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.TempLeaderboardCtrl">
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.TempLeaderboardCtrl">
    <children>
-       <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" />
-       <Button focusTraversable="false" layoutX="14.0" layoutY="343.0" mnemonicParsing="false" onAction="#leaveGame" prefHeight="45.0" prefWidth="50.0" text="Leave Game" wrapText="true" />
-       <TableView layoutX="164.0" layoutY="115.0" prefHeight="198.0" prefWidth="272.0">
+       <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true" />
+       <Button focusTraversable="false" layoutX="21.0" layoutY="650.0" mnemonicParsing="false" onAction="#leaveGame" prefHeight="45.0" prefWidth="50.0" text="Leave Game" wrapText="true" />
+       <Label layoutX="595.0" layoutY="64.0" text="Leaderboard">
+           <font>
+               <Font size="16.0" />
+           </font>
+       </Label>
+       <TableView layoutX="350.0" layoutY="110.0" prefHeight="450.0" prefWidth="600.0">
         <columns>
-          <TableColumn prefWidth="40.0" text="#rank" />
-          <TableColumn prefWidth="60.0" text="avatar" />
-            <TableColumn prefWidth="120.0" text="username" />
-            <TableColumn prefWidth="50.0" text="score" />
+          <TableColumn prefWidth="120.0" text="#rank" />
+          <TableColumn prefWidth="160.0" text="avatar" />
+            <TableColumn prefWidth="180.0" text="username" />
+            <TableColumn prefWidth="140.0" text="score" />
         </columns>
       </TableView>
    </children>
