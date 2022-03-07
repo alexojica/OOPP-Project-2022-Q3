@@ -8,3 +8,6 @@
         /addPlayer
         /getAllPlayers
         /getPlayer
+    /activity
+        /getActivityByWh
+        /getRandomActivity

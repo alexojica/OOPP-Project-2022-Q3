@@ -6,11 +6,12 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import server.entities.Activity;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+
+import commons.Activity;
 
 @Configuration
 public class LoadActivities {

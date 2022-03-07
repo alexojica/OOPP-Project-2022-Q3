@@ -31,6 +31,7 @@ import jakarta.ws.rs.core.GenericType;
 
 import commons.Player;
 import commons.Lobby;
+import commons.Activity;
 
 public class ServerUtils {
 
@@ -86,5 +87,13 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<Lobby>() {});
+    }
+
+    public Activity getRandomActivity() {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/activity/getRandomActivity")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<Activity>() {});
     }
 }

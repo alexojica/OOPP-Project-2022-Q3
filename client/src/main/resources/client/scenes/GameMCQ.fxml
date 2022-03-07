@@ -42,9 +42,9 @@
             <Font size="22.0" />
          </font>
       </Text>
-      <RadioButton focusTraversable="false" layoutX="41.0" layoutY="312.0" mnemonicParsing="false" text="Answer 1" />
-      <RadioButton focusTraversable="false" layoutX="188.0" layoutY="312.0" mnemonicParsing="false" text="Answer 2" />
-      <RadioButton focusTraversable="false" layoutX="327.0" layoutY="312.0" mnemonicParsing="false" text="Answer 3" />
+      <RadioButton fx:id="answer1" focusTraversable="false" layoutX="41.0" layoutY="312.0" mnemonicParsing="false" text="Answer 1" />
+      <RadioButton fx:id="answer2" focusTraversable="false" layoutX="188.0" layoutY="312.0" mnemonicParsing="false" text="Answer 2" />
+      <RadioButton fx:id="answer3" focusTraversable="false" layoutX="327.0" layoutY="312.0" mnemonicParsing="false" text="Answer 3" />
       <RadioButton focusTraversable="false" layoutX="475.0" layoutY="312.0" mnemonicParsing="false" text="Answer 4" />
       <Pane layoutX="228.0" layoutY="94.0" prefHeight="105.0" prefWidth="142.0" style="-fx-background-color: ffffff;">
          <children>
