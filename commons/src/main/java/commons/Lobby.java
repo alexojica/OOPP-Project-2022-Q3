@@ -76,8 +76,15 @@ public class Lobby {
 
     public void removePlayerFromLobby(Player player)
     {
+        int toRemove = -1;
         playerIds.remove(player.getId());
-        playersInLobby.remove(player);
+        for(int i=0; i< playersInLobby.size(); ++i){
+            if(playersInLobby.get(i).getId() == player.getId())
+                toRemove = i;
+        }
+        if(toRemove != -1)
+            playersInLobby.remove(toRemove);
+        //playersInLobby.remove(player);
     }
 
     public List<Player> getPlayersInLobby()

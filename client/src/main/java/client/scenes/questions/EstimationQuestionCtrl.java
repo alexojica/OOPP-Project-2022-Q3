@@ -1,5 +1,6 @@
-package client.scenes;
+package client.scenes.questions;
 
+import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;

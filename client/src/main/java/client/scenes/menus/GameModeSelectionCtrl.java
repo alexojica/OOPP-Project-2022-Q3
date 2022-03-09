@@ -1,5 +1,6 @@
-package client.scenes;
+package client.scenes.menus;
 
+import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
 
 import javax.inject.Inject;

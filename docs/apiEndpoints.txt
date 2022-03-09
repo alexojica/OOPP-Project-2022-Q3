@@ -4,8 +4,12 @@
         /getAllLobbies
         /getLobby
         /getLobbyByToken
-        /getConnectPermission
+        /delete
+        /clear
     /player
         /addPlayer
         /getAllPlayers
         /getPlayer
+        /delete
+        /clear
+        

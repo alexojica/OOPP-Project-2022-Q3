@@ -8,21 +8,21 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.LeaderboardCtrl">
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.leaderboards.LeaderboardCtrl">
    <children>
-      <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true" />
       <Button focusTraversable="false" layoutX="21.0" layoutY="21.0" mnemonicParsing="false" onAction="#back" prefHeight="28.0" prefWidth="65.0" text="Back" />
-      <Label layoutX="255.0" layoutY="36.0" text="Leaderboard">
+      <Label layoutX="595.0" layoutY="64.0" text="Leaderboard">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <TableView layoutX="149.0" layoutY="82.0" prefHeight="200.0" prefWidth="302.0">
+      <TableView layoutX="350.0" layoutY="110.0" prefHeight="450.0" prefWidth="600.0">
         <columns>
-          <TableColumn prefWidth="48.79998779296875" text="#Rank" />
-          <TableColumn prefWidth="86.4000244140625" text="Avatar" />
-            <TableColumn prefWidth="90.4000244140625" text="Username" />
-            <TableColumn prefWidth="75.0" text="Score" />
+          <TableColumn prefWidth="120" text="#Rank" />
+          <TableColumn prefWidth="160" text="Avatar" />
+            <TableColumn prefWidth="180" text="Username" />
+            <TableColumn prefWidth="140" text="Score" />
         </columns>
       </TableView>
    </children>
