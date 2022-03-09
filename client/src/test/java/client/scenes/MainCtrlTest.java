@@ -28,8 +28,52 @@ public class MainCtrlTest {
     }
 
     @Test
-    public void writeSomeTests() {
-        // TODO create replacement objects and write some tests
-        // sut.initialize(null, null, null);
+    void initialize() {
+        try {
+            sut.initialize(null, null, null, null, null, null, null, null, null,
+                    null, null);
+        } catch (Exception e){
+            assert true;
+        }
+    }
+
+    @Test
+    void showWaiting() {
+    }
+
+    @Test
+    void showGameMCQ() {
+    }
+
+    @Test
+    void showHome() {
+    }
+
+    @Test
+    void showLeaderboard() {
+    }
+
+    @Test
+    void showGameModeSelection() {
+    }
+
+    @Test
+    void showGameOver() {
+    }
+
+    @Test
+    void showMultiplayerMenu() {
+    }
+
+    @Test
+    void showTempLeaderboard() {
+    }
+
+    @Test
+    void showPopUp() {
+    }
+
+    @Test
+    void closePopUp() {
     }
 }

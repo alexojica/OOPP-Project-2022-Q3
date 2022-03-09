@@ -3,6 +3,7 @@ package server.api;
 import java.util.List;
 import java.util.Optional;
 
+import commons.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,6 +45,31 @@ public class LobbyController {
         return found;
     }
 
+    /**
+     *
+     * @param token the token of the lobby a player is trying to access
+     * @param playerUsername the username of the player
+     * @return 0 if the username is already used, 1 if the lobby cannot be found,
+     *          2 if the player has permission to connect
+     */
+    @GetMapping("/getConnectPermission")
+    @ResponseBody
+    public Integer getConnectPermission(@RequestParam String token, @RequestParam String playerUsername){
+        Optional<Lobby> found = repository.findByToken(token);
+        if(found.isPresent()){
+            if(!found.get().playersInLobby.isEmpty()){
+                for(Player p : found.get().playersInLobby){
+                    if(p.name.equals(playerUsername))
+                        return 0;
+                }
+            }
+
+            return 2;
+        } else {
+            return 1;
+        }
+    }
+
     @GetMapping("/clear")
     protected String clear(){
         repository.deleteAll();
@@ -51,9 +77,9 @@ public class LobbyController {
     }
 
     @GetMapping("/delete")
-    public String deleteLobby(@RequestParam long id){
+    public String deleteLobby(@RequestParam long id) {
         Optional<Lobby> lobby = repository.findById(id);
-        if(lobby.isEmpty()){
+        if (lobby.isEmpty()) {
             return "Lobby not found";
         }
 

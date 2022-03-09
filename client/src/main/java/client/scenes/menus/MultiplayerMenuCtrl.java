@@ -25,20 +25,31 @@ public class MultiplayerMenuCtrl {
 
     public void joinPublicLobby(){
 
-        //sends in also common lobby token
-        Lobby commonLobby = server.getLobbyByToken("COMMON");
         Player clientPlayer = ClientData.getClientPlayer();
 
-        //set client lobby static variable
-        ClientData.setLobby(commonLobby);
+        int permissionCode = server.getConnectPermission("COMMON", clientPlayer.name);
 
-        //adds player to lobby (client sided)
-        commonLobby.addPlayerToLobby(clientPlayer);
+        switch(permissionCode){
+            case 0:
+                mainCtrl.showPopUp("public");
+                break;
+            case 1:
+                //lobby not found
+                break;
+            case 2:
+                Lobby commonLobby = server.getLobbyByToken("COMMON");
+                //set client lobby static variable
+                ClientData.setLobby(commonLobby);
 
-        //save the new state of the lobby to the repository again
-        server.addLobby(commonLobby);
+                //adds player to lobby (client sided)
+                commonLobby.addPlayerToLobby(clientPlayer);
 
-        mainCtrl.showWaiting();
+                //save the new state of the lobby to the repository again
+                server.addLobby(commonLobby);
+
+                mainCtrl.showWaiting();
+        }
+
     }
 
 
