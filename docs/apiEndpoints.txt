@@ -4,6 +4,7 @@
         /getAllLobbies
         /getLobby
         /getLobbyByToken
+        /getConnectPermission
     /player
         /addPlayer
         /getAllPlayers
