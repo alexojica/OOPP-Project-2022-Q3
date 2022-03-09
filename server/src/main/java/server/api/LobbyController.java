@@ -43,4 +43,21 @@ public class LobbyController {
         Optional<Lobby> found = repository.findByToken(token);
         return found;
     }
+
+    @GetMapping("/clear")
+    protected String clear(){
+        repository.deleteAll();
+        return "Cleared";
+    }
+
+    @GetMapping("/delete")
+    public String deleteLobby(@RequestParam long id){
+        Optional<Lobby> lobby = repository.findById(id);
+        if(lobby.isEmpty()){
+            return "Lobby not found";
+        }
+
+        repository.deleteById(id);
+        return "Success";
+    }
 }

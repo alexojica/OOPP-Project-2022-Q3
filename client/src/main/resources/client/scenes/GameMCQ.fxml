@@ -10,67 +10,67 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: e6e6e6;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.GameMCQCtrl">
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: e6e6e6;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.questions.GameMCQCtrl">
    <children>
-      <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" />
-      <Pane layoutX="32.0" layoutY="223.0" prefHeight="82.0" prefWidth="110.0" style="-fx-background-color: ffffff;">
+      <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true" />
+      <Pane layoutX="500.0" layoutY="370.0" prefHeight="100.0" prefWidth="130.0" style="-fx-background-color: ffffff;">
          <children>
-            <ImageView fitHeight="67.0" fitWidth="98.0" layoutX="7.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fitHeight="90.0" fitWidth="120.0" layoutX="7.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true" />
          </children></Pane>
-      <Pane layoutX="455.0" layoutY="223.0" prefHeight="82.0" prefWidth="110.0" style="-fx-background-color: ffffff;">
+      <Pane layoutX="300.0" layoutY="370.0" prefHeight="100.0" prefWidth="130.0" style="-fx-background-color: ffffff;">
          <children>
-            <ImageView fitHeight="67.0" fitWidth="98.0" layoutX="6.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fitHeight="90.0" fitWidth="120.0" layoutX="6.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </Pane>
-      <Pane layoutX="307.0" layoutY="223.0" prefHeight="82.0" prefWidth="110.0" style="-fx-background-color: ffffff;">
+      <Pane layoutX="700.0" layoutY="370.0" prefHeight="100.0" prefWidth="130.0" style="-fx-background-color: ffffff;">
          <children>
-            <ImageView fitHeight="67.0" fitWidth="98.0" layoutX="6.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fitHeight="90.0" fitWidth="120.0" layoutX="6.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </Pane>
-      <Pane layoutX="168.0" layoutY="223.0" prefHeight="82.0" prefWidth="110.0" style="-fx-background-color: ffffff;">
+      <Pane layoutX="900.0" layoutY="370.0" prefHeight="100.0" prefWidth="130.0" style="-fx-background-color: ffffff;">
          <children>
-            <ImageView fitHeight="67.0" fitWidth="98.0" layoutX="6.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fitHeight="90.0" fitWidth="120.0" layoutX="6.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </Pane>
-      <Button focusTraversable="false" layoutX="21.0" layoutY="341.0" mnemonicParsing="false" onAction="#leaveGame" prefHeight="43.0" prefWidth="110.0" text="Leave Game">
+      <Button focusTraversable="false" layoutX="21.0" layoutY="650.0" mnemonicParsing="false" onAction="#leaveGame" prefHeight="43.0" prefWidth="110.0" text="Leave Game">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
-      <Text fx:id="nQuestionsTxt" layoutX="528.0" layoutY="371.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-/20" wrappingWidth="48.39996337890625">
+      <Text fx:id="nQuestionsTxt" layoutX="1208.0" layoutY="687.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-/20" wrappingWidth="48.39996337890625">
          <font>
-            <Font size="22.0" />
+            <Font size="24.0" />
          </font>
       </Text>
-      <RadioButton focusTraversable="false" layoutX="41.0" layoutY="312.0" mnemonicParsing="false" text="Answer 1" />
-      <RadioButton focusTraversable="false" layoutX="188.0" layoutY="312.0" mnemonicParsing="false" text="Answer 2" />
-      <RadioButton focusTraversable="false" layoutX="327.0" layoutY="312.0" mnemonicParsing="false" text="Answer 3" />
-      <RadioButton focusTraversable="false" layoutX="475.0" layoutY="312.0" mnemonicParsing="false" text="Answer 4" />
-      <Pane layoutX="228.0" layoutY="94.0" prefHeight="105.0" prefWidth="142.0" style="-fx-background-color: ffffff;">
+      <RadioButton focusTraversable="false" layoutX="325.0" layoutY="473.0" mnemonicParsing="false" text="Answer 1" />
+      <RadioButton focusTraversable="false" layoutX="525.0" layoutY="473.0" mnemonicParsing="false" text="Answer 2" />
+      <RadioButton focusTraversable="false" layoutX="725.0" layoutY="473.0" mnemonicParsing="false" text="Answer 3" />
+      <RadioButton focusTraversable="false" layoutX="925.0" layoutY="473.0" mnemonicParsing="false" text="Answer 4" />
+      <Pane layoutX="550.0" layoutY="130.0" prefHeight="170.0" prefWidth="220.0" style="-fx-background-color: ffffff;">
          <children>
-            <ImageView fitHeight="93.0" fitWidth="131.0" layoutX="7.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fitHeight="160.0" fitWidth="210.0" layoutX="7.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </Pane>
-      <Text layoutX="204.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Some question?">
+      <Text layoutX="550.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Some question?">
          <font>
             <Font size="29.0" />
          </font>
       </Text>
       <Text fx:id="scoreTxt" layoutX="21.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Score:" wrappingWidth="63.5999755859375">
          <font>
-            <Font size="17.0" />
+            <Font size="20.0" />
          </font>
       </Text>
-      <ProgressBar layoutX="158.0" layoutY="60.0" prefHeight="18.0" prefWidth="282.0" progress="0.0" />
-      <Circle fill="DODGERBLUE" layoutX="566.0" layoutY="42.0" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fill="DODGERBLUE" layoutX="204.0" layoutY="359.0" radius="18.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fill="DODGERBLUE" layoutX="307.0" layoutY="359.0" radius="18.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fill="DODGERBLUE" layoutX="409.0" layoutY="359.0" radius="18.0" stroke="BLACK" strokeType="INSIDE" />
-      <Text layoutX="174.0" layoutY="390.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Power up 1" />
-      <Text layoutX="277.0" layoutY="390.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Power up 2" />
-      <Text layoutX="379.0" layoutY="389.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Power up 3" />
-      <Text layoutX="547.0" layoutY="74.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Emotes" />
-      <Text layoutX="128.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" text="⏰" wrappingWidth="28.0">
+      <ProgressBar layoutX="500.0" layoutY="84.0" prefHeight="20.0" prefWidth="320.0" progress="0.0" />
+      <Circle fill="DODGERBLUE" layoutX="1220.0" layoutY="42.0" radius="18.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fill="DODGERBLUE" layoutX="482.0" layoutY="630.0" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fill="DODGERBLUE" layoutX="612.0" layoutY="630.0" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fill="DODGERBLUE" layoutX="742.0" layoutY="630.0" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
+      <Text layoutX="450.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Power up 1" />
+      <Text layoutX="580.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Power up 2" />
+      <Text layoutX="710.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Power up 3" />
+      <Text layoutX="1200.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Emotes" />
+      <Text layoutX="470.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" text="⏰" wrappingWidth="33.0">
          <font>
             <Font size="23.0" />
          </font>
