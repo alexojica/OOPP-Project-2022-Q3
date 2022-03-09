@@ -49,7 +49,8 @@ public class LobbyController {
      *
      * @param token the token of the lobby a player is trying to access
      * @param playerUsername the username of the player
-     * @return 0 if the username is already used, 1 if the lobby cannot be found, 2 if the player has permission to connect
+     * @return 0 if the username is already used, 1 if the lobby cannot be found,
+     *          2 if the player has permission to connect
      */
     @GetMapping("/getConnectPermission")
     @ResponseBody
