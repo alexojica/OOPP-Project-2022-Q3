@@ -58,9 +58,11 @@ public class MainCtrl {
     private Stage incorrectUsernamePopUp;
 
     public void initialize(Stage primaryStage, Pair<HomeCtrl, Parent> home, Pair<LeaderboardCtrl, Parent> leaderboard,
-                           Pair<GameModeSelectionCtrl, Parent> gameModeSelection, Pair<MultiplayerMenuCtrl, Parent> multiplayerMenu,
-                           Pair<EstimationQuestionCtrl, Parent> estimationQuestion, Pair<GameMCQCtrl, Parent> gameMCQ, Pair<GameOverCtrl, Parent> gameOver,
-                           Pair<WaitingCtrl, Parent> waiting, Pair<TempLeaderboardCtrl, Parent> tempLeaderboard, Pair<UsernamePopUpCtrl, Parent> usernamePopUp) {
+                           Pair<GameModeSelectionCtrl, Parent> gameModeSelection, Pair<MultiplayerMenuCtrl,
+                           Parent> multiplayerMenu, Pair<EstimationQuestionCtrl, Parent> estimationQuestion,
+                           Pair<GameMCQCtrl, Parent> gameMCQ, Pair<GameOverCtrl, Parent> gameOver,
+                           Pair<WaitingCtrl, Parent> waiting, Pair<TempLeaderboardCtrl, Parent> tempLeaderboard,
+                           Pair<UsernamePopUpCtrl, Parent> usernamePopUp) {
         this.primaryStage = primaryStage;
 
 

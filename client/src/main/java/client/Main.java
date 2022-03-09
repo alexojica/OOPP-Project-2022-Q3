@@ -51,6 +51,7 @@ public class Main extends Application {
         var usernamePopUp = FXML.load(UsernamePopUpCtrl.class, "client", "scenes", "UsernamePopUp.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, home, leaderboard, gameModeSelection, multiPlayerMenu, estimationQuestion, gameMCQ, gameOver, waiting, tempLeaderboard, usernamePopUp);
+        mainCtrl.initialize(primaryStage, home, leaderboard, gameModeSelection, multiPlayerMenu,
+                            estimationQuestion, gameMCQ, gameOver, waiting, tempLeaderboard, usernamePopUp);
     }
 }
