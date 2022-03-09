@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.ClientData;
+import client.scenes.menus.MultiplayerMenuCtrl;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
