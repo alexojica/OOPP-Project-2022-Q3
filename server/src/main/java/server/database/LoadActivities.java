@@ -30,6 +30,9 @@ public class LoadActivities {
         ObjectMapper mapper = new ObjectMapper();
         TypeReference<List<Activity>> typeReference = new TypeReference<List<Activity>>(){};
         InputStream inputStream = TypeReference.class.getResourceAsStream("/activities.json");
+        if(inputStream == null){
+            return;
+        }
         try {
             List<Activity> activities = mapper.readValue(inputStream,typeReference);
             repository.saveAll(activities);
