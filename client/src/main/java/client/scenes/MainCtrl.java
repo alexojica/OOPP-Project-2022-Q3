@@ -117,6 +117,7 @@ public class MainCtrl {
     public void showGameMCQ(){
         primaryStage.setTitle("GameScreen");
         primaryStage.setScene(gameMCQ);
+        gameMCQCtrl.load();
     }
 
     public void showHome(){

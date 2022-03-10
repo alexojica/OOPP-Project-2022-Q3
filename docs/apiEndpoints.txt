@@ -6,6 +6,7 @@
         /getLobbyByToken
         /delete
         /clear
+        /getConnectPermission
     /player
         /addPlayer
         /getAllPlayers
@@ -13,3 +14,6 @@
         /delete
         /clear
         
+    /activity
+        /getActivityByWh
+        /getRandomActivity

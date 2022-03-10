@@ -4,11 +4,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import server.entities.Activity;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import commons.Activity;
 
 import static org.mockito.Mockito.*;
 

@@ -1,4 +1,4 @@
-package server.entities;
+package commons;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
