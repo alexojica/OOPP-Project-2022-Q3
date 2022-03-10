@@ -5,16 +5,16 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.GameModeSelectionCtrl">
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.menus.GameModeSelectionCtrl">
    <children>
-      <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" />
-      <Button focusTraversable="false" layoutX="31.0" layoutY="31.0" mnemonicParsing="false" onAction="#back" prefHeight="28.0" prefWidth="65.0" text="Back" />
-      <Button focusTraversable="false" layoutX="223.0" layoutY="129.0" mnemonicParsing="false" onAction="#multiplayer" prefHeight="70.0" prefWidth="154.0" text="Multiplayer">
+      <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true" />
+      <Button focusTraversable="false" layoutX="41.0" layoutY="41.0" mnemonicParsing="false" onAction="#back" prefHeight="28.0" prefWidth="65.0" text="Back" />
+      <Button focusTraversable="false" layoutX="575.0" layoutY="232.0" mnemonicParsing="false" onAction="#multiplayer" prefHeight="70.0" prefWidth="154.0" text="Multiplayer">
          <font>
             <Font size="21.0" />
          </font>
       </Button>
-      <Button focusTraversable="false" layoutX="223.0" layoutY="217.0" mnemonicParsing="false" onAction="#singleplayer" prefHeight="70.0" prefWidth="154.0" text="Single-player">
+      <Button focusTraversable="false" layoutX="575.0" layoutY="360.0" mnemonicParsing="false" onAction="#singleplayer" prefHeight="70.0" prefWidth="154.0" text="Single-player">
          <font>
             <Font size="21.0" />
          </font>

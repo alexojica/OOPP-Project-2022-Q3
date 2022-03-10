@@ -15,8 +15,17 @@
  */
 package client.scenes;
 
+import client.scenes.leaderboards.LeaderboardCtrl;
+import client.scenes.leaderboards.TempLeaderboardCtrl;
+import client.scenes.menus.GameModeSelectionCtrl;
+import client.scenes.menus.HomeCtrl;
+import client.scenes.menus.MultiplayerMenuCtrl;
+import client.scenes.menus.WaitingCtrl;
+import client.scenes.questions.EstimationQuestionCtrl;
+import client.scenes.questions.GameMCQCtrl;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -51,10 +60,17 @@ public class MainCtrl {
     private TempLeaderboardCtrl tempLeaderboardCtrl;
     private Scene tempLeaderboard;
 
+    private UsernamePopUpCtrl usernamePopUpCtrl;
+    private Scene usernamePopUp;
+
+    private Stage incorrectUsernamePopUp;
+
     public void initialize(Stage primaryStage, Pair<HomeCtrl, Parent> home, Pair<LeaderboardCtrl, Parent> leaderboard,
-                           Pair<GameModeSelectionCtrl, Parent> gameModeSelection, Pair<MultiplayerMenuCtrl, Parent> multiplayerMenu,
-                           Pair<EstimationQuestionCtrl, Parent> estimationQuestion, Pair<GameMCQCtrl, Parent> gameMCQ, Pair<GameOverCtrl, Parent> gameOver,
-                           Pair<WaitingCtrl, Parent> waiting, Pair<TempLeaderboardCtrl, Parent> tempLeaderboard) {
+                           Pair<GameModeSelectionCtrl, Parent> gameModeSelection, Pair<MultiplayerMenuCtrl,
+                           Parent> multiplayerMenu, Pair<EstimationQuestionCtrl, Parent> estimationQuestion,
+                           Pair<GameMCQCtrl, Parent> gameMCQ, Pair<GameOverCtrl, Parent> gameOver,
+                           Pair<WaitingCtrl, Parent> waiting, Pair<TempLeaderboardCtrl, Parent> tempLeaderboard,
+                           Pair<UsernamePopUpCtrl, Parent> usernamePopUp) {
         this.primaryStage = primaryStage;
 
 
@@ -85,6 +101,9 @@ public class MainCtrl {
         this.tempLeaderboardCtrl = tempLeaderboard.getKey();
         this.tempLeaderboard = new Scene(tempLeaderboard.getValue());
 
+        this.usernamePopUpCtrl = usernamePopUp.getKey();
+        this.usernamePopUp = new Scene(usernamePopUp.getValue());
+
         showHome();
         primaryStage.show();
     }
@@ -98,11 +117,13 @@ public class MainCtrl {
     public void showGameMCQ(){
         primaryStage.setTitle("GameScreen");
         primaryStage.setScene(gameMCQ);
+        gameMCQCtrl.load();
     }
 
     public void showHome(){
         primaryStage.setTitle("Home");
         primaryStage.setScene(home);
+        homeCtrl.onLoad();
     }
 
     public void showLeaderboard(){
@@ -127,5 +148,25 @@ public class MainCtrl {
     public void showTempLeaderboard(){
         primaryStage.setTitle("TempLeaderboard");
         primaryStage.setScene(tempLeaderboard);
+    }
+
+    public void showPopUp(String lobbyType){
+        incorrectUsernamePopUp = new Stage();
+        incorrectUsernamePopUp.setScene(usernamePopUp);
+        incorrectUsernamePopUp.setTitle("Incorrect Username");
+        incorrectUsernamePopUp.initModality(Modality.APPLICATION_MODAL);
+        incorrectUsernamePopUp.showAndWait();
+
+        //tries to join the lobby again
+        switch(lobbyType){
+            case "public":
+                multiplayerMenuCtrl.joinPublicLobby();
+                break;
+        }
+
+    }
+
+    public void closePopUp(){
+        incorrectUsernamePopUp.close();
     }
 }

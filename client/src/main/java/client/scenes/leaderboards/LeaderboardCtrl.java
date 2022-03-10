@@ -1,27 +1,22 @@
-package client.scenes;
+package client.scenes.leaderboards;
 
+import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
 
 import javax.inject.Inject;
 
-public class MultiplayerMenuCtrl {
+public class LeaderboardCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
     @Inject
-    public MultiplayerMenuCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public LeaderboardCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
 
     public void back(){
-        mainCtrl.showGameModeSelection();
+        mainCtrl.showHome();
     }
-
-    public void joinPublicLobby(){
-        mainCtrl.showWaiting();
-    }
-
-
 }

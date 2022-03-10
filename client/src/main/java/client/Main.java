@@ -21,6 +21,14 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import client.scenes.*;
+import client.scenes.leaderboards.LeaderboardCtrl;
+import client.scenes.leaderboards.TempLeaderboardCtrl;
+import client.scenes.menus.GameModeSelectionCtrl;
+import client.scenes.menus.HomeCtrl;
+import client.scenes.menus.MultiplayerMenuCtrl;
+import client.scenes.menus.WaitingCtrl;
+import client.scenes.questions.EstimationQuestionCtrl;
+import client.scenes.questions.GameMCQCtrl;
 import com.google.inject.Injector;
 
 import javafx.application.Application;
@@ -48,8 +56,10 @@ public class Main extends Application {
         var tempLeaderboard = FXML.load(TempLeaderboardCtrl.class, "client", "scenes", "TempLeaderboard.fxml");
         var gameOver = FXML.load(GameOverCtrl.class, "client", "scenes", "GameOver.fxml");
         var multiPlayerMenu = FXML.load(MultiplayerMenuCtrl.class, "client", "scenes", "MultiplayerMenu.fxml");
+        var usernamePopUp = FXML.load(UsernamePopUpCtrl.class, "client", "scenes", "UsernamePopUp.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, home, leaderboard, gameModeSelection, multiPlayerMenu, estimationQuestion, gameMCQ, gameOver, waiting, tempLeaderboard);
+        mainCtrl.initialize(primaryStage, home, leaderboard, gameModeSelection, multiPlayerMenu,
+                            estimationQuestion, gameMCQ, gameOver, waiting, tempLeaderboard, usernamePopUp);
     }
 }

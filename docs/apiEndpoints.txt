@@ -1,0 +1,19 @@
+/api
+    /lobby
+        /addLobby
+        /getAllLobbies
+        /getLobby
+        /getLobbyByToken
+        /delete
+        /clear
+        /getConnectPermission
+    /player
+        /addPlayer
+        /getAllPlayers
+        /getPlayer
+        /delete
+        /clear
+        
+    /activity
+        /getActivityByWh
+        /getRandomActivity

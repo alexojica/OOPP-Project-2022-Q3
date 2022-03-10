@@ -1,4 +1,4 @@
-package server.entities;
+package commons;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -31,8 +31,10 @@ public class Player {
     @Column(name = "jokers")
     public ArrayList<Boolean> usedPowerups;
 
+    /*
     @Column(name = "lobbyId")
-    public int lobbyId;
+    public Integer lobbyId;
+    */
 
     public Player() {
         // for object mapper
@@ -63,6 +65,10 @@ public class Player {
         this.score = 0;
         //initialise all power ups as unused
         this.usedPowerups = new ArrayList<>();
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getName() {
@@ -106,6 +112,7 @@ public class Player {
         this.usedPowerups = usedPowerups;
     }
 
+    /*
     public int getLobbyId() {
         return lobbyId;
     }
@@ -113,6 +120,7 @@ public class Player {
     public void setLobbyId(int lobbyId) {
         this.lobbyId = lobbyId;
     }
+    */
 
     @Override
     public boolean equals(Object obj) {

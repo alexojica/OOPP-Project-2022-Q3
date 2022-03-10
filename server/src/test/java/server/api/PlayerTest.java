@@ -2,7 +2,7 @@ package server.api;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import server.entities.Player;
+import commons.Player;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -56,12 +56,5 @@ public class PlayerTest {
         Player player1 = player;
         player1.setScore(5);
         assertEquals(5, player1.getScore());
-    }
-
-    @Test
-    void setAndGetLobbyId(){
-        Player player1 = player;
-        player1.setLobbyId(5);
-        assertEquals(5, player1.getLobbyId());
     }
 }
