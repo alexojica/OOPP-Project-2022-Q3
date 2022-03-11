@@ -28,6 +28,7 @@ public class QuestionController {
 
         Random random = new Random();
         long newPointer = random.nextInt((int) questionRepository.count() * 21 + 1) + 1;
+        System.out.println(pointer + " " + newPointer);
         if(pointer == newPointer) newPointer++;
 
         if(foundQuestion.isEmpty())
@@ -57,6 +58,7 @@ public class QuestionController {
 
                     Long current = activityPivot.getEnergyConsumption();
                     List<Activity> randList = new ArrayList<>();
+                    /*
                     for(int i = 0; i < 6;i++)
                     {
                         Activity a = new Activity();
@@ -65,6 +67,8 @@ public class QuestionController {
                         randList.add(a);
                     }
                     Collections.shuffle(randList);
+
+                     */
                     activities.clear();
 
                     activities.add(activityPivot);

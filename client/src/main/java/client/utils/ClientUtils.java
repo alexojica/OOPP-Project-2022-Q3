@@ -6,13 +6,13 @@ import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
 import commons.Lobby;
 import commons.Player;
-import commons.Question;
 import javafx.application.Platform;
 import javafx.scene.control.ProgressBar;
 
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ClientUtils {
 
@@ -37,12 +37,14 @@ public class ClientUtils {
         pb.setProgress(0);
         Timer timer = new Timer();
         AtomicBoolean ok = new AtomicBoolean(false);
+        AtomicReference<Double> progress = new AtomicReference<>((double) 0);
 
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 Platform.runLater(() -> {
-                    pb.setProgress(pb.getProgress() + 0.01);
+                    progress.updateAndGet(v -> new Double((double) (v + 0.01)));
+                    pb.setProgress(progress.get());
                     System.out.println(pb.getProgress());
                     if(pb.getProgress() >= 0.999)
                     {
@@ -60,11 +62,12 @@ public class ClientUtils {
     }
 
     public static void getQuestion(ServerUtils server, MainCtrl mainCtrl){
-        System.out.println("Pointer:" + ClientData.getClientPointer() + "Token:" + ClientData.getClientLobby().getToken());
         
         ClientData.setQuestion(server.getQuestion(ClientData.getClientPointer(), ClientData.getClientLobby().getToken()));
 
         ClientData.setPointer(ClientData.getClientQuestion().getPointer());
+
+        System.out.println("Pointer:" + ClientData.getClientPointer() + "Token:" + ClientData.getClientLobby().getToken());
 
         System.out.println("Type:" + ClientData.getClientQuestion().getType());
 

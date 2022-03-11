@@ -108,7 +108,7 @@ public class ServerUtils {
                 .get(new GenericType<Activity>() {});
     }
 
-    public Question getQuestion(long pointer, String lastLobby){
+    public  Question getQuestion(long pointer, String lastLobby){
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/question/getQuestion") //
                 .queryParam("pointer", pointer)//
