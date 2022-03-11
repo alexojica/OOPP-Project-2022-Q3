@@ -4,24 +4,20 @@ import client.ClientData;
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
-import javafx.util.Duration;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.Text;
-import javafx.animation.Timeline;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Animation;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-
 
 
 import commons.Question;
 
 import javax.inject.Inject;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GameMCQCtrl {
 
@@ -67,36 +63,22 @@ public class GameMCQCtrl {
         answer2.setToggleGroup(radioGroup);
         answer3.setToggleGroup(radioGroup);
 
+        ClientUtils.startTimer(pb,server,mainCtrl);
+
         Question question = ClientData.getClientQuestion();
 
-        IntegerProperty seconds = new SimpleIntegerProperty();
-        pb.progressProperty().bind(seconds.divide(20.0));
-        Timeline timeline = new Timeline(
-            new KeyFrame(Duration.ZERO, new KeyValue(seconds, 0)),
-            new KeyFrame(Duration.minutes((double) 1.0 * 1/3), e-> {
-                nextQuestion();
-            }, new KeyValue(seconds, 20))
-        );
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
-
         questionTxt.setText(question.getText());
-
 
         answer1.setText(question.getFoundActivities().get(0).getTitle());
         answer2.setText(question.getFoundActivities().get(1).getTitle());
         answer3.setText(question.getFoundActivities().get(2).getTitle());
-
-        
     }
 
-    private void nextQuestion(){
+    public void nextQuestion(){
         if(answer1.equals(radioGroup.getSelectedToggle())){
             ClientData.setClientScore(ClientData.getClientScore() + 500);
         }
 
         ClientUtils.getQuestion(server, mainCtrl);
-        
-        return;
     }
 }

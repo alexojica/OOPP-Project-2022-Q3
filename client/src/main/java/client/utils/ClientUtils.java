@@ -5,11 +5,15 @@ import client.scenes.MainCtrl;
 import commons.Lobby;
 import commons.Player;
 import commons.Question;
+import javafx.application.Platform;
+import javafx.scene.control.ProgressBar;
+
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ClientUtils {
 
-
-    
     public static void leaveLobby(ServerUtils server, MainCtrl mainCtrl){
         Lobby currentLobbby = ClientData.getClientLobby();
         Player clientPlayer = ClientData.getClientPlayer();
@@ -26,6 +30,31 @@ public class ClientUtils {
         mainCtrl.showGameModeSelection();
     }
 
+    public static void startTimer(ProgressBar pb,ServerUtils server, MainCtrl mainCtrl)
+    {
+        pb.setProgress(0);
+        Timer timer = new Timer();
+        AtomicBoolean ok = new AtomicBoolean(false);
+
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    pb.setProgress(pb.getProgress() + 0.01);
+                    System.out.println(pb.getProgress());
+                    if(pb.getProgress() >= 0.999)
+                    {
+                        timer.cancel();
+                        if(!ok.get()) {
+                            getQuestion(server,mainCtrl);
+                            ok.set(true);
+                        }
+                    }
+                });
+            }
+        },0,200);
+    }
+
     public static void getQuestion(ServerUtils server, MainCtrl mainCtrl){
         System.out.println("Pointer:" + ClientData.getClientPointer() + "Token:" + ClientData.getClientLobby().getToken());
         
@@ -37,18 +66,16 @@ public class ClientUtils {
 
         switch(ClientData.getClientQuestion().getType())
         {
-            case 0:{
-                    mainCtrl.showGameMCQ();
+            case 0:
+                mainCtrl.showGameMCQ();
                 break;
-            }
-            case 1:{
-                    mainCtrl.showGameEstimation();
-                break;
-            }
-            case 2:{
 
+            case 1:
+                mainCtrl.showGameEstimation();
                 break;
-            }
+
+            case 2:
+                break;
             default: break;
         }
     }

@@ -27,7 +27,7 @@ public class QuestionController {
         Optional<Question> foundQuestion = questionRepository.findByPointer(pointer);
 
         Random random = new Random();
-        long newPointer = random.nextInt((int) questionRepository.count() * 2 + 1) + 1;
+        long newPointer = random.nextInt((int) questionRepository.count() * 21 + 1) + 1;
         if(pointer == newPointer) newPointer++;
 
         if(foundQuestion.isEmpty())
@@ -42,7 +42,7 @@ public class QuestionController {
 
             activityPivot = activities.get(random.nextInt(activities.size()));
 
-            switch (idx % 3){
+            switch (idx % 2){
                 case 0:
 
                     Activity activityLeft = (activitiesRepository.findByEnergyConsumptionDesc(activityPivot.getEnergyConsumption() * (100 - difficulty) / 100)).get(0);
@@ -96,7 +96,7 @@ public class QuestionController {
                 default:break;
             }
 
-            question = new Question(pointer,idx % 3,newPointer,activities,lastLobby);
+            question = new Question(pointer,idx % 2,newPointer,activities,lastLobby);
             System.out.println(question);
             questionRepository.save(question);
             return question;
@@ -105,8 +105,6 @@ public class QuestionController {
         {
             Question q = foundQuestion.get();
             if(!Objects.equals(q.getLastLobbyToken(), lastLobby)) {
-                //coming from a new lobby
-                System.out.println(q.getLastLobbyToken() + " " + lastLobby);
                 q.setPointer(newPointer);
                 q.setLastLobbyToken(lastLobby);
                 questionRepository.save(q);

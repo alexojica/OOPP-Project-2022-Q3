@@ -12,6 +12,7 @@ import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Animation;
+import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
@@ -19,6 +20,10 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class EstimationQuestionCtrl {
 
@@ -50,8 +55,6 @@ public class EstimationQuestionCtrl {
     private void nextQuestion(){
 
         ClientUtils.getQuestion(server, mainCtrl);
-
-        return;
     }
 
     public void load() {
@@ -60,16 +63,7 @@ public class EstimationQuestionCtrl {
 
         Question question = ClientData.getClientQuestion();
 
-        IntegerProperty seconds = new SimpleIntegerProperty();
-        pb.progressProperty().bind(seconds.divide(20.0));
-        Timeline timeline = new Timeline(
-            new KeyFrame(Duration.ZERO, new KeyValue(seconds, 0)),
-            new KeyFrame(Duration.minutes((double) 1.0 * 1/3), e-> {
-                nextQuestion();
-            }, new KeyValue(seconds, 20))
-        );
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
+        ClientUtils.startTimer(pb,server,mainCtrl);
 
         questionTxt.setText(question.getText());    
     }
