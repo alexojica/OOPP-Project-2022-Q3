@@ -32,6 +32,7 @@ import jakarta.ws.rs.core.GenericType;
 import commons.Player;
 import commons.Lobby;
 import commons.Activity;
+import commons.Question;
 
 public class ServerUtils {
 
@@ -105,5 +106,15 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<Activity>() {});
+    }
+
+    public Question getQuestion(long pointer, String lastLobby){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/question/getQuestion") //
+                .queryParam("pointer", pointer)//
+                .queryParam("lastLobby", lastLobby)//
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<Question>(){}); 
     }
 }

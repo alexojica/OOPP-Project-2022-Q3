@@ -2,6 +2,7 @@ package client.scenes.menus;
 
 import client.ClientData;
 import client.scenes.MainCtrl;
+import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.Lobby;
 import commons.Player;
@@ -107,23 +108,14 @@ public class WaitingCtrl implements Initializable {
     }
 
     public void leaveLobby(){
-        Lobby currentLobbby = ClientData.getClientLobby();
-        Player clientPlayer = ClientData.getClientPlayer();
-
-        //set client lobby to exited
-        ClientData.setLobby(null);
-
-        //removes player from lobby (client sided)
-        currentLobbby.removePlayerFromLobby(clientPlayer);
-
-        //save the new state of the lobby to the repository again
-        server.addLobby(currentLobbby);
-
-        mainCtrl.showGameModeSelection();
+        ClientUtils.leaveLobby(server, mainCtrl);
     }
 
     public void startGame(){
-        mainCtrl.showGameMCQ();
+        ClientData.setPointer(ClientData.getClientLobby().getPlayerIds().get(0));
+        ClientData.setClientScore(0L);
+
+        ClientUtils.getQuestion(server, mainCtrl);
     }
 
 

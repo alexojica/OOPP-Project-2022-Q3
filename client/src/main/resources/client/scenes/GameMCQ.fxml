@@ -45,13 +45,12 @@
       <RadioButton fx:id="answer1" focusTraversable="false" layoutX="325.0" layoutY="473.0" mnemonicParsing="false" text="Answer 1" />
       <RadioButton fx:id="answer2" focusTraversable="false" layoutX="525.0" layoutY="473.0" mnemonicParsing="false" text="Answer 2" />
       <RadioButton fx:id="answer3" focusTraversable="false" layoutX="725.0" layoutY="473.0" mnemonicParsing="false" text="Answer 3" />
-      <RadioButton focusTraversable="false" layoutX="925.0" layoutY="473.0" mnemonicParsing="false" text="Answer 4" />
       <Pane layoutX="550.0" layoutY="130.0" prefHeight="170.0" prefWidth="220.0" style="-fx-background-color: ffffff;">
          <children>
             <ImageView fitHeight="160.0" fitWidth="210.0" layoutX="7.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </Pane>
-      <Text layoutX="550.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Some question?">
+      <Text fx:id="questionTxt" layoutX="550.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Some question?">
          <font>
             <Font size="29.0" />
          </font>
@@ -61,7 +60,7 @@
             <Font size="20.0" />
          </font>
       </Text>
-      <ProgressBar layoutX="500.0" layoutY="84.0" prefHeight="20.0" prefWidth="320.0" progress="0.0" />
+      <ProgressBar fx:id="pb" layoutX="500.0" layoutY="84.0" prefHeight="20.0" prefWidth="320.0" progress="0.0" />
       <Circle fill="DODGERBLUE" layoutX="1220.0" layoutY="42.0" radius="18.0" stroke="BLACK" strokeType="INSIDE" />
       <Circle fill="DODGERBLUE" layoutX="482.0" layoutY="630.0" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
       <Circle fill="DODGERBLUE" layoutX="612.0" layoutY="630.0" radius="20.0" stroke="BLACK" strokeType="INSIDE" />

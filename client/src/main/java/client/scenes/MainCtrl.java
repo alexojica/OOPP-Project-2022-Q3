@@ -120,6 +120,12 @@ public class MainCtrl {
         gameMCQCtrl.load();
     }
 
+    public void showGameEstimation(){
+        primaryStage.setTitle("GameScreen");
+        primaryStage.setScene(estimation);
+        estimationQuestionCtrl.load();
+    }
+
     public void showHome(){
         primaryStage.setTitle("Home");
         primaryStage.setScene(home);
