@@ -15,8 +15,8 @@ public class Question {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public long id;
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    public Long id;
 
     @Column(name = "type")
     public int type;
@@ -30,12 +30,17 @@ public class Question {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     public List<Activity> foundActivities;
 
+    @Column(name = "lastLobbyToken")
+    public String lastLobbyToken;
+
     public Question() {
         // for object mapper
     }
 
-    public Question(int type, Long pointer, List<Activity> foundActivities) {
+    public Question(Long id,int type, Long pointer, List<Activity> foundActivities, String lastLobbyToken) {
+        this.id = id;
         this.type = type;
+        this.lastLobbyToken = lastLobbyToken;
         switch (type){
             case 0: this.text = "What requires more energy?";
                 break;
@@ -68,6 +73,14 @@ public class Question {
 
     public Long getPointer() {
         return pointer;
+    }
+
+    public String getLastLobbyToken() {
+        return lastLobbyToken;
+    }
+
+    public void setLastLobbyToken(String lastLobbyToken) {
+        this.lastLobbyToken = lastLobbyToken;
     }
 
     public void setPointer(Long pointer) {
