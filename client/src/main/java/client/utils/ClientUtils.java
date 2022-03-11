@@ -6,6 +6,7 @@ import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
 import commons.Lobby;
 import commons.Player;
+import commons.Question;
 import javafx.application.Platform;
 import javafx.scene.control.ProgressBar;
 
@@ -62,10 +63,11 @@ public class ClientUtils {
     }
 
     public static void getQuestion(ServerUtils server, MainCtrl mainCtrl){
-        
-        ClientData.setQuestion(server.getQuestion(ClientData.getClientPointer(), ClientData.getClientLobby().getToken()));
 
-        ClientData.setPointer(ClientData.getClientQuestion().getPointer());
+        Question foundQuestion = server.getQuestion(ClientData.getClientPointer(), ClientData.getClientLobby().getToken());
+        ClientData.setQuestion(foundQuestion);
+
+        ClientData.setPointer(foundQuestion.getPointer());
 
         System.out.println("Pointer:" + ClientData.getClientPointer() + "Token:" + ClientData.getClientLobby().getToken());
 
