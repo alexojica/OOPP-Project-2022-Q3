@@ -17,13 +17,8 @@ public class QuestionProvider {
     private int difficulty;
     private String lastLobby;
     private Random random;
-    private QuestionTypes questionType;
 
-    public QuestionProvider(ActivitiesRepository activitiesRepository, QuestionRepository questionRepository,
-                            long pointer, String lastLobby, int difficulty) {
-        this.pointer = pointer;
-        this.lastLobby = lastLobby;
-        this.difficulty = difficulty;
+    public QuestionProvider(ActivitiesRepository activitiesRepository, QuestionRepository questionRepository) {
         this.activitiesRepository = activitiesRepository;
         this.questionRepository = questionRepository;
         random = new Random();
@@ -31,45 +26,44 @@ public class QuestionProvider {
 
     /**
      * The important method of this class, it gets the next linked question or creates a new one
-     *
      * @return the next or newly created question
      */
-    public Question getQuestion() {
-        Optional<Question> foundQuestion = questionRepository.findByPointer(pointer);
+    public Question getQuestion(long pointer, String lastLobby, int difficulty) {
+        this.pointer = pointer;
+        this.lastLobby = lastLobby;
+        this.difficulty = difficulty;
+        Optional<Question> foundQuestion = questionRepository.findById(pointer);
 
         updatePointer();
 
         if (foundQuestion.isEmpty()) {
-            createRandomQuestionType();
             return createNewQuestion();
         } else {
-            return useNextQuestion(foundQuestion);
+            return useQuestionAfter(foundQuestion);
         }
     }
 
     public void updatePointer() {
-        newPointer = random.nextInt((int) questionRepository.count() * 21 + 1) + 1;
-        System.out.println(pointer + " " + newPointer);
+        newPointer = Math.abs(random.nextInt((int) (questionRepository.count()+1) * 21) + 1);
+        System.out.println("[OLD POINTER] " + pointer + ", " + "[NEW POINTER]" + newPointer);
         if (pointer == newPointer) newPointer++;
     }
 
-    public void createRandomQuestionType() {
-        switch (Math.abs(random.nextInt(3))) {
+    public QuestionTypes getRandomQuestionType() {
+        switch (Math.abs(random.nextInt(2))) {
             case 0:
-                questionType = QuestionTypes.MULTIPLE_CHOICE_QUESTION;
-                return;
+                return QuestionTypes.MULTIPLE_CHOICE_QUESTION;
             case 1:
-                questionType = QuestionTypes.ESTIMATION_QUESTION;
-                return;
+                return QuestionTypes.ESTIMATION_QUESTION;
             case 2:
-                questionType = QuestionTypes.ENERGY_ALTERNATIVE_QUESTION;
-                return;
+                return QuestionTypes.ENERGY_ALTERNATIVE_QUESTION;
             default:
-                return;
+                return null;
         }
     }
 
     public Question createNewQuestion() {
+        QuestionTypes questionType = getRandomQuestionType();
         List<Activity> activities;
         Activity activityPivot = getActivityPivot();
 
@@ -89,15 +83,16 @@ public class QuestionProvider {
 
         Question question = new Question(pointer, questionType, newPointer, activities, lastLobby);
         System.out.println(question);
-        questionRepository.save(question);
         return question;
     }
 
-    public Question useNextQuestion(Optional<Question> foundQuestion) {
+
+    public Question useQuestionAfter(Optional<Question> foundQuestion) {
         Question q = foundQuestion.get();
         if (!Objects.equals(q.getLastLobbyToken(), lastLobby)) {
             q.setPointer(newPointer);
             q.setLastLobbyToken(lastLobby);
+            System.out.println("A question has been reused");
             questionRepository.save(q);
         }
         return q;

@@ -19,9 +19,8 @@ public class QuestionController {
     @GetMapping("/getQuestion")
     @ResponseBody
     public Question getQuestion(@RequestParam Long pointer, @RequestParam String lastLobby) {
-        QuestionProvider questionProvider = new QuestionProvider(activitiesRepository, questionRepository,
-                pointer, lastLobby, 30);
-        return questionProvider.getQuestion();
+        QuestionProvider questionProvider = new QuestionProvider(activitiesRepository, questionRepository);
+        return questionProvider.getQuestion(pointer, lastLobby, 30);
     }
 
 }

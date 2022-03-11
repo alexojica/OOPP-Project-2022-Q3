@@ -10,9 +10,8 @@ import java.util.Optional;
 
 @Transactional
 public interface QuestionRepository extends JpaRepository<Question, Long> {
+    
+    Optional<Question> findById(Long pointer);
 
-    @Query("select u from Question u where u.id = ?1")
-    public Optional<Question> findByPointer(Long pointer);
-
-    public long count();
+    long count();
 }
