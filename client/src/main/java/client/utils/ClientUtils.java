@@ -64,12 +64,15 @@ public class ClientUtils {
 
     public static void getQuestion(ServerUtils server, MainCtrl mainCtrl){
 
-        Question foundQuestion = server.getQuestion(ClientData.getClientPointer(), ClientData.getClientLobby().getToken());
+        Question foundQuestion = server.getQuestion(
+                ClientData.getClientPointer(), ClientData.getClientLobby().getToken());
+
         ClientData.setQuestion(foundQuestion);
 
         ClientData.setPointer(foundQuestion.getPointer());
 
-        System.out.println("Pointer:" + ClientData.getClientPointer() + "Token:" + ClientData.getClientLobby().getToken());
+        System.out.println("Pointer:" + ClientData.getClientPointer() +
+                "Token:" + ClientData.getClientLobby().getToken());
 
         System.out.println("Type:" + ClientData.getClientQuestion().getType());
 
