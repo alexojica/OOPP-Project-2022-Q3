@@ -4,11 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import commons.Player;
+import constants.ConnectionStatusCodes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import server.database.LobbyRepository;
 import commons.Lobby;
+
+import static constants.ConnectionStatusCodes.*;
 
 @RestController
 @RequestMapping("/api/lobby")
@@ -54,19 +57,19 @@ public class LobbyController {
      */
     @GetMapping("/getConnectPermission")
     @ResponseBody
-    public Integer getConnectPermission(@RequestParam String token, @RequestParam String playerUsername){
+    public ConnectionStatusCodes getConnectPermission(@RequestParam String token, @RequestParam String playerUsername){
         Optional<Lobby> found = repository.findByToken(token);
         if(found.isPresent()){
             if(!found.get().playersInLobby.isEmpty()){
                 for(Player p : found.get().playersInLobby){
                     if(p.name.equals(playerUsername))
-                        return 0;
+                        return ConnectionStatusCodes.USERNAME_ALREADY_USED;
                 }
             }
 
-            return 2;
+            return CONNECTION_PERMISSION_GRANTED;
         } else {
-            return 1;
+            return LOBBY_NOT_FOUND;
         }
     }
 

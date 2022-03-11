@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.List;
 
+import constants.ConnectionStatusCodes;
 import org.glassfish.jersey.client.ClientConfig;
 
 import jakarta.ws.rs.client.ClientBuilder;
@@ -90,14 +91,14 @@ public class ServerUtils {
                 .get(new GenericType<Lobby>() {});
     }
 
-    public int getConnectPermission(String token, String playerUsername){
+    public ConnectionStatusCodes getConnectPermission(String token, String playerUsername){
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/lobby/getConnectPermission") //
                 .queryParam("token", token)//
                 .queryParam("playerUsername", playerUsername)
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .get(new GenericType<Integer>(){});
+                .get(new GenericType<ConnectionStatusCodes>(){});
     }
 
     public Activity getRandomActivity() {
@@ -108,7 +109,7 @@ public class ServerUtils {
                 .get(new GenericType<Activity>() {});
     }
 
-    public  Question getQuestion(long pointer, String lastLobby){
+    public Question getQuestion(long pointer, String lastLobby){
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/question/getQuestion") //
                 .queryParam("pointer", pointer)//

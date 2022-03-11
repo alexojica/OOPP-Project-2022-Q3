@@ -43,7 +43,7 @@ public class ClientUtils {
             @Override
             public void run() {
                 Platform.runLater(() -> {
-                    progress.updateAndGet(v -> new Double((double) (v + 0.01)));
+                    progress.updateAndGet(v -> (double) (v + 0.01));
                     pb.setProgress(progress.get());
                     System.out.println(pb.getProgress());
                     if(pb.getProgress() >= 0.999)
@@ -73,15 +73,16 @@ public class ClientUtils {
 
         switch(ClientData.getClientQuestion().getType())
         {
-            case 0:
+            case MULTIPLE_CHOICE_QUESTION:
                 mainCtrl.showGameMCQ();
                 break;
 
-            case 1:
+            case ESTIMATION_QUESTION:
                 mainCtrl.showGameEstimation();
                 break;
 
-            case 2:
+            case ENERGY_ALTERNATIVE_QUESTION:
+                mainCtrl.showGameMCQ(); // this is only a placeholder, should be changed later
                 break;
             default: break;
         }

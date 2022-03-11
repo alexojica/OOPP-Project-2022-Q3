@@ -5,6 +5,7 @@ import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
 import commons.Lobby;
 import commons.Player;
+import constants.ConnectionStatusCodes;
 
 import javax.inject.Inject;
 
@@ -27,16 +28,16 @@ public class MultiplayerMenuCtrl {
 
         Player clientPlayer = ClientData.getClientPlayer();
 
-        int permissionCode = server.getConnectPermission("COMMON", clientPlayer.name);
+        ConnectionStatusCodes permissionCode = server.getConnectPermission("COMMON", clientPlayer.name);
 
         switch(permissionCode){
-            case 0:
+            case USERNAME_ALREADY_USED:
                 mainCtrl.showPopUp("public");
                 break;
-            case 1:
+            case LOBBY_NOT_FOUND:
                 //lobby not found
                 break;
-            case 2:
+            case CONNECTION_PERMISSION_GRANTED:
                 Lobby commonLobby = server.getLobbyByToken("COMMON");
                 //set client lobby static variable
                 ClientData.setLobby(commonLobby);
