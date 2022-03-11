@@ -43,7 +43,7 @@ public class QuestionController {
 
             activityPivot = activities.get(random.nextInt(activities.size()));
 
-            switch (idx % 2){
+            switch (idx % 1){
                 case 0:
 
                     Activity activityLeft = (activitiesRepository.findByEnergyConsumptionDesc(activityPivot.getEnergyConsumption() * (100 - difficulty) / 100)).get(0);
@@ -100,7 +100,7 @@ public class QuestionController {
                 default:break;
             }
 
-            question = new Question(pointer,idx % 2,newPointer,activities,lastLobby);
+            question = new Question(pointer,idx % 1,newPointer,activities,lastLobby);
             System.out.println(question);
             questionRepository.save(question);
             return question;
