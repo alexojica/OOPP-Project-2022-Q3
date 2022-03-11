@@ -52,7 +52,7 @@ public class EstimationQuestionCtrl {
         this.server = server;
     }
 
-    private void nextQuestion(){
+    public void nextQuestion(){
 
         ClientUtils.getQuestion(server, mainCtrl);
     }
@@ -63,7 +63,7 @@ public class EstimationQuestionCtrl {
 
         Question question = ClientData.getClientQuestion();
 
-        ClientUtils.startTimer(pb,server,mainCtrl);
+        ClientUtils.startTimer(pb,server,mainCtrl,this,1);
 
         questionTxt.setText(question.getText());    
     }

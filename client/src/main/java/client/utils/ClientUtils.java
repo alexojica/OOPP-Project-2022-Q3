@@ -2,6 +2,8 @@ package client.utils;
 
 import client.ClientData;
 import client.scenes.MainCtrl;
+import client.scenes.questions.EstimationQuestionCtrl;
+import client.scenes.questions.GameMCQCtrl;
 import commons.Lobby;
 import commons.Player;
 import commons.Question;
@@ -30,7 +32,7 @@ public class ClientUtils {
         mainCtrl.showGameModeSelection();
     }
 
-    public static void startTimer(ProgressBar pb,ServerUtils server, MainCtrl mainCtrl)
+    public static void startTimer(ProgressBar pb,ServerUtils server, MainCtrl mainCtrl, Object me, int type)
     {
         pb.setProgress(0);
         Timer timer = new Timer();
@@ -46,7 +48,9 @@ public class ClientUtils {
                     {
                         timer.cancel();
                         if(!ok.get()) {
-                            getQuestion(server,mainCtrl);
+                            if(type == 0) ((GameMCQCtrl) me).nextQuestion();
+                            if(type == 1) ((EstimationQuestionCtrl) me).nextQuestion();
+                            //getQuestion(server,mainCtrl);
                             ok.set(true);
                         }
                     }

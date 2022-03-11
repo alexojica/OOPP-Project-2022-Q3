@@ -63,7 +63,7 @@ public class GameMCQCtrl {
         answer2.setToggleGroup(radioGroup);
         answer3.setToggleGroup(radioGroup);
 
-        ClientUtils.startTimer(pb,server,mainCtrl);
+        ClientUtils.startTimer(pb,server,mainCtrl,this,0);
 
         Question question = ClientData.getClientQuestion();
 
