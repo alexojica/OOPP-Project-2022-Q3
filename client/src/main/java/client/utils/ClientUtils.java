@@ -1,95 +1,13 @@
 package client.utils;
 
-import client.ClientData;
-import client.scenes.MainCtrl;
-import client.scenes.questions.EstimationQuestionCtrl;
-import client.scenes.questions.GameMCQCtrl;
-import commons.Lobby;
-import commons.Player;
-import commons.Question;
-import javafx.application.Platform;
+import constants.QuestionTypes;
 import javafx.scene.control.ProgressBar;
 
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
+public interface ClientUtils {
 
-public class ClientUtils {
+    void leaveLobby();
 
-    public static void leaveLobby(ServerUtils server, MainCtrl mainCtrl){
-        Lobby currentLobbby = ClientData.getClientLobby();
-        Player clientPlayer = ClientData.getClientPlayer();
+    void startTimer(ProgressBar pb, Object me, QuestionTypes questionType);
 
-        //set client lobby to exited
-        ClientData.setLobby(null);
-
-        //removes player from lobby (client sided)
-        currentLobbby.removePlayerFromLobby(clientPlayer);
-
-        //save the new state of the lobby to the repository again
-        server.addLobby(currentLobbby);
-
-        mainCtrl.showGameModeSelection();
-    }
-
-    public static void startTimer(ProgressBar pb,ServerUtils server, MainCtrl mainCtrl, Object me, int type)
-    {
-        pb.setProgress(0);
-        Timer timer = new Timer();
-        AtomicBoolean ok = new AtomicBoolean(false);
-        AtomicReference<Double> progress = new AtomicReference<>((double) 0);
-
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                Platform.runLater(() -> {
-                    progress.updateAndGet(v -> (double) (v + 0.01));
-                    pb.setProgress(progress.get());
-                    System.out.println(pb.getProgress());
-                    if(pb.getProgress() >= 0.999)
-                    {
-                        timer.cancel();
-                        if(!ok.get()) {
-                            if(type == 0) ((GameMCQCtrl) me).nextQuestion();
-                            if(type == 1) ((EstimationQuestionCtrl) me).nextQuestion();
-                            //getQuestion(server,mainCtrl);
-                            ok.set(true);
-                        }
-                    }
-                });
-            }
-        },0,200);
-    }
-
-    public static void getQuestion(ServerUtils server, MainCtrl mainCtrl){
-
-        Question foundQuestion = server.getQuestion(
-                ClientData.getClientPointer(), ClientData.getClientLobby().getToken());
-
-        ClientData.setQuestion(foundQuestion);
-
-        ClientData.setPointer(foundQuestion.getPointer());
-
-        System.out.println("Pointer:" + ClientData.getClientPointer() +
-                "Token:" + ClientData.getClientLobby().getToken());
-
-        System.out.println("Type:" + ClientData.getClientQuestion().getType());
-
-        switch(ClientData.getClientQuestion().getType())
-        {
-            case MULTIPLE_CHOICE_QUESTION:
-                mainCtrl.showGameMCQ();
-                break;
-
-            case ESTIMATION_QUESTION:
-                mainCtrl.showGameEstimation();
-                break;
-
-            case ENERGY_ALTERNATIVE_QUESTION:
-                mainCtrl.showGameMCQ(); // this is only a placeholder, should be changed later
-                break;
-            default: break;
-        }
-    }
+    void getQuestion();
 }

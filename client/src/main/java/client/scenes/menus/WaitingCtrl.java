@@ -26,6 +26,8 @@ import java.util.TimerTask;
 public class WaitingCtrl implements Initializable {
 
     private final ServerUtils server;
+    private final ClientUtils client;
+
     private final MainCtrl mainCtrl;
     private ObservableList<Player> playerData;
 
@@ -46,15 +48,14 @@ public class WaitingCtrl implements Initializable {
     private List<Player> activePlayers;
 
     @Inject
-    public WaitingCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public WaitingCtrl(ServerUtils server, MainCtrl mainCtrl, ClientUtils client) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        this.client = client;
     }
 
     /**
      * Method that sets up how the scene should look like when switched to
-     * TODO: Create a class that stores a player (avatar, username...)
-     * TODO: Have the 'Tip' text randomised and changed every x seconds
      */
     public void load(){
         tip.setText("Theres only one correct answer per question, get the most right to win.");
@@ -108,14 +109,14 @@ public class WaitingCtrl implements Initializable {
     }
 
     public void leaveLobby(){
-        ClientUtils.leaveLobby(server, mainCtrl);
+        client.leaveLobby();
     }
 
     public void startGame(){
-        ClientData.setPointer(ClientData.getClientLobby().getPlayerIds().get(0) + 42);
+        ClientData.setPointer(ClientData.getClientLobby().getPlayerIds().get(0));
         ClientData.setClientScore(0L);
 
-        ClientUtils.getQuestion(server, mainCtrl);
+        client.getQuestion();
     }
 
 

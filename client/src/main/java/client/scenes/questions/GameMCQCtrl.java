@@ -13,9 +13,12 @@ import javafx.scene.text.Text;
 
 import javax.inject.Inject;
 
+import static constants.QuestionTypes.MULTIPLE_CHOICE_QUESTION;
+
 public class GameMCQCtrl {
 
     private final ServerUtils server;
+    private final ClientUtils client;
     private final MainCtrl mainCtrl;
 
     @FXML
@@ -40,13 +43,14 @@ public class GameMCQCtrl {
     private RadioButton answer3;
 
     @Inject
-    public GameMCQCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public GameMCQCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        this.client = client;
     }
 
     public void leaveGame(){
-        ClientUtils.leaveLobby(server, mainCtrl);
+        client.leaveLobby();
     }
 
     public void load() {
@@ -57,7 +61,7 @@ public class GameMCQCtrl {
         answer2.setToggleGroup(radioGroup);
         answer3.setToggleGroup(radioGroup);
 
-        ClientUtils.startTimer(pb,server,mainCtrl,this,0);
+        client.startTimer(pb,this, MULTIPLE_CHOICE_QUESTION);
 
         Question question = ClientData.getClientQuestion();
 
@@ -73,6 +77,6 @@ public class GameMCQCtrl {
             ClientData.setClientScore(ClientData.getClientScore() + 500);
         }
 
-        ClientUtils.getQuestion(server, mainCtrl);
+        client.getQuestion();
     }
 }

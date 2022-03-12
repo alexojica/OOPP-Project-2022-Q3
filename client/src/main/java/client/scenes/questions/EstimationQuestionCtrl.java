@@ -6,14 +6,20 @@ import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Question;
+import jakarta.ws.rs.ConstrainedTo;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
+import static constants.QuestionTypes.ESTIMATION_QUESTION;
+
 public class EstimationQuestionCtrl {
 
     private final ServerUtils server;
+
+    private final ClientUtils client;
+
     private final MainCtrl mainCtrl;
 
     @FXML
@@ -33,14 +39,15 @@ public class EstimationQuestionCtrl {
     private TextField answer;
 
     @Inject
-    public EstimationQuestionCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public EstimationQuestionCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        this.client = client;
     }
 
     public void nextQuestion(){
 
-        ClientUtils.getQuestion(server, mainCtrl);
+        client.getQuestion();
     }
 
     public void load() {
@@ -49,7 +56,7 @@ public class EstimationQuestionCtrl {
 
         Question question = ClientData.getClientQuestion();
 
-        ClientUtils.startTimer(pb,server,mainCtrl,this,1);
+        client.startTimer(pb,this, ESTIMATION_QUESTION);
 
         questionTxt.setText(question.getText());    
     }
@@ -59,6 +66,6 @@ public class EstimationQuestionCtrl {
     }
 
     public void leaveGame() {
-        ClientUtils.leaveLobby(server, mainCtrl);
+        client.leaveLobby();
     }
 }

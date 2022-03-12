@@ -23,6 +23,8 @@ import client.scenes.menus.MultiplayerMenuCtrl;
 import client.scenes.menus.WaitingCtrl;
 import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
+import client.utils.ClientUtils;
+import com.google.inject.Inject;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
@@ -65,6 +67,9 @@ public class MainCtrl {
 
     private Stage incorrectUsernamePopUp;
 
+    @Inject
+    private ClientUtils client;
+
     public void initialize(Stage primaryStage, Pair<HomeCtrl, Parent> home, Pair<LeaderboardCtrl, Parent> leaderboard,
                            Pair<GameModeSelectionCtrl, Parent> gameModeSelection, Pair<MultiplayerMenuCtrl,
                            Parent> multiplayerMenu, Pair<EstimationQuestionCtrl, Parent> estimationQuestion,
@@ -104,9 +109,14 @@ public class MainCtrl {
         this.usernamePopUpCtrl = usernamePopUp.getKey();
         this.usernamePopUp = new Scene(usernamePopUp.getValue());
 
+        primaryStage.setOnCloseRequest(e -> {
+            client.leaveLobby();
+        });
+
         showHome();
         primaryStage.show();
     }
+
 
     public void showWaiting(){
         primaryStage.setTitle("WaitingScreen");
