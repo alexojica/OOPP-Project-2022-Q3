@@ -26,8 +26,6 @@ import client.scenes.menus.MultiplayerMenuCtrl;
 import client.scenes.menus.WaitingCtrl;
 import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
-import client.utils.ClientUtils;
-import com.google.inject.Inject;
 import com.google.inject.Injector;
 import javafx.application.Application;
 import javafx.stage.Stage;
