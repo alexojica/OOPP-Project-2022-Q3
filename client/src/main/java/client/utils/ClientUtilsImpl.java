@@ -10,11 +10,13 @@ import commons.Question;
 import constants.QuestionTypes;
 import javafx.application.Platform;
 import javafx.scene.control.ProgressBar;
+import org.checkerframework.checker.units.qual.A;
 
 import javax.inject.Inject;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ClientUtilsImpl implements ClientUtils {
@@ -24,17 +26,20 @@ public class ClientUtilsImpl implements ClientUtils {
 
     @Inject
     private MainCtrl mainCtrl;
-    
-    @Inject 
-    private ClientData clientData;
+
+
+    @Override
+    public boolean isInLobby() {
+        return ClientData.getClientLobby() != null;
+    }
 
     @Override
     public void leaveLobby() {
-        Lobby currentLobby = clientData.getClientLobby();
-        Player clientPlayer = clientData.getClientPlayer();
+        Lobby currentLobby = ClientData.getClientLobby();
+        Player clientPlayer = ClientData.getClientPlayer();
 
         //set client lobby to exited
-        clientData.setLobby(null);
+        ClientData.setLobby(null);
 
         //removes player from lobby (client sided)
         currentLobby.removePlayerFromLobby(clientPlayer);
@@ -48,19 +53,25 @@ public class ClientUtilsImpl implements ClientUtils {
     @Override
     public void startTimer(ProgressBar pb, Object me, QuestionTypes questionType)
     {
-        pb.setProgress(0);
+        AtomicInteger r= new AtomicInteger();
+        AtomicInteger g= new AtomicInteger();
+
         Timer timer = new Timer();
         AtomicBoolean ok = new AtomicBoolean(false);
-        AtomicReference<Double> progress = new AtomicReference<>((double) 0);
+        AtomicReference<Double> progress = new AtomicReference<>((double) 1);
+        pb.setProgress(progress.get());
 
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 Platform.runLater(() -> {
-                    progress.updateAndGet(v -> (double) (v + 0.01));
+                    progress.updateAndGet(v -> (double) (v - 0.01));
                     pb.setProgress(progress.get());
+                    r.set((int) Math.floor(255 - progress.get() * 255));
+                    g.set((int) Math.floor(progress.get() * 255));
+                    pb.setStyle("-fx-accent: rgb(" + r + "," + g + ", " + 0 + ");");
 //                    System.out.println(pb.getProgress());
-                    if(pb.getProgress() >= 0.999)
+                    if(pb.getProgress() <= 0)
                     {
                         timer.cancel();
                         if(!ok.get()) {
@@ -82,18 +93,18 @@ public class ClientUtilsImpl implements ClientUtils {
     public void getQuestion(){
 
         Question foundQuestion = server.getQuestion(
-                clientData.getClientPointer(), clientData.getClientLobby().getToken());
+                ClientData.getClientPointer(), ClientData.getClientLobby().getToken());
 
-        clientData.setQuestion(foundQuestion);
+        ClientData.setQuestion(foundQuestion);
 
-        clientData.setPointer(foundQuestion.getPointer());
+        ClientData.setPointer(foundQuestion.getPointer());
 
-        System.out.println("[POINTER] " + clientData.getClientPointer() +
-                ", [TOKEN] " + clientData.getClientLobby().getToken());
+        System.out.println("[POINTER] " + ClientData.getClientPointer() +
+                ", [TOKEN] " + ClientData.getClientLobby().getToken());
 
-        System.out.println("[TYPE] " + clientData.getClientQuestion().getType());
+        System.out.println("[TYPE] " + ClientData.getClientQuestion().getType());
 
-        switch(clientData.getClientQuestion().getType())
+        switch(ClientData.getClientQuestion().getType())
         {
             case MULTIPLE_CHOICE_QUESTION:
                 mainCtrl.showGameMCQ();

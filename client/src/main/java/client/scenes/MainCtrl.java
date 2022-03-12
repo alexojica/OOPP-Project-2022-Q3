@@ -110,7 +110,9 @@ public class MainCtrl {
         this.usernamePopUp = new Scene(usernamePopUp.getValue());
 
         primaryStage.setOnCloseRequest(e -> {
-            client.leaveLobby();
+            if(client.isInLobby()){
+                client.leaveLobby();
+            }
         });
 
         showHome();
