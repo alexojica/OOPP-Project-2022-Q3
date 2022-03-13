@@ -33,6 +33,8 @@ public class EstimationQuestionCtrl {
     @FXML
     private Text questionTxt;
 
+    @FXML
+    private Text activityText;
 
     @FXML
     private TextField answer;
@@ -44,20 +46,26 @@ public class EstimationQuestionCtrl {
         this.client = client;
     }
 
-    public void nextQuestion(){
-
-        client.getQuestion();
-    }
-
     public void load() {
-
-        scoreTxt.setText("Score:" + ClientData.getClientScore());
 
         Question question = ClientData.getClientQuestion();
 
+        updateUI(question);
+    }
+
+    public void updateUI(Question question)
+    {
+        scoreTxt.setText("Score:" + ClientData.getClientScore());
+        nQuestionsTxt.setText(ClientData.getQuestionCounter() + "/20");
+
         client.startTimer(pb,this, ESTIMATION_QUESTION);
 
-        questionTxt.setText(question.getText());    
+        questionTxt.setText(question.getText());
+        activityText.setText(question.getFoundActivities().get(0).getTitle());
+    }
+
+    public void nextQuestion(){
+        client.getQuestion();
     }
 
     public void submit() {

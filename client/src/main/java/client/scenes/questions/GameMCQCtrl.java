@@ -5,6 +5,7 @@ import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.Question;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
@@ -12,6 +13,10 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.Text;
 
 import javax.inject.Inject;
+
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static constants.QuestionTypes.MULTIPLE_CHOICE_QUESTION;
 
@@ -42,6 +47,8 @@ public class GameMCQCtrl {
     @FXML
     private RadioButton answer3;
 
+    private int correctAnswer;
+
     @Inject
     public GameMCQCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl) {
         this.server = server;
@@ -55,28 +62,117 @@ public class GameMCQCtrl {
 
     public void load() {
 
+        Question question = ClientData.getClientQuestion();
+
+        updateUI(question);
+
+    }
+
+    public void updateUI(Question question)
+    {
         scoreTxt.setText("Score:" + ClientData.getClientScore());
+        nQuestionsTxt.setText(ClientData.getQuestionCounter() + "/20");
 
         answer1.setToggleGroup(radioGroup);
         answer2.setToggleGroup(radioGroup);
         answer3.setToggleGroup(radioGroup);
 
-        client.startTimer(pb,this, MULTIPLE_CHOICE_QUESTION);
+        answer1.setStyle(" -fx-background-color: transparent; ");
+        answer2.setStyle(" -fx-background-color: transparent; ");
+        answer3.setStyle(" -fx-background-color: transparent; ");
 
-        Question question = ClientData.getClientQuestion();
+
+        if(answer1.isSelected()) answer1.setSelected(false);
+        if(answer2.isSelected()) answer2.setSelected(false);
+        if(answer3.isSelected()) answer3.setSelected(false);
+
+        client.startTimer(pb,this, MULTIPLE_CHOICE_QUESTION);
 
         questionTxt.setText(question.getText());
 
-        answer1.setText(question.getFoundActivities().get(0).getTitle());
-        answer2.setText(question.getFoundActivities().get(1).getTitle());
-        answer3.setText(question.getFoundActivities().get(2).getTitle());
+        Random random = new Random();
+        correctAnswer = random.nextInt(3);
+
+        switch (correctAnswer)
+        {
+            case 0:
+                //correct answer is first one
+                randomizeFields(answer1,answer2,answer3,question);
+                break;
+            case 1:
+                //correct answer is second one
+                randomizeFields(answer2,answer1,answer3,question);
+                break;
+            case 2:
+                //correct answer is third one
+                randomizeFields(answer3,answer1,answer2,question);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void randomizeFields(RadioButton a, RadioButton b, RadioButton c, Question question)
+    {
+        a.setText(question.getFoundActivities().get(0).getTitle());
+        b.setText(question.getFoundActivities().get(1).getTitle());
+        c.setText(question.getFoundActivities().get(2).getTitle());
     }
 
     public void nextQuestion(){
-        if(answer1.equals(radioGroup.getSelectedToggle())){
-            ClientData.setClientScore(ClientData.getClientScore() + 500);
-        }
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    Platform.runLater(() -> updateCorrectAnswer());
+                    //sleep for two seconds to update ui and let the user see the correct answer
+                    Thread.sleep(2000);
+                    //execute next question immediatly after sleep on current thread finishes execution
+                    Platform.runLater(() -> client.getQuestion());
+                    //client.getQuestion();
+                }catch (InterruptedException e)
+                {
+                    e.printStackTrace();
+                    System.out.println("Something went wrong when showing correct answer!");
+                }
+            }
+        });
+        thread.start();
+    }
 
-        client.getQuestion();
+    public void updateCorrectAnswer()
+    {
+        switch (correctAnswer)
+        {
+            case 0:
+                if(answer1.equals(radioGroup.getSelectedToggle())){
+                    ClientData.setClientScore(ClientData.getClientScore() + 500);
+                }
+                answer1.setStyle(" -fx-background-color: green; ");
+                answer2.setStyle(" -fx-background-color: red; ");
+                answer3.setStyle(" -fx-background-color: red; ");
+                break;
+            case 1:
+                if(answer2.equals(radioGroup.getSelectedToggle())){
+                    ClientData.setClientScore(ClientData.getClientScore() + 500);
+                }
+                answer2.setStyle(" -fx-background-color: green; ");
+                answer1.setStyle(" -fx-background-color: red; ");
+                answer3.setStyle(" -fx-background-color: red; ");
+                break;
+            case 2:
+                if(answer3.equals(radioGroup.getSelectedToggle())){
+                    ClientData.setClientScore(ClientData.getClientScore() + 500);
+                }
+                answer3.setStyle(" -fx-background-color: green; ");
+                answer1.setStyle(" -fx-background-color: red; ");
+                answer2.setStyle(" -fx-background-color: red; ");
+                break;
+            default:
+                //no answer was selected do nothing
+                //maybe poll later for inactivity
+                break;
+        }
+        scoreTxt.setText("Score:" + ClientData.getClientScore());
     }
 }

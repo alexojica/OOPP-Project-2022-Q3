@@ -37,15 +37,15 @@
             <Font size="24.0" />
          </font>
       </Text>
-      <RadioButton fx:id="answer1" focusTraversable="false" layoutX="380.0" layoutY="473.0" mnemonicParsing="false" text="Answer 1" />
-      <RadioButton fx:id="answer2" focusTraversable="false" layoutX="617.0" layoutY="473.0" mnemonicParsing="false" text="Answer 2" />
-      <RadioButton fx:id="answer3" focusTraversable="false" layoutX="863.0" layoutY="473.0" mnemonicParsing="false" text="Answer 3" />
+      <RadioButton fx:id="answer1" focusTraversable="false" layoutX="348.0" layoutY="473.0" mnemonicParsing="false" prefHeight="131.0" prefWidth="130.0" text="Answer 1" textAlignment="CENTER" wrapText="true" />
+      <RadioButton fx:id="answer2" focusTraversable="false" layoutX="594.0" layoutY="473.0" mnemonicParsing="false" prefHeight="131.0" prefWidth="130.0" text="Answer 2" textAlignment="CENTER" wrapText="true" />
+      <RadioButton fx:id="answer3" focusTraversable="false" layoutX="831.0" layoutY="473.0" mnemonicParsing="false" prefHeight="131.0" prefWidth="130.0" text="Answer 3" textAlignment="CENTER" wrapText="true" />
       <Pane layoutX="550.0" layoutY="130.0" prefHeight="170.0" prefWidth="220.0" style="-fx-background-color: ffffff;">
          <children>
             <ImageView fitHeight="160.0" fitWidth="210.0" layoutX="5.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </Pane>
-      <Text fx:id="questionTxt" layoutX="550.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Some question?">
+      <Text fx:id="questionTxt" layoutX="519.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Some question?" textAlignment="CENTER">
          <font>
             <Font size="29.0" />
          </font>
@@ -64,7 +64,7 @@
       <Text layoutX="630.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Power up 2" />
       <Text layoutX="803.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Power up 3" />
       <Text layoutX="1200.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Emotes" />
-      <Text layoutX="470.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" text="⏰" wrappingWidth="33.0">
+      <Text layoutX="464.0" layoutY="103.0" strokeType="OUTSIDE" strokeWidth="0.0" text="⏰" wrappingWidth="33.0">
          <font>
             <Font size="23.0" />
          </font>

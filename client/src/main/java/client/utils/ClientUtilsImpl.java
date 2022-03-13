@@ -99,6 +99,8 @@ public class ClientUtilsImpl implements ClientUtils {
 
         ClientData.setPointer(foundQuestion.getPointer());
 
+        ClientData.incrementQuestionCounter();
+
         System.out.println("[POINTER] " + ClientData.getClientPointer() +
                 ", [TOKEN] " + ClientData.getClientLobby().getToken());
 
