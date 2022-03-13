@@ -137,12 +137,12 @@ public class WaitingCtrl implements Initializable{
             @Override
             public void run() {
                 try{
+                    //TODO: add timer progress bar / UI text with counter depleting until the start of the game
                     Thread.sleep(3000);
 
                     //prepare the question again only if not host
                     if(!ClientData.getIsHost()) client.prepareQuestion();
                     Platform.runLater(() -> client.getQuestion());
-                    //client.getQuestion();
 
                 }catch (InterruptedException e){
                     e.printStackTrace();

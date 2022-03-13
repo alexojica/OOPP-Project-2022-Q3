@@ -87,9 +87,12 @@ public class EstimationQuestionCtrl {
                 try{
                     Platform.runLater(() -> updateCorrectAnswer());
                     //sleep for two seconds to update ui and let the user see the correct answer
-                    //prepare next question
-                    client.prepareQuestion();
+
                     Thread.sleep(2000);
+
+                    //prepare the question again only if not host
+                    if(!ClientData.getIsHost()) client.prepareQuestion();
+
                     //execute next question immediatly after sleep on current thread finishes execution
                     Platform.runLater(() -> client.getQuestion());
                     //client.getQuestion();
@@ -104,6 +107,13 @@ public class EstimationQuestionCtrl {
     }
 
     private void updateCorrectAnswer() {
+
+        if(ClientData.getIsHost())
+        {
+            //if host prepare next question
+            client.prepareQuestion();
+        }
+
         if(submittedAnswer == null) {
             showStatus("No answer submitted!","red");
             //also check for inactivity later on
