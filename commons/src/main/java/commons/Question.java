@@ -17,7 +17,6 @@ public class Question {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
     public Long id;
 
     @Column(name = "type")

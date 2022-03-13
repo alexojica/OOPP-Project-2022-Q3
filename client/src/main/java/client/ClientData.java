@@ -18,6 +18,15 @@ public class ClientData {
     private static Question clientQuestion;
     private static Long clientScore;
     private static Integer questionCounter;
+    private static Boolean isHost = false; //remembers who the host of the lobby is
+
+    public static Boolean getIsHost() {
+        return isHost;
+    }
+
+    public static void setAsHost(Boolean value) {
+        isHost = value;
+    }
 
     public static Integer getQuestionCounter()
     {

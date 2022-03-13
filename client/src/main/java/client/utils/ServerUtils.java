@@ -26,6 +26,7 @@ import jakarta.ws.rs.core.GenericType;
 import org.glassfish.jersey.client.ClientConfig;
 
 import java.util.List;
+import java.util.Optional;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -101,5 +102,14 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<Question>(){}); 
+    }
+
+    public Lobby startLobby(String token) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/lobby/startLobby") //
+                .queryParam("token", token)//
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<Lobby>() {});
     }
 }

@@ -126,7 +126,9 @@ public class GameMCQCtrl {
                 try{
                     Platform.runLater(() -> updateCorrectAnswer());
                     //sleep for two seconds to update ui and let the user see the correct answer
-                    Thread.sleep(2000);
+                    //prepare next question
+                    client.prepareQuestion();
+                    Thread.sleep(3000);
                     //execute next question immediatly after sleep on current thread finishes execution
                     Platform.runLater(() -> client.getQuestion());
                     //client.getQuestion();

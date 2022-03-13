@@ -48,6 +48,19 @@ public class LobbyController {
         return found;
     }
 
+    @GetMapping("/startLobby")
+    @ResponseBody
+    public Optional<Lobby> startLobby(@RequestParam String token){
+        Optional<Lobby> found = repository.findByToken(token);
+        if(found.isPresent())
+        {
+            Lobby activeLobby = found.get();
+            activeLobby.setStarted(true);
+            repository.save(activeLobby);
+        }
+        return found;
+    }
+
     /**
      *
      * @param token the token of the lobby a player is trying to access

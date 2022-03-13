@@ -25,13 +25,14 @@ import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
 import client.utils.ClientUtils;
 import com.google.inject.Inject;
+import jakarta.ws.rs.core.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
-public class MainCtrl {
+public class MainCtrl extends Application {
 
     private Stage primaryStage;
 

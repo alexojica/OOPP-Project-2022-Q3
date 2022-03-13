@@ -90,14 +90,18 @@ public class ClientUtilsImpl implements ClientUtils {
     }
 
     @Override
-    public void getQuestion(){
-
+    public void prepareQuestion()
+    {
         Question foundQuestion = server.getQuestion(
                 ClientData.getClientPointer(), ClientData.getClientLobby().getToken());
 
         ClientData.setQuestion(foundQuestion);
 
         ClientData.setPointer(foundQuestion.getPointer());
+    }
+
+    @Override
+    public void getQuestion(){
 
         ClientData.incrementQuestionCounter();
 

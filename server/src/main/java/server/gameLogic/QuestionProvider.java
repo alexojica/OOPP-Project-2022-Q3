@@ -37,6 +37,7 @@ public class QuestionProvider {
         updatePointer();
 
         if (foundQuestion.isEmpty()) {
+            System.out.println("New question created");
             return createNewQuestion();
         } else {
             return useQuestionAfter(foundQuestion);
@@ -82,6 +83,7 @@ public class QuestionProvider {
         }
 
         Question question = new Question(pointer, questionType, newPointer, activities, lastLobby);
+        questionRepository.save(question);
         System.out.println(question);
         return question;
     }
