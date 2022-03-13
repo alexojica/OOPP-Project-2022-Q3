@@ -129,6 +129,7 @@ public class MainCtrl {
     public void showLeaderboard(){
         primaryStage.setTitle("Leaderboard");
         primaryStage.setScene(leaderboard);
+        leaderboardCtrl.load();
     }
     public void showGameModeSelection(){
         primaryStage.setTitle("GameModeSelection");

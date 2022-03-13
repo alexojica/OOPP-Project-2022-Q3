@@ -1,9 +1,9 @@
-package server.entities;
+package commons;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Leadearboard")
+@Table(name = "Leaderboard")
 public class LeaderboardEntry {
 
     @Id

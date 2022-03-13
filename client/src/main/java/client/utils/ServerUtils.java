@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.List;
 
+import commons.LeaderboardEntry;
 import org.glassfish.jersey.client.ClientConfig;
 
 import jakarta.ws.rs.client.ClientBuilder;
@@ -105,5 +106,13 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<Activity>() {});
+    }
+
+    public List<LeaderboardEntry> getTop10Scores() {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/leaderboard/getTop10")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<List<LeaderboardEntry>>() {});
     }
 }
