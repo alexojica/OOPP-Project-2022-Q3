@@ -115,6 +115,7 @@ public class WaitingCtrl implements Initializable {
     public void startGame(){
         ClientData.setPointer(ClientData.getClientLobby().getPlayerIds().get(0));
         ClientData.setClientScore(0L);
+        ClientData.setQuestionCounter(0);
 
         client.getQuestion();
     }

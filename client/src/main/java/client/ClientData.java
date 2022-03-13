@@ -17,6 +17,22 @@ public class ClientData {
     private static Long clientPointer;
     private static Question clientQuestion;
     private static Long clientScore;
+    private static Integer questionCounter;
+
+    public static Integer getQuestionCounter()
+    {
+        return questionCounter;
+    }
+
+    public static void incrementQuestionCounter()
+    {
+        questionCounter++;
+    }
+
+    public static void setQuestionCounter(Integer counter)
+    {
+        questionCounter = counter;
+    }
 
     public static Long getClientScore() {
 		return clientScore;
