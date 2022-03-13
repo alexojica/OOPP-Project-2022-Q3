@@ -1,6 +1,6 @@
 package client.scenes.menus;
 
-import client.ClientData;
+import client.data.ClientData;
 import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
 import commons.Lobby;
@@ -13,11 +13,13 @@ public class MultiplayerMenuCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private final ClientData clientData;
 
     @Inject
-    public MultiplayerMenuCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public MultiplayerMenuCtrl(ServerUtils server, MainCtrl mainCtrl, ClientData clientData) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        this.clientData = clientData;
     }
 
     public void back(){
@@ -26,7 +28,7 @@ public class MultiplayerMenuCtrl {
 
     public void joinPublicLobby(){
 
-        Player clientPlayer = ClientData.getClientPlayer();
+        Player clientPlayer = clientData.getClientPlayer();
 
         ConnectionStatusCodes permissionCode = server.getConnectPermission("COMMON", clientPlayer.name);
 
@@ -40,7 +42,7 @@ public class MultiplayerMenuCtrl {
             case CONNECTION_PERMISSION_GRANTED:
                 Lobby commonLobby = server.getLobbyByToken("COMMON");
                 //set client lobby static variable
-                ClientData.setLobby(commonLobby);
+                clientData.setLobby(commonLobby);
 
                 //adds player to lobby (client sided)
                 commonLobby.addPlayerToLobby(clientPlayer);

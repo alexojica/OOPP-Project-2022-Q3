@@ -1,6 +1,6 @@
 package client.scenes.questions;
 
-import client.ClientData;
+import client.data.ClientData;
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
@@ -21,6 +21,8 @@ public class EstimationQuestionCtrl {
     private final ClientUtils client;
 
     private final MainCtrl mainCtrl;
+
+    private final ClientData clientData;
 
     @FXML
     private ProgressBar pb;
@@ -47,23 +49,24 @@ public class EstimationQuestionCtrl {
     private Long correctAnswer;
 
     @Inject
-    public EstimationQuestionCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl) {
+    public EstimationQuestionCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ClientData clientData) {
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.client = client;
+        this.clientData = clientData;
     }
 
     public void load() {
 
-        Question question = ClientData.getClientQuestion();
+        Question question = clientData.getClientQuestion();
 
         resetUI(question);
     }
 
     public void resetUI(Question question)
     {
-        scoreTxt.setText("Score:" + ClientData.getClientScore());
-        nQuestionsTxt.setText(ClientData.getQuestionCounter() + "/20");
+        scoreTxt.setText("Score:" + clientData.getClientScore());
+        nQuestionsTxt.setText(clientData.getQuestionCounter() + "/20");
 
         correctAnswer = question.getFoundActivities().get(0).getEnergyConsumption();
 
@@ -91,7 +94,7 @@ public class EstimationQuestionCtrl {
                     Thread.sleep(2000);
 
                     //prepare the question again only if not host
-                    if(!ClientData.getIsHost()) client.prepareQuestion();
+                    if(!clientData.getIsHost()) client.prepareQuestion();
 
                     //execute next question immediatly after sleep on current thread finishes execution
                     Platform.runLater(() -> client.getQuestion());
@@ -108,7 +111,7 @@ public class EstimationQuestionCtrl {
 
     private void updateCorrectAnswer() {
 
-        if(ClientData.getIsHost())
+        if(clientData.getIsHost())
         {
             //if host prepare next question
             client.prepareQuestion();
@@ -136,7 +139,8 @@ public class EstimationQuestionCtrl {
         }
     }
 
-    //TODO: Right now the points are calculated using simple if - statements, but we should probably do this with a math formula
+    //TODO: Right now the points are calculated using simple if -
+    // statements, but we should probably do this with a math formula
     public void addPoints()
     {
         Long pointsToAdd = 0L;
@@ -163,8 +167,8 @@ public class EstimationQuestionCtrl {
             //100% off -> get 150 points
             pointsToAdd = 150L;
         }
-        ClientData.setClientScore(ClientData.getClientScore() + pointsToAdd);
-        scoreTxt.setText("Score:" + ClientData.getClientScore());
+        clientData.setClientScore(clientData.getClientScore() + pointsToAdd);
+        scoreTxt.setText("Score:" + clientData.getClientScore());
     }
 
     public void showStatus(String text,String color)

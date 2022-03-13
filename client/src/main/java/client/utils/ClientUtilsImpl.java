@@ -1,6 +1,6 @@
 package client.utils;
 
-import client.ClientData;
+import client.data.ClientData;
 import client.scenes.MainCtrl;
 import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
@@ -10,7 +10,6 @@ import commons.Question;
 import constants.QuestionTypes;
 import javafx.application.Platform;
 import javafx.scene.control.ProgressBar;
-import org.checkerframework.checker.units.qual.A;
 
 import javax.inject.Inject;
 import java.util.Timer;
@@ -27,19 +26,25 @@ public class ClientUtilsImpl implements ClientUtils {
     @Inject
     private MainCtrl mainCtrl;
 
+    private final ClientData clientData;
+
+    @Inject
+    public ClientUtilsImpl(ClientData clientData) {
+        this.clientData = clientData;
+    }
 
     @Override
     public boolean isInLobby() {
-        return ClientData.getClientLobby() != null;
+        return clientData.getClientLobby() != null;
     }
 
     @Override
     public void leaveLobby() {
-        Lobby currentLobby = ClientData.getClientLobby();
-        Player clientPlayer = ClientData.getClientPlayer();
+        Lobby currentLobby = clientData.getClientLobby();
+        Player clientPlayer = clientData.getClientPlayer();
 
         //set client lobby to exited
-        ClientData.setLobby(null);
+        clientData.setLobby(null);
 
         //removes player from lobby (client sided)
         currentLobby.removePlayerFromLobby(clientPlayer);
@@ -93,24 +98,24 @@ public class ClientUtilsImpl implements ClientUtils {
     public void prepareQuestion()
     {
         Question foundQuestion = server.getQuestion(
-                ClientData.getClientPointer(), ClientData.getClientLobby().getToken());
+                clientData.getClientPointer(), clientData.getClientLobby().getToken());
 
-        ClientData.setQuestion(foundQuestion);
+        clientData.setQuestion(foundQuestion);
 
-        ClientData.setPointer(foundQuestion.getPointer());
+        clientData.setPointer(foundQuestion.getPointer());
     }
 
     @Override
     public void getQuestion(){
 
-        ClientData.incrementQuestionCounter();
+        clientData.incrementQuestionCounter();
 
-        System.out.println("[POINTER] " + ClientData.getClientPointer() +
-                ", [TOKEN] " + ClientData.getClientLobby().getToken());
+        System.out.println("[POINTER] " + clientData.getClientPointer() +
+                ", [TOKEN] " + clientData.getClientLobby().getToken());
 
-        System.out.println("[TYPE] " + ClientData.getClientQuestion().getType());
+        System.out.println("[TYPE] " + clientData.getClientQuestion().getType());
 
-        switch(ClientData.getClientQuestion().getType())
+        switch(clientData.getClientQuestion().getType())
         {
             case MULTIPLE_CHOICE_QUESTION:
                 mainCtrl.showGameMCQ();

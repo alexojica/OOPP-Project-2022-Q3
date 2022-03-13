@@ -1,6 +1,6 @@
 package client.scenes.questions;
 
-import client.ClientData;
+import client.data.ClientData;
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
@@ -13,10 +13,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.Text;
 
 import javax.inject.Inject;
-
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static constants.QuestionTypes.MULTIPLE_CHOICE_QUESTION;
 
@@ -25,6 +22,7 @@ public class GameMCQCtrl {
     private final ServerUtils server;
     private final ClientUtils client;
     private final MainCtrl mainCtrl;
+    private final ClientData clientData;
 
     @FXML
     private ProgressBar pb;
@@ -50,19 +48,21 @@ public class GameMCQCtrl {
     private int correctAnswer;
 
     @Inject
-    public GameMCQCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl) {
+    public GameMCQCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ClientData clientData) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.client = client;
+        this.clientData = clientData;
     }
 
     public void leaveGame(){
         client.leaveLobby();
     }
 
+
     public void load() {
 
-        Question question = ClientData.getClientQuestion();
+        Question question = clientData.getClientQuestion();
 
         resetUI(question);
 
@@ -70,8 +70,8 @@ public class GameMCQCtrl {
 
     public void resetUI(Question question)
     {
-        scoreTxt.setText("Score:" + ClientData.getClientScore());
-        nQuestionsTxt.setText(ClientData.getQuestionCounter() + "/20");
+        scoreTxt.setText("Score:" + clientData.getClientScore());
+        nQuestionsTxt.setText(clientData.getQuestionCounter() + "/20");
 
         answer1.setToggleGroup(radioGroup);
         answer2.setToggleGroup(radioGroup);
@@ -130,7 +130,7 @@ public class GameMCQCtrl {
                     Thread.sleep(2000);
 
                     //prepare the question again only if not host
-                    if(!ClientData.getIsHost()) client.prepareQuestion();
+                    if(!clientData.getIsHost()) client.prepareQuestion();
 
                     //execute next question immediatly after sleep on current thread finishes execution
                     Platform.runLater(() -> client.getQuestion());
@@ -148,7 +148,7 @@ public class GameMCQCtrl {
     public void updateCorrectAnswer()
     {
 
-        if(ClientData.getIsHost())
+        if(clientData.getIsHost())
         {
             //if host prepare next question
             client.prepareQuestion();
@@ -158,7 +158,7 @@ public class GameMCQCtrl {
         {
             case 0:
                 if(answer1.equals(radioGroup.getSelectedToggle())){
-                    ClientData.setClientScore(ClientData.getClientScore() + 500);
+                    clientData.setClientScore(clientData.getClientScore() + 500);
                 }
                 answer1.setStyle(" -fx-background-color: green; ");
                 answer2.setStyle(" -fx-background-color: red; ");
@@ -166,7 +166,7 @@ public class GameMCQCtrl {
                 break;
             case 1:
                 if(answer2.equals(radioGroup.getSelectedToggle())){
-                    ClientData.setClientScore(ClientData.getClientScore() + 500);
+                    clientData.setClientScore(clientData.getClientScore() + 500);
                 }
                 answer2.setStyle(" -fx-background-color: green; ");
                 answer1.setStyle(" -fx-background-color: red; ");
@@ -174,7 +174,7 @@ public class GameMCQCtrl {
                 break;
             case 2:
                 if(answer3.equals(radioGroup.getSelectedToggle())){
-                    ClientData.setClientScore(ClientData.getClientScore() + 500);
+                    clientData.setClientScore(clientData.getClientScore() + 500);
                 }
                 answer3.setStyle(" -fx-background-color: green; ");
                 answer1.setStyle(" -fx-background-color: red; ");
@@ -185,6 +185,6 @@ public class GameMCQCtrl {
                 //maybe poll later for inactivity
                 break;
         }
-        scoreTxt.setText("Score:" + ClientData.getClientScore());
+        scoreTxt.setText("Score:" + clientData.getClientScore());
     }
 }
