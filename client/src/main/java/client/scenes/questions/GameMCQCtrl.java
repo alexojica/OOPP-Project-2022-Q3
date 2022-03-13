@@ -64,11 +64,11 @@ public class GameMCQCtrl {
 
         Question question = ClientData.getClientQuestion();
 
-        updateUI(question);
+        resetUI(question);
 
     }
 
-    public void updateUI(Question question)
+    public void resetUI(Question question)
     {
         scoreTxt.setText("Score:" + ClientData.getClientScore());
         nQuestionsTxt.setText(ClientData.getQuestionCounter() + "/20");

@@ -6,6 +6,7 @@ import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Question;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
@@ -39,6 +40,12 @@ public class EstimationQuestionCtrl {
     @FXML
     private TextField answer;
 
+    @FXML
+    private Text answerPopUp;
+
+    private Long submittedAnswer;
+    private Long correctAnswer;
+
     @Inject
     public EstimationQuestionCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
@@ -50,13 +57,22 @@ public class EstimationQuestionCtrl {
 
         Question question = ClientData.getClientQuestion();
 
-        updateUI(question);
+        resetUI(question);
     }
 
-    public void updateUI(Question question)
+    public void resetUI(Question question)
     {
         scoreTxt.setText("Score:" + ClientData.getClientScore());
         nQuestionsTxt.setText(ClientData.getQuestionCounter() + "/20");
+
+        correctAnswer = question.getFoundActivities().get(0).getEnergyConsumption();
+
+       // answerPopUp.setText(correctAnswer.toString());
+        answerPopUp.setStyle(" -fx-background-color: transparent; ");
+        submittedAnswer = null;
+
+        answer.setText("");
+        answer.setStyle(" -fx-background-color: white; ");
 
         client.startTimer(pb,this, ESTIMATION_QUESTION);
 
@@ -65,11 +81,84 @@ public class EstimationQuestionCtrl {
     }
 
     public void nextQuestion(){
-        client.getQuestion();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    Platform.runLater(() -> updateCorrectAnswer());
+                    //sleep for two seconds to update ui and let the user see the correct answer
+                    Thread.sleep(2000);
+                    //execute next question immediatly after sleep on current thread finishes execution
+                    Platform.runLater(() -> client.getQuestion());
+                    //client.getQuestion();
+                }catch (InterruptedException e)
+                {
+                    e.printStackTrace();
+                    System.out.println("Something went wrong when showing correct answer!");
+                }
+            }
+        });
+        thread.start();
+    }
+
+    private void updateCorrectAnswer() {
+        if(submittedAnswer == null) {
+            showStatus("No answer submitted!","red");
+            //also check for inactivity later on
+        }
+        else
+        {
+            showStatus("Correct answer is " + correctAnswer.toString(),"green");
+            addPoints();
+        }
     }
 
     public void submit() {
+        try {
+            submittedAnswer = Long.parseLong(answer.getText());
+            answer.setStyle(" -fx-background-color: yellow; ");
+        }catch (NumberFormatException e){
+            System.out.println("Number not formatted correctly");
+            showStatus("Number not formatted correctly","red");
+            answer.setText("");
+        }
+    }
 
+    //TODO: Right now the points are calculated using simple if - statements, but we should probably do this with a math formula
+    public void addPoints()
+    {
+        Long pointsToAdd = 0L;
+        if(correctAnswer * 70 / 100L <= submittedAnswer && submittedAnswer <= correctAnswer * 130/100L)
+        {
+            //30% off -> get full points
+            pointsToAdd = 500L;
+        }
+        else
+        if(correctAnswer * 50 / 100L <= submittedAnswer && submittedAnswer <= correctAnswer * 150/100L)
+        {
+            //50% off -> get 350 points
+            pointsToAdd = 350L;
+        }
+        else
+        if(correctAnswer * 30 / 100L <= submittedAnswer && submittedAnswer <= correctAnswer * 170/100L)
+        {
+            //70% off -> get 250 points
+            pointsToAdd = 250L;
+        }
+        else
+        if(correctAnswer * 1 / 2L <= submittedAnswer && submittedAnswer <= correctAnswer * 200/100L)
+        {
+            //100% off -> get 150 points
+            pointsToAdd = 150L;
+        }
+        ClientData.setClientScore(ClientData.getClientScore() + pointsToAdd);
+        scoreTxt.setText("Score:" + ClientData.getClientScore());
+    }
+
+    public void showStatus(String text,String color)
+    {
+        answerPopUp.setText(text);
+        answerPopUp.setStyle(" -fx-background-color: " + color + "; ");
     }
 
     public void leaveGame() {

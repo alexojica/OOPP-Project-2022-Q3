@@ -28,7 +28,7 @@
             <Font size="24.0" />
          </font>
       </Text>
-      <Text fx:id="questionTxt" layoutX="513.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Some question?" textAlignment="CENTER">
+      <Text fx:id="questionTxt" layoutX="472.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Some question?" textAlignment="CENTER">
          <font>
             <Font size="29.0" />
          </font>
@@ -42,6 +42,11 @@
       <Text layoutX="439.0" layoutY="109.0" strokeType="OUTSIDE" strokeWidth="0.0" text="⏰" wrappingWidth="33.0">
          <font>
             <Font size="23.0" />
+         </font>
+      </Text>
+      <Text fx:id="answerPopUp" layoutX="456.0" layoutY="408.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="286.2333984375">
+         <font>
+            <Font size="18.0" />
          </font>
       </Text>
    </children>

@@ -45,7 +45,7 @@
             <ImageView fitHeight="160.0" fitWidth="210.0" layoutX="5.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </Pane>
-      <Text fx:id="questionTxt" layoutX="519.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Some question?" textAlignment="CENTER">
+      <Text fx:id="questionTxt" layoutX="500.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Some question?" textAlignment="CENTER">
          <font>
             <Font size="29.0" />
          </font>
