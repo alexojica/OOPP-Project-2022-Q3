@@ -13,7 +13,7 @@
         <Button focusTraversable="false" layoutX="773.0" layoutY="194.0" mnemonicParsing="false" prefHeight="92.0" prefWidth="25.0" text="&gt;" />
         <Button focusTraversable="false" layoutX="456.0" layoutY="194.0" mnemonicParsing="false" prefHeight="92.0" prefWidth="25.0" text="&lt;" />
         <TextField fx:id="name" alignment="CENTER" layoutX="550.0" layoutY="360.0" promptText="Username" />
-        <Button focusTraversable="false" layoutX="562.0" layoutY="400.0" mnemonicParsing="false" onAction="#play" prefHeight="26.0" prefWidth="123.0" text="Play" />
+        <Button focusTraversable="false" layoutX="568.0" layoutY="400.0" mnemonicParsing="false" onAction="#play" prefHeight="26.0" prefWidth="123.0" text="Play" />
         <Label layoutX="600.0" layoutY="86.4" text="Quizzz" AnchorPane.topAnchor="86.4" />
     </children>
 </AnchorPane>

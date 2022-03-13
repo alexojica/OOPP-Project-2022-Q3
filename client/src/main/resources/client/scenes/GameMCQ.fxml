@@ -13,23 +13,18 @@
 <AnchorPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: e6e6e6;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.questions.GameMCQCtrl">
    <children>
       <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true" />
-      <Pane layoutX="500.0" layoutY="370.0" prefHeight="100.0" prefWidth="130.0" style="-fx-background-color: ffffff;">
+      <Pane layoutX="600.0" layoutY="365.0" prefHeight="110.0" prefWidth="145.0" style="-fx-background-color: ffffff;">
          <children>
-            <ImageView fitHeight="90.0" fitWidth="120.0" layoutX="7.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fitHeight="100.0" fitWidth="135.0" layoutX="7.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true" />
          </children></Pane>
-      <Pane layoutX="300.0" layoutY="370.0" prefHeight="100.0" prefWidth="130.0" style="-fx-background-color: ffffff;">
+      <Pane layoutX="290.0" layoutY="365.0" prefHeight="110.0" prefWidth="145.0" style="-fx-background-color: ffffff;">
          <children>
-            <ImageView fitHeight="90.0" fitWidth="120.0" layoutX="6.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fitHeight="100.0" fitWidth="135.0" layoutX="6.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </Pane>
-      <Pane layoutX="700.0" layoutY="370.0" prefHeight="100.0" prefWidth="130.0" style="-fx-background-color: ffffff;">
+      <Pane layoutX="900.0" layoutY="365.0" prefHeight="110.0" prefWidth="145.0" style="-fx-background-color: ffffff;">
          <children>
-            <ImageView fitHeight="90.0" fitWidth="120.0" layoutX="6.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true" />
-         </children>
-      </Pane>
-      <Pane layoutX="900.0" layoutY="370.0" prefHeight="100.0" prefWidth="130.0" style="-fx-background-color: ffffff;">
-         <children>
-            <ImageView fitHeight="90.0" fitWidth="120.0" layoutX="6.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fitHeight="100.0" fitWidth="135.0" layoutX="6.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </Pane>
       <Button focusTraversable="false" layoutX="21.0" layoutY="650.0" mnemonicParsing="false" onAction="#leaveGame" prefHeight="43.0" prefWidth="110.0" text="Leave Game">
@@ -42,10 +37,9 @@
             <Font size="24.0" />
          </font>
       </Text>
-      <RadioButton fx:id="answer1" focusTraversable="false" layoutX="325.0" layoutY="473.0" mnemonicParsing="false" text="Answer 1" />
-      <RadioButton fx:id="answer2" focusTraversable="false" layoutX="525.0" layoutY="473.0" mnemonicParsing="false" text="Answer 2" />
-      <RadioButton fx:id="answer3" focusTraversable="false" layoutX="725.0" layoutY="473.0" mnemonicParsing="false" text="Answer 3" />
-      <RadioButton focusTraversable="false" layoutX="925.0" layoutY="473.0" mnemonicParsing="false" text="Answer 4" />
+      <RadioButton fx:id="answer1" focusTraversable="false" layoutX="290.0" layoutY="477.0" mnemonicParsing="false" text="Answer 1" />
+      <RadioButton fx:id="answer2" focusTraversable="false" layoutX="600.0" layoutY="477.0" mnemonicParsing="false" text="Answer 2" />
+      <RadioButton fx:id="answer3" focusTraversable="false" layoutX="900.0" layoutY="477.0" mnemonicParsing="false" text="Answer 3" />
       <Pane layoutX="550.0" layoutY="130.0" prefHeight="170.0" prefWidth="220.0" style="-fx-background-color: ffffff;">
          <children>
             <ImageView fitHeight="160.0" fitWidth="210.0" layoutX="7.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true" />

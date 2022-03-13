@@ -14,7 +14,7 @@
             <Font size="21.0" />
          </font>
       </Button>
-      <Button focusTraversable="false" layoutX="600.0" layoutY="423.0" mnemonicParsing="false" onAction="#leaderboard" prefHeight="18.0" prefWidth="107.0" text="Leaderboard" />
+      <Button focusTraversable="false" layoutX="598.0" layoutY="423.0" mnemonicParsing="false" onAction="#leaderboard" prefHeight="18.0" prefWidth="107.0" text="Leaderboard" />
       <Button focusTraversable="false" layoutX="575.0" layoutY="340.0" mnemonicParsing="false" onAction="#singleplayer" prefHeight="70.0" prefWidth="154.0" text="Single-player">
          <font>
             <Font size="21.0" />
