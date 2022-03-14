@@ -1,4 +1,4 @@
-package server.api;
+package server.api.Mocks;
 
 import commons.Lobby;
 import org.springframework.data.domain.Example;
