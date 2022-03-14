@@ -57,12 +57,12 @@
       </Text>
       <ProgressBar layoutX="500.0" layoutY="84.0" prefHeight="20.0" prefWidth="320.0" progress="0.0" />
       <Circle fill="DODGERBLUE" layoutX="1220.0" layoutY="42.0" radius="18.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fill="DODGERBLUE" layoutX="482.0" layoutY="630.0" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fill="DODGERBLUE" layoutX="612.0" layoutY="630.0" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fill="DODGERBLUE" layoutX="742.0" layoutY="630.0" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
-      <Text layoutX="450.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Power up 1" />
-      <Text layoutX="580.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Power up 2" />
-      <Text layoutX="710.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Power up 3" />
+      <Circle fill="DODGERBLUE" layoutX="537.0" layoutY="630.0" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fill="DODGERBLUE" layoutX="667.0" layoutY="630.0" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fill="DODGERBLUE" layoutX="797.0" layoutY="630.0" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
+      <Text layoutX="507.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Power up 1" />
+      <Text layoutX="637.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Power up 2" />
+      <Text layoutX="767.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Power up 3" />
       <Text layoutX="1200.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Emotes" />
       <Text layoutX="470.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" text="⏰" wrappingWidth="33.0">
          <font>
