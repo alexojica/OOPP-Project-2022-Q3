@@ -5,17 +5,17 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.menus.GameModeSelectionCtrl">
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" stylesheets="@css/GameModeSelection.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.menus.GameModeSelectionCtrl">
    <children>
       <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true" />
-      <Button focusTraversable="false" layoutX="41.0" layoutY="41.0" mnemonicParsing="false" onAction="#back" prefHeight="32.0" prefWidth="80.0" text="Edit Player" />
-      <Button focusTraversable="false" layoutX="575.0" layoutY="250.0" mnemonicParsing="false" onAction="#multiplayer" prefHeight="70.0" prefWidth="154.0" text="Multiplayer">
+      <Button focusTraversable="false" layoutX="41.0" layoutY="41.0" mnemonicParsing="false" onAction="#back" prefHeight="32.0" prefWidth="90.0" text="Edit Player" styleClass="button4"/>
+      <Button focusTraversable="false" layoutX="575.0" layoutY="250.0" mnemonicParsing="false" onAction="#multiplayer" prefHeight="70.0" prefWidth="154.0" text="Multiplayer" styleClass="button1">
          <font>
             <Font size="21.0" />
          </font>
       </Button>
-      <Button focusTraversable="false" layoutX="598.0" layoutY="423.0" mnemonicParsing="false" onAction="#leaderboard" prefHeight="18.0" prefWidth="107.0" text="Leaderboard" />
-      <Button focusTraversable="false" layoutX="575.0" layoutY="340.0" mnemonicParsing="false" onAction="#singleplayer" prefHeight="70.0" prefWidth="154.0" text="Single-player">
+      <Button focusTraversable="false" layoutX="598.0" layoutY="423.0" mnemonicParsing="false" onAction="#leaderboard" prefHeight="18.0" prefWidth="107.0" text="Leaderboard" styleClass="button3"/>
+      <Button focusTraversable="false" layoutX="575.0" layoutY="340.0" mnemonicParsing="false" onAction="#singleplayer" prefHeight="70.0" prefWidth="154.0" text="Single-player" styleClass="button2">
          <font>
             <Font size="21.0" />
          </font>

@@ -9,40 +9,46 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: e6e6e6;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.menus.WaitingCtrl">
+<?import client.utils.FormattedTableCellFactory?>
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: e6e6e6;" stylesheets="@css/Waiting.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.menus.WaitingCtrl">
    <children>
       <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true" />
-      <TableView fx:id="tableView" focusTraversable="false" layoutX="200.0" layoutY="175.0" prefHeight="400.0" prefWidth="292.0">
+      <TableView fx:id="tableView" focusTraversable="false" layoutX="200.0" layoutY="175.0" prefHeight="400.0" prefWidth="292.0" styleClass="table">
         <columns>
-          <TableColumn fx:id="avatarColumn" prefWidth="100.0" text="Avatar" />
-          <TableColumn fx:id="usernameColumn" prefWidth="191.2" text="Username" />
+          <TableColumn fx:id="avatarColumn" prefWidth="110.0" text="Avatar" />
+          <TableColumn fx:id="usernameColumn" prefWidth="181.2" text="Username">
+           <cellFactory>
+              <FormattedTableCellFactory alignment="center">
+              </FormattedTableCellFactory>
+           </cellFactory>
+           </TableColumn>
         </columns>
       </TableView>
-      <Text layoutX="575.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Currently Waiting..." wrappingWidth="161.3526611328125">
+      <Text layoutX="565.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Currently Waiting..." wrappingWidth="240" styleClass="header-section">
          <font>
             <Font size="19.0" />
          </font>
       </Text>
-      <Text fx:id="lobbyCode" layoutX="1000.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lobby Code:" wrappingWidth="144.68707275390625">
+      <Text fx:id="lobbyCode" layoutX="1100.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lobby Code:" wrappingWidth="144.68707275390625" styleClass="code">
          <font>
             <Font size="15.0" />
          </font>
       </Text>
-      <Pane layoutX="800.0" layoutY="225.0" prefHeight="245.0" prefWidth="248.0" style="-fx-background-color: fffac3;">
+      <Pane layoutX="800.0" layoutY="275.0" prefHeight="145.0" prefWidth="248.0" style="-fx-background-color: fffac3;">
          <children>
-            <Text layoutX="98.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tip" textAlignment="CENTER" wrappingWidth="40.3720703125">
+            <Text layoutX="98.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tip" textAlignment="CENTER" wrappingWidth="40.3720703125" styleClass="Tip">
                <font>
                   <Font size="18.0" />
                </font>
             </Text>
-            <Text fx:id="tip" layoutX="25.0" layoutY="72.0" strokeType="OUTSIDE" strokeWidth="0.0" text="tip_text" wrappingWidth="200.33673095703125">
+            <Text fx:id="tip" layoutX="25.0" layoutY="72.0" strokeType="OUTSIDE" strokeWidth="0.0" text="tip_text" wrappingWidth="200.33673095703125" styleClass="tipText">
                <font>
                   <Font size="14.0" />
                </font>
             </Text>
          </children>
       </Pane>
-      <Button focusTraversable="false" layoutX="89.0" layoutY="650.0" mnemonicParsing="false" onAction="#leaveLobby" prefHeight="39.0" prefWidth="94.0" text="Leave Lobby" />
-      <Button focusTraversable="false" layoutX="1050.0" layoutY="650.0" mnemonicParsing="false" onAction="#startGame" prefHeight="39.0" prefWidth="94.0" text="Start Game" />
+      <Button focusTraversable="false" layoutX="65.0" layoutY="650.0" mnemonicParsing="false" onAction="#leaveLobby" prefHeight="39.0" prefWidth="100.0" text="Leave Lobby" />
+      <Button focusTraversable="false" layoutX="1040.0" layoutY="615.0" mnemonicParsing="false" onAction="#startGame" prefHeight="70.0" prefWidth="185.0" text="Start Game" styleClass="button1"/>
    </children>
 </AnchorPane>
