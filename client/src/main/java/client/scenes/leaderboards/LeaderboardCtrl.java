@@ -9,15 +9,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-
 import javax.inject.Inject;
-import java.net.URL;
-import java.util.ResourceBundle;
 
-public class LeaderboardCtrl implements Initializable {
+public class LeaderboardCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -43,11 +39,10 @@ public class LeaderboardCtrl implements Initializable {
     }
 
     public void load() {
-        top10LeaderboardEntries = FXCollections.observableList(server.getTop10Scores());
-    }
+        //test
+        server.saveScore(new LeaderboardEntry(0, "hehehe", "gmgmg"));
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+        top10LeaderboardEntries = FXCollections.observableList(server.getTop10Scores());
         nameColumn.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().name));
         avatarColumn.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().avatarPath));
         scoreColumn.setCellValueFactory(q -> new SimpleIntegerProperty(q.getValue().score).asObject());

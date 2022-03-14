@@ -9,8 +9,5 @@ import java.util.List;
 
 @Transactional
 public interface LeaderboardRepository extends JpaRepository<LeaderboardEntry, Long> {
-
-    @Query("select l from LeaderboardEntry l order by l.score desc")
     List<LeaderboardEntry> findTop10ByOrderByScoreDesc();
-
 }

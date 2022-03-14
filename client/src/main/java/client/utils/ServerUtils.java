@@ -115,4 +115,12 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<LeaderboardEntry>>() {});
     }
+
+    public LeaderboardEntry saveScore(LeaderboardEntry score) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/leaderboard/saveScore")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(score, APPLICATION_JSON), LeaderboardEntry.class);
+    }
 }
