@@ -6,19 +6,30 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import server.Exceptions.WrongParameterException;
 import server.database.PlayerRepository;
 import commons.Player;
 
 @RestController
-@RequestMapping("api/player")
+@RequestMapping("/api/player")
 public class PlayerController {
     
     @Autowired
     private PlayerRepository repository;
 
+    public PlayerController(PlayerRepository repository){
+        this.repository = repository;
+    }
+
+    public PlayerController(){
+
+    }
+
     @PostMapping("/addPlayer")
     @ResponseBody
-    public Player addPlayer(@RequestBody Player newPlayer){
+    public Player addPlayer(@RequestBody Player newPlayer) throws Exception{
+        if(newPlayer == null)
+            throw new WrongParameterException();
         repository.save(newPlayer);
         return newPlayer;
     }

@@ -13,9 +13,17 @@ import commons.Lobby;
 @RestController
 @RequestMapping("/api/lobby")
 public class LobbyController {
-    
+
     @Autowired
     private LobbyRepository repository;
+
+    public LobbyController(LobbyRepository repository){
+        this.repository = repository;
+    }
+
+    public LobbyController(){
+
+    }
 
     @PostMapping("/addLobby")
     @ResponseBody

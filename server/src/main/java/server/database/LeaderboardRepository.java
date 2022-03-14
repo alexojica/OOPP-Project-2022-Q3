@@ -6,5 +6,5 @@ import server.entities.LeaderboardEntry;
 import javax.transaction.Transactional;
 
 @Transactional
-public interface LeadearboardRepository extends JpaRepository<LeaderboardEntry, Long> {
+public interface LeaderboardRepository extends JpaRepository<LeaderboardEntry, Long> {
 }
