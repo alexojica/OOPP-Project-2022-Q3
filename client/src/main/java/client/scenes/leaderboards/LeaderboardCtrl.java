@@ -39,9 +39,6 @@ public class LeaderboardCtrl {
     }
 
     public void load() {
-        //test
-        server.saveScore(new LeaderboardEntry(0, "hehehe", "gmgmg"));
-
         top10LeaderboardEntries = FXCollections.observableList(server.getTop10Scores());
         nameColumn.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().name));
         avatarColumn.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().avatarPath));
