@@ -57,10 +57,6 @@ public class HomeCtrl {
         mainCtrl.showGameModeSelection();
     }
 
-    public void leaderboard(){
-        mainCtrl.showLeaderboard();
-    }
-
     private Player getPlayer()
     {
         String userName = name.getText();

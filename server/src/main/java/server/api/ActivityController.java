@@ -18,10 +18,20 @@ public class ActivityController {
     @Autowired
     private ActivitiesRepository repository;
 
+    public ActivityController(ActivitiesRepository repository){
+        this.repository = repository;
+    }
+
+    public ActivityController(){
+
+    }
+
     @GetMapping("/getActivityByWh")
     @ResponseBody
     public Activity getActivityByWh(@RequestParam Long energyConsumption) {
         List<Activity> act = repository.findByEnergyConsumptionDesc(energyConsumption);
+        if(act.isEmpty())
+            return null;
         return act.get(0);
     }
 
@@ -30,6 +40,8 @@ public class ActivityController {
     public Activity getRandomActivity() {
         List<Activity> allAct = repository.findAll();
         Random ran = new Random();
+        if(allAct.isEmpty())
+            return null;
         return allAct.get(ran.nextInt(allAct.size()));
     }
 }

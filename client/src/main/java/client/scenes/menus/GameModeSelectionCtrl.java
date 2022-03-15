@@ -40,4 +40,8 @@ public class GameModeSelectionCtrl {
     public void multiplayer(){
         mainCtrl.showMultiplayerMenu();
     }
+
+    public void leaderboard(){
+        mainCtrl.showLeaderboard();
+    }
 }

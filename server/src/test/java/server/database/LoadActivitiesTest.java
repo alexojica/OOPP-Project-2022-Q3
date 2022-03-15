@@ -42,6 +42,7 @@ class LoadActivitiesTest {
             when(mockRepository.saveAll(activities)).thenReturn(activities);
             loadActivities.saveIntoDatabase(mockRepository);
 
+
             // then
             verify(mockRepository).saveAll(activities);
         }
