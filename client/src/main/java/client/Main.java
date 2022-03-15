@@ -15,12 +15,9 @@
  */
 package client;
 
-import static com.google.inject.Guice.createInjector;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
-
-import client.scenes.*;
+import client.scenes.GameOverCtrl;
+import client.scenes.MainCtrl;
+import client.scenes.UsernamePopUpCtrl;
 import client.scenes.leaderboards.LeaderboardCtrl;
 import client.scenes.leaderboards.TempLeaderboardCtrl;
 import client.scenes.menus.GameModeSelectionCtrl;
@@ -30,22 +27,22 @@ import client.scenes.menus.WaitingCtrl;
 import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
 import com.google.inject.Injector;
-
 import javafx.application.Application;
 import javafx.stage.Stage;
+
+import static com.google.inject.Guice.createInjector;
 
 public class Main extends Application {
 
     private static final Injector INJECTOR = createInjector(new MyModule());
     private static final MyFXML FXML = new MyFXML(INJECTOR);
 
-    public static void main(String[] args) throws URISyntaxException, IOException {
+    public static void main(String[] args) {
         launch();
     }
 
     @Override
-    public void start(Stage primaryStage) throws IOException {
-
+    public void start(Stage primaryStage) {
 
         var home = FXML.load(HomeCtrl.class, "client", "scenes", "Home.fxml");
         var gameModeSelection = FXML.load(GameModeSelectionCtrl.class, "client", "scenes", "GameModeSelection.fxml");

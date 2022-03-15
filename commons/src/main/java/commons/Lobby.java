@@ -25,6 +25,9 @@ public class Lobby {
     @Column(name = "isPublic")
     public Boolean isPublic;
 
+    @Column(name = "isStarted")
+    public Boolean isStarted;
+
     @Column(name = "hostId")
     public Integer hostId;
 
@@ -52,6 +55,7 @@ public class Lobby {
         this.playerIds = new ArrayList<>();
         this.playersInLobby = new ArrayList<>();
         this.hostId = null;
+        this.isStarted = false;
     }
 
     /**
@@ -66,6 +70,7 @@ public class Lobby {
         this.playerIds = new ArrayList<>();
         this.playersInLobby = new ArrayList<>();
         this.isPublic = false;
+        this.isStarted = false;
     }
 
     public void addPlayerToLobby(Player player)
@@ -114,6 +119,14 @@ public class Lobby {
 
     public void setPlayerIds(ArrayList<Long> playerIds) {
         this.playerIds = playerIds;
+    }
+
+    public Boolean getStarted() {
+        return isStarted;
+    }
+
+    public void setStarted(Boolean started) {
+        isStarted = started;
     }
 
     @Override

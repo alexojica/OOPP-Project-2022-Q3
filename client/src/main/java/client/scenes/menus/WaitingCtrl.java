@@ -1,10 +1,12 @@
 package client.scenes.menus;
 
-import client.ClientData;
+import client.data.ClientData;
 import client.scenes.MainCtrl;
+import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.Lobby;
 import commons.Player;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,9 +24,12 @@ import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class WaitingCtrl implements Initializable {
+public class WaitingCtrl implements Initializable{
 
     private final ServerUtils server;
+    private final ClientUtils client;
+    private final ClientData clientData;
+
     private final MainCtrl mainCtrl;
     private ObservableList<Player> playerData;
 
@@ -44,16 +49,18 @@ public class WaitingCtrl implements Initializable {
 
     private List<Player> activePlayers;
 
+    private Timer timer;
+
     @Inject
-    public WaitingCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public WaitingCtrl(ServerUtils server, MainCtrl mainCtrl, ClientUtils client, ClientData clientData) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        this.client = client;
+        this.clientData = clientData;
     }
 
     /**
      * Method that sets up how the scene should look like when switched to
-     * TODO: Create a class that stores a player (avatar, username...)
-     * TODO: Have the 'Tip' text randomised and changed every x seconds
      */
     public void load(){
         tip.setText("Theres only one correct answer per question, get the most right to win.");
@@ -68,7 +75,7 @@ public class WaitingCtrl implements Initializable {
 
     public void showActivePlayers()
     {
-        activePlayers = ClientData.getClientLobby().getPlayersInLobby();
+        activePlayers = clientData.getClientLobby().getPlayersInLobby();
 
         refresh();
     }
@@ -79,17 +86,18 @@ public class WaitingCtrl implements Initializable {
         usernameColumn.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().name));
         //also initialization done for the avatar path/ logo directly
 
-        new Timer().scheduleAtFixedRate(new TimerTask() {
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 refresh();
             }
-        }, 0, 500);
+        }, 0, 250);
     }
 
     public boolean isInLobby()
     {
-        if(ClientData.getClientLobby() == null) return false;
+        if(clientData.getClientLobby() == null) return false;
         return true;
     }
 
@@ -97,34 +105,69 @@ public class WaitingCtrl implements Initializable {
     {
         if(activePlayers != null && isInLobby())
         {
-            String token = ClientData.getClientLobby().getToken();
+            String token = clientData.getClientLobby().getToken();
             Lobby current = server.getLobbyByToken(token);
-            ClientData.setLobby(current);
+            clientData.setLobby(current);
             activePlayers = current.getPlayersInLobby();
             playerData = FXCollections.observableList(activePlayers);
             tableView.setItems(playerData);
+
+            //check if game has started in this lobby
+            if(current.getStarted()) {
+                timer.cancel();
+                Platform.runLater(() -> initiateGame());
+                //initiateGame();
+                System.out.println("Game started in lobby " + token);
+            }
         }
     }
 
     public void leaveLobby(){
-        Lobby currentLobbby = ClientData.getClientLobby();
-        Player clientPlayer = ClientData.getClientPlayer();
-
-        //set client lobby to exited
-        ClientData.setLobby(null);
-
-        //removes player from lobby (client sided)
-        currentLobbby.removePlayerFromLobby(clientPlayer);
-
-        //save the new state of the lobby to the repository again
-        server.addLobby(currentLobbby);
-
-        mainCtrl.showGameModeSelection();
+        client.leaveLobby();
     }
+
+    public void initiateGame()
+    {
+        clientData.setPointer(clientData.getClientLobby().getPlayerIds().get(0));
+        clientData.setClientScore(0L);
+        clientData.setQuestionCounter(0);
+
+        //add delay until game starts
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    //TODO: add timer progress bar / UI text with counter depleting until the start of the game
+                    Thread.sleep(3000);
+
+                    //prepare the question again only if not host
+                    if(!clientData.getIsHost()) client.prepareQuestion();
+                    Platform.runLater(() -> client.getQuestion());
+
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                    System.out.println("Something went wrong while waiting to start the game");
+                }
+            }
+        });
+        thread.start();
+    }
+
+    //Only one player presses start game
+    //that player now becomes the HOST
+    //the HOST precalculates the question - only one api call
+    //the rest use the pregenerated question
 
     public void startGame(){
-        mainCtrl.showGameMCQ();
+        //start the game for the other players as well
+        String token = clientData.getClientLobby().getToken();
+        server.startLobby(token);
+
+        clientData.setPointer(clientData.getClientLobby().getPlayerIds().get(0));
+        clientData.setClientScore(0L);
+        clientData.setQuestionCounter(0);
+        clientData.setAsHost(true);
+
+        client.prepareQuestion();
     }
-
-
 }

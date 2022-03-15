@@ -33,6 +33,10 @@ public class Activity {
         this.source = source;
     }
 
+    public void setEnergyConsumption(Long energyConsumption) {
+        this.energyConsumption = energyConsumption;
+    }
+
     public String getId() {
         return id;
     }

@@ -1,10 +1,11 @@
 package client.scenes.menus;
 
-import client.ClientData;
+import client.data.ClientData;
 import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
 import commons.Lobby;
 import commons.Player;
+import constants.ConnectionStatusCodes;
 
 import javax.inject.Inject;
 
@@ -12,11 +13,13 @@ public class MultiplayerMenuCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private final ClientData clientData;
 
     @Inject
-    public MultiplayerMenuCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public MultiplayerMenuCtrl(ServerUtils server, MainCtrl mainCtrl, ClientData clientData) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        this.clientData = clientData;
     }
 
     public void back(){
@@ -25,21 +28,21 @@ public class MultiplayerMenuCtrl {
 
     public void joinPublicLobby(){
 
-        Player clientPlayer = ClientData.getClientPlayer();
+        Player clientPlayer = clientData.getClientPlayer();
 
-        int permissionCode = server.getConnectPermission("COMMON", clientPlayer.name);
+        ConnectionStatusCodes permissionCode = server.getConnectPermission("COMMON", clientPlayer.name);
 
         switch(permissionCode){
-            case 0:
+            case USERNAME_ALREADY_USED:
                 mainCtrl.showPopUp("public");
                 break;
-            case 1:
+            case LOBBY_NOT_FOUND:
                 //lobby not found
                 break;
-            case 2:
+            case CONNECTION_PERMISSION_GRANTED:
                 Lobby commonLobby = server.getLobbyByToken("COMMON");
                 //set client lobby static variable
-                ClientData.setLobby(commonLobby);
+                clientData.setLobby(commonLobby);
 
                 //adds player to lobby (client sided)
                 commonLobby.addPlayerToLobby(clientPlayer);

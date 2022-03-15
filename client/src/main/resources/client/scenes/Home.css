@@ -1,0 +1,24 @@
+.root {
+    -fx-font-size: 14px;
+    -fx-font-family: sans-serif;
+    -fx-background-color: MintCream;
+}
+
+.button1 {
+    -fx-padding:5px 10px;
+    -fx-margin: 5px 0;
+    -fx-border:5px 5px;
+    -fx-border-radius: 3px;
+    -fx-text-fill: #fff;
+    -fx-background-color: #00a6d6;
+}
+
+.header-section {
+    -fx-padding: 5px;
+    -fx-font-size: 25px;
+}
+
+.header-section Label {
+    -fx-text-fill: #ffffff;
+    -fx-pdding: 10px;
+}
