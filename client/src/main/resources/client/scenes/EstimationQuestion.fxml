@@ -1,15 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.questions.EstimationQuestionCtrl">
    <children>
-      <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" />
-      <Button layoutX="274.0" layoutY="244.0" mnemonicParsing="false" onAction="#submit" text="Submit" />
-      <TextField fx:id="answer" layoutX="226.0" layoutY="207.0" promptText="Fill in your guess here!" />
-      <Button layoutX="14.0" layoutY="347.0" mnemonicParsing="false" onAction="#leaveGame" prefHeight="45.0" prefWidth="50.0" text="Leave Game" wrapText="true" />
+      <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true" />
+      <Button layoutX="589.0" layoutY="557.0" mnemonicParsing="false" onAction="#submit" text="Submit" />
+      <TextField fx:id="answer" layoutX="395.0" layoutY="440.0" prefHeight="74.0" prefWidth="441.0" promptText="Fill in your guess here!" />
+      <Button focusTraversable="false" layoutX="27.0" layoutY="650.0" mnemonicParsing="false" onAction="#leaveGame" prefHeight="43.0" prefWidth="110.0" text="Leave Game">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+      <Text fx:id="scoreTxt" layoutX="31.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Score:" wrappingWidth="63.5999755859375">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text fx:id="nQuestionsTxt" layoutX="1218.0" layoutY="697.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-/20" wrappingWidth="48.39996337890625">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Text>
+      <Text fx:id="questionTxt" layoutX="472.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Some question?" textAlignment="CENTER">
+         <font>
+            <Font size="29.0" />
+         </font>
+      </Text>
+      <ProgressBar fx:id="pb" layoutX="472.0" layoutY="90.0" prefHeight="20.0" prefWidth="320.0" progress="0.0" />
+      <Text fx:id="activityText" layoutX="502.0" layoutY="219.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="226.91268208373484">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text layoutX="439.0" layoutY="109.0" strokeType="OUTSIDE" strokeWidth="0.0" text="⏰" wrappingWidth="33.0">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Text>
+      <Text fx:id="answerPopUp" layoutX="456.0" layoutY="408.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="286.2333984375">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>

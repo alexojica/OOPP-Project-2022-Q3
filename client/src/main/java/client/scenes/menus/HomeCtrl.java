@@ -1,6 +1,6 @@
 package client.scenes.menus;
 
-import client.ClientData;
+import client.data.ClientData;
 import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
 import jakarta.ws.rs.WebApplicationException;
@@ -21,14 +21,16 @@ public class HomeCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private final ClientData clientData;
 
     @FXML
     private TextField name;
 
     @Inject
-    public HomeCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public HomeCtrl(ServerUtils server, MainCtrl mainCtrl, ClientData clientData) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        this.clientData = clientData;
     }
 
     public void play(){
@@ -40,7 +42,7 @@ public class HomeCtrl {
             Player serverPlayer = server.addPlayer(p);
 
             //store client player info received from the server
-            ClientData.setPlayer(serverPlayer);
+            clientData.setPlayer(serverPlayer);
         }
         catch (WebApplicationException e)
         {
@@ -53,10 +55,6 @@ public class HomeCtrl {
 
 
         mainCtrl.showGameModeSelection();
-    }
-
-    public void leaderboard(){
-        mainCtrl.showLeaderboard();
     }
 
     private Player getPlayer()

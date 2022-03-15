@@ -23,13 +23,16 @@ import client.scenes.menus.MultiplayerMenuCtrl;
 import client.scenes.menus.WaitingCtrl;
 import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
+import client.utils.ClientUtils;
+import com.google.inject.Inject;
+import jakarta.ws.rs.core.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
-public class MainCtrl {
+public class MainCtrl extends Application {
 
     private Stage primaryStage;
 
@@ -64,6 +67,9 @@ public class MainCtrl {
     private Scene usernamePopUp;
 
     private Stage incorrectUsernamePopUp;
+
+    @Inject
+    private ClientUtils client;
 
     public void initialize(Stage primaryStage, Pair<HomeCtrl, Parent> home, Pair<LeaderboardCtrl, Parent> leaderboard,
                            Pair<GameModeSelectionCtrl, Parent> gameModeSelection, Pair<MultiplayerMenuCtrl,
@@ -104,9 +110,16 @@ public class MainCtrl {
         this.usernamePopUpCtrl = usernamePopUp.getKey();
         this.usernamePopUp = new Scene(usernamePopUp.getValue());
 
+        primaryStage.setOnCloseRequest(e -> {
+            if(client.isInLobby()){
+                client.leaveLobby();
+            }
+        });
+
         showHome();
         primaryStage.show();
     }
+
 
     public void showWaiting(){
         primaryStage.setTitle("WaitingScreen");
@@ -118,6 +131,12 @@ public class MainCtrl {
         primaryStage.setTitle("GameScreen");
         primaryStage.setScene(gameMCQ);
         gameMCQCtrl.load();
+    }
+
+    public void showGameEstimation(){
+        primaryStage.setTitle("GameScreen");
+        primaryStage.setScene(estimation);
+        estimationQuestionCtrl.load();
     }
 
     public void showHome(){

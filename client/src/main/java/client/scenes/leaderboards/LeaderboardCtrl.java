@@ -17,6 +17,6 @@ public class LeaderboardCtrl {
     }
 
     public void back(){
-        mainCtrl.showHome();
+        mainCtrl.showGameModeSelection();
     }
 }
