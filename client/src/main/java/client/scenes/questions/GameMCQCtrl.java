@@ -33,7 +33,7 @@ public class GameMCQCtrl {
     }
 
     public void leaveGame(){
-        mainCtrl.showHome();
+        mainCtrl.showGameModeSelection();
     }
 
     public void load() {
