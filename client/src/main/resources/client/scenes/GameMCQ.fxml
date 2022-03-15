@@ -37,15 +37,15 @@
             <Font size="24.0" />
          </font>
       </Text>
-      <RadioButton fx:id="answer1" focusTraversable="false" layoutX="290.0" layoutY="477.0" mnemonicParsing="false" text="Answer 1" />
-      <RadioButton fx:id="answer2" focusTraversable="false" layoutX="600.0" layoutY="477.0" mnemonicParsing="false" text="Answer 2" />
-      <RadioButton fx:id="answer3" focusTraversable="false" layoutX="900.0" layoutY="477.0" mnemonicParsing="false" text="Answer 3" />
+      <RadioButton fx:id="answer1" focusTraversable="false" layoutX="348.0" layoutY="473.0" mnemonicParsing="false" prefHeight="131.0" prefWidth="130.0" text="Answer 1" textAlignment="CENTER" wrapText="true" />
+      <RadioButton fx:id="answer2" focusTraversable="false" layoutX="594.0" layoutY="473.0" mnemonicParsing="false" prefHeight="131.0" prefWidth="130.0" text="Answer 2" textAlignment="CENTER" wrapText="true" />
+      <RadioButton fx:id="answer3" focusTraversable="false" layoutX="831.0" layoutY="473.0" mnemonicParsing="false" prefHeight="131.0" prefWidth="130.0" text="Answer 3" textAlignment="CENTER" wrapText="true" />
       <Pane layoutX="550.0" layoutY="130.0" prefHeight="170.0" prefWidth="220.0" style="-fx-background-color: ffffff;">
          <children>
-            <ImageView fitHeight="160.0" fitWidth="210.0" layoutX="7.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fitHeight="160.0" fitWidth="210.0" layoutX="5.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </Pane>
-      <Text layoutX="550.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Some question?">
+      <Text fx:id="questionTxt" layoutX="500.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Some question?" textAlignment="CENTER">
          <font>
             <Font size="29.0" />
          </font>
@@ -55,7 +55,7 @@
             <Font size="20.0" />
          </font>
       </Text>
-      <ProgressBar layoutX="500.0" layoutY="84.0" prefHeight="20.0" prefWidth="320.0" progress="0.0" />
+      <ProgressBar fx:id="pb" layoutX="500.0" layoutY="84.0" prefHeight="20.0" prefWidth="320.0" progress="0.0" />
       <Circle fill="DODGERBLUE" layoutX="1220.0" layoutY="42.0" radius="18.0" stroke="BLACK" strokeType="INSIDE" />
       <Circle fill="DODGERBLUE" layoutX="537.0" layoutY="630.0" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
       <Circle fill="DODGERBLUE" layoutX="667.0" layoutY="630.0" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
@@ -64,7 +64,7 @@
       <Text layoutX="637.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Power up 2" />
       <Text layoutX="767.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Power up 3" />
       <Text layoutX="1200.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Emotes" />
-      <Text layoutX="470.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" text="⏰" wrappingWidth="33.0">
+      <Text layoutX="464.0" layoutY="103.0" strokeType="OUTSIDE" strokeWidth="0.0" text="⏰" wrappingWidth="33.0">
          <font>
             <Font size="23.0" />
          </font>

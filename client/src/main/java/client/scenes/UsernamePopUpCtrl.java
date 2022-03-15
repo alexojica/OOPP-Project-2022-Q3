@@ -1,6 +1,6 @@
 package client.scenes;
 
-import client.ClientData;
+import client.data.ClientData;
 import client.scenes.menus.MultiplayerMenuCtrl;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -11,15 +11,16 @@ public class UsernamePopUpCtrl {
 
     private final MainCtrl mainCtrl;
     private final MultiplayerMenuCtrl multiplayerMenuCtrl;
-    private ClientData clientData;
+    private final ClientData clientData;
 
     @FXML
     private TextField name;
 
     @Inject
-    public UsernamePopUpCtrl(MainCtrl mainCtrl, MultiplayerMenuCtrl multiplayerMenuCtrl) {
+    public UsernamePopUpCtrl(MainCtrl mainCtrl, MultiplayerMenuCtrl multiplayerMenuCtrl, ClientData clientData) {
         this.mainCtrl = mainCtrl;
         this.multiplayerMenuCtrl = multiplayerMenuCtrl;
+        this.clientData = clientData;
     }
 
     public void done(){

@@ -15,37 +15,23 @@
  */
 package client.utils;
 
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.util.List;
-
-import org.glassfish.jersey.client.ClientConfig;
-
+import commons.Activity;
+import commons.Lobby;
+import commons.Player;
+import commons.Question;
+import constants.ConnectionStatusCodes;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
+import org.glassfish.jersey.client.ClientConfig;
 
-import commons.Player;
-import commons.Lobby;
-import commons.Activity;
+import java.util.List;
+
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
 
-    private static final String SERVER = "http://localhost:8080/";
-
-    public void getQuotesTheHardWay() throws IOException {
-        var url = new URL("http://localhost:8080/api/quotes");
-        var is = url.openConnection().getInputStream();
-        var br = new BufferedReader(new InputStreamReader(is));
-        String line;
-        while ((line = br.readLine()) != null) {
-            System.out.println(line);
-        }
-    }
+    String SERVER = "http://localhost:8080/";
 
     public List<Player> getPlayers() {
         return ClientBuilder.newClient(new ClientConfig()) //
@@ -89,14 +75,14 @@ public class ServerUtils {
                 .get(new GenericType<Lobby>() {});
     }
 
-    public int getConnectPermission(String token, String playerUsername){
+    public ConnectionStatusCodes getConnectPermission(String token, String playerUsername){
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/lobby/getConnectPermission") //
                 .queryParam("token", token)//
                 .queryParam("playerUsername", playerUsername)
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .get(new GenericType<Integer>(){});
+                .get(new GenericType<ConnectionStatusCodes>(){});
     }
 
     public Activity getRandomActivity() {
@@ -105,5 +91,24 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<Activity>() {});
+    }
+
+    public Question getQuestion(long pointer, String lastLobby){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/question/getQuestion") //
+                .queryParam("pointer", pointer)//
+                .queryParam("lastLobby", lastLobby)//
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<Question>(){}); 
+    }
+
+    public Lobby startLobby(String token) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/lobby/startLobby") //
+                .queryParam("token", token)//
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<Lobby>() {});
     }
 }

@@ -3,6 +3,7 @@ package server.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.Lobby;
 import commons.Player;
+import constants.ConnectionStatusCodes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -72,13 +73,17 @@ class LobbyControllerTest {
 
     @Test
     void getConnectPermission() {
-        assertTrue(lobbyController.getConnectPermission("private", "alex") == 1);
+        assertTrue(lobbyController.getConnectPermission("private", "alex")
+                .equals(ConnectionStatusCodes.LOBBY_NOT_FOUND));
         Lobby newLobby = new Lobby("private", 2);
         lobbyController.addLobby(newLobby);
-        assertTrue(lobbyController.getConnectPermission("private", "alex") == 2);
+        assertTrue(lobbyController.getConnectPermission("private", "alex")
+                .equals(ConnectionStatusCodes.CONNECTION_PERMISSION_GRANTED));
         newLobby.addPlayerToLobby(new Player("alex"));
-        assertTrue(lobbyController.getConnectPermission("private", "alex") == 0);
-        assertTrue(lobbyController.getConnectPermission("private", "testPlayer") == 2);
+        assertTrue(lobbyController.getConnectPermission("private", "alex")
+                .equals(ConnectionStatusCodes.USERNAME_ALREADY_USED));
+        assertTrue(lobbyController.getConnectPermission("private", "testPlayer")
+                .equals(ConnectionStatusCodes.CONNECTION_PERMISSION_GRANTED));
     }
 
     @Test

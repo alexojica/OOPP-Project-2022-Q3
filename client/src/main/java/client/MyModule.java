@@ -15,7 +15,10 @@
  */
 package client;
 
-import client.scenes.*;
+import client.data.ClientData;
+import client.data.ClientDataImpl;
+import client.scenes.GameOverCtrl;
+import client.scenes.MainCtrl;
 import client.scenes.leaderboards.LeaderboardCtrl;
 import client.scenes.leaderboards.TempLeaderboardCtrl;
 import client.scenes.menus.GameModeSelectionCtrl;
@@ -24,6 +27,8 @@ import client.scenes.menus.MultiplayerMenuCtrl;
 import client.scenes.menus.WaitingCtrl;
 import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
+import client.utils.ClientUtils;
+import client.utils.ClientUtilsImpl;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
@@ -32,6 +37,7 @@ public class MyModule implements Module {
 
     @Override
     public void configure(Binder binder) {
+        // Binding controllers
         binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
         binder.bind(HomeCtrl.class).in(Scopes.SINGLETON);
         binder.bind(LeaderboardCtrl.class).in(Scopes.SINGLETON);
@@ -42,5 +48,9 @@ public class MyModule implements Module {
         binder.bind(MultiplayerMenuCtrl.class).in(Scopes.SINGLETON);
         binder.bind(TempLeaderboardCtrl.class).in(Scopes.SINGLETON);
         binder.bind(WaitingCtrl.class).in(Scopes.SINGLETON);
+
+        // Binding interfaces to concrete implementations
+        binder.bind(ClientUtils.class).to(ClientUtilsImpl.class).in(Scopes.SINGLETON);
+        binder.bind(ClientData.class).to(ClientDataImpl.class).in(Scopes.SINGLETON);
     }
 }
