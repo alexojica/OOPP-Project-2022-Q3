@@ -1,13 +1,13 @@
-﻿
+
 ## Agenda Week 4
 
   
 
-Date: 15/03/2022\
+Date: 15/03/2022
 
-Main focus: Demo and missing features\
+Main focus: Demo and missing features
 
-Chair: Alexandru Ojica\
+Chair: Alexandru Ojica
 
 Note taker: Andrei Simionescu
 
