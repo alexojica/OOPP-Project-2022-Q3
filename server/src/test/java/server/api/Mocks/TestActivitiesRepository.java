@@ -28,6 +28,11 @@ public class TestActivitiesRepository implements ActivitiesRepository {
     }
 
     @Override
+    public Optional<List<Activity>> findActivitiesInRange(long small, long big) {
+        return Optional.empty();
+    }
+
+    @Override
     public List<Activity> findAll() {
         return activities;
     }
