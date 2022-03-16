@@ -5,6 +5,7 @@ import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.Lobby;
+import javafx.application.Platform;
 
 import javax.inject.Inject;
 
@@ -30,11 +31,32 @@ public class GameModeSelectionCtrl {
     public void singleplayer(){
 
         clientData.setLobby(new Lobby("SINGLE_PLAYER"));
-        clientData.setPointer(0L);
+        clientData.setPointer(clientData.getClientPlayer().getId());
         clientData.setClientScore(0L);
+        clientData.setQuestionCounter(0);
 
-        client.getQuestion();
-        mainCtrl.showGameMCQ();
+        //add delay until game starts
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    //TODO: add timer progress bar / UI text with counter depleting until the start of the game
+
+                    client.prepareQuestion();
+
+                    Thread.sleep(3000);
+
+                    Platform.runLater(() -> client.getQuestion());
+
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                    System.out.println("Something went wrong while waiting to start the game");
+                }
+            }
+        });
+        thread.start();
+
+        //mainCtrl.showGameMCQ();
     }
 
     public void multiplayer(){
