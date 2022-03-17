@@ -18,7 +18,7 @@
                <Font size="16.0" />
            </font>
        </Label>
-       <TableView layoutX="350.0" layoutY="110.0" prefHeight="450.0" prefWidth="600.0">
+       <TableView fx:id="table" layoutX="350.0" layoutY="110.0" prefHeight="450.0" prefWidth="600.0">
         <columns>
             <TableColumn prefWidth="120" text="#Rank">
                 <cellFactory>
@@ -26,19 +26,19 @@
                     </FormattedTableCellFactory>
                 </cellFactory>
             </TableColumn>
-            <TableColumn prefWidth="160" text="Avatar" >
+            <TableColumn fx:id="avatarColumn" prefWidth="160" text="Avatar" >
                 <cellFactory>
                     <FormattedTableCellFactory alignment="center">
                     </FormattedTableCellFactory>
                 </cellFactory>
             </TableColumn>
-            <TableColumn prefWidth="180" text="Username" >
+            <TableColumn fx:id="nameColumn" prefWidth="180" text="Username" >
                 <cellFactory>
                     <FormattedTableCellFactory alignment="center">
                     </FormattedTableCellFactory>
                 </cellFactory>
             </TableColumn>
-            <TableColumn prefWidth="140" text="Score" >
+            <TableColumn fx:id="scoreColumn" prefWidth="140" text="Score" >
                 <cellFactory>
                     <FormattedTableCellFactory alignment="center">
                     </FormattedTableCellFactory>

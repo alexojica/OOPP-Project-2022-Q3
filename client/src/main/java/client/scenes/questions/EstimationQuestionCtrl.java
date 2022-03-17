@@ -96,6 +96,10 @@ public class EstimationQuestionCtrl {
                     //prepare the question again only if not host
                     if(!clientData.getIsHost()) client.prepareQuestion();
 
+                    if(clientData.getQuestionCounter() == 3){
+                        Platform.runLater(() -> mainCtrl.showTempLeaderboard());
+                        Thread.sleep(5000);
+                    }
                     //execute next question immediatly after sleep on current thread finishes execution
                     Platform.runLater(() -> client.getQuestion());
                     //client.getQuestion();

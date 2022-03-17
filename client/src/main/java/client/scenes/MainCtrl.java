@@ -167,6 +167,7 @@ public class MainCtrl extends Application {
     public void showTempLeaderboard(){
         primaryStage.setTitle("TempLeaderboard");
         primaryStage.setScene(tempLeaderboard);
+        tempLeaderboardCtrl.load();
     }
 
     public void showPopUp(String lobbyType){

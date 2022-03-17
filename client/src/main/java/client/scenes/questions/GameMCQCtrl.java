@@ -14,6 +14,8 @@ import javafx.scene.text.Text;
 
 import javax.inject.Inject;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static constants.QuestionTypes.MULTIPLE_CHOICE_QUESTION;
 
@@ -132,6 +134,10 @@ public class GameMCQCtrl {
                     //prepare the question again only if not host
                     if(!clientData.getIsHost()) client.prepareQuestion();
 
+                    if(clientData.getQuestionCounter() == 3){
+                        Platform.runLater(() -> mainCtrl.showTempLeaderboard());
+                        Thread.sleep(5000);
+                    }
                     //execute next question immediatly after sleep on current thread finishes execution
                     Platform.runLater(() -> client.getQuestion());
                     //client.getQuestion();
