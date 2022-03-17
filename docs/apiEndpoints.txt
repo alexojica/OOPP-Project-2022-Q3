@@ -13,7 +13,9 @@
         /getPlayer
         /delete
         /clear
-        
     /activity
         /getActivityByWh
         /getRandomActivity
+    /leaderboard
+        /saveScore
+        /getTop10Scores
