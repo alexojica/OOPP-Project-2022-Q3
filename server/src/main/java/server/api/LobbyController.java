@@ -1,5 +1,6 @@
 package server.api;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -109,5 +110,31 @@ public class LobbyController {
 
         repository.deleteById(id);
         return "Success";
+    }
+
+    /**
+     * @param token lobby token for which you want to find the top 10 scores
+     * @return top 10 players (or less if there are less players) from lobby with given token
+     * Gets all players from lobby with given token, sorts them by their score and returns the sorted list,
+     * which can then be displayed in the table
+     */
+
+    @GetMapping("/getTop10ByLobbyId")
+    public List<Player> getTop10ByLobbyId(@RequestParam String token) {
+        Optional<Lobby> lobby = repository.findByToken(token);
+        if(lobby.isEmpty()) {
+            return null;
+        }
+        List<Player> players = lobby.get().getPlayersInLobby();
+        Collections.sort(players, (p1, p2) -> {
+            if (p1.getScore() > p2.getScore()) {
+                return 1;
+            }
+            if (p1.getScore() < p2.getScore()) {
+                return -1;
+            }
+            return 0;
+        });
+        return players;
     }
 }

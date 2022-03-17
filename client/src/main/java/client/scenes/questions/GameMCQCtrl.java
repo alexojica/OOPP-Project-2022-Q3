@@ -186,5 +186,7 @@ public class GameMCQCtrl {
                 break;
         }
         scoreTxt.setText("Score:" + clientData.getClientScore());
+        clientData.getClientPlayer().setScore(Math.toIntExact(clientData.getClientScore()));
+        //not the prettiest, we should change clientdata's score to int instead of long
     }
 }
