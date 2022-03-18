@@ -2,6 +2,7 @@ package client.utils;
 
 import client.data.ClientData;
 import client.scenes.MainCtrl;
+import client.scenes.questions.EnergyAlternativeQuestionCtrl;
 import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
 import commons.Lobby;
@@ -84,6 +85,8 @@ public class ClientUtilsImpl implements ClientUtils {
                                 ((GameMCQCtrl) me).nextQuestion();
                             }else if(questionType == QuestionTypes.ESTIMATION_QUESTION){
                                 ((EstimationQuestionCtrl) me).nextQuestion();
+                            }else if(questionType == QuestionTypes.ENERGY_ALTERNATIVE_QUESTION){
+                                ((EnergyAlternativeQuestionCtrl) me).nextQuestion();
                             }
                             //getQuestion(server,mainCtrl);
                             ok.set(true);
@@ -126,7 +129,7 @@ public class ClientUtilsImpl implements ClientUtils {
                 break;
 
             case ENERGY_ALTERNATIVE_QUESTION:
-                mainCtrl.showGameMCQ(); // this is only a placeholder, should be changed later
+                mainCtrl.showEnergyAlternative();
                 break;
             default: break;
         }

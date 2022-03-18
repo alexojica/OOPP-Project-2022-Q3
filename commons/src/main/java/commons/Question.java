@@ -47,7 +47,7 @@ public class Question {
                 break;
             case ESTIMATION_QUESTION: this.text = "How much energy does it take?";
                 break;
-            case ENERGY_ALTERNATIVE_QUESTION: this.text = "Instead of, this you could do that";
+            case ENERGY_ALTERNATIVE_QUESTION: this.text = "Instead of ";
                 break;
             default: this.text = "This question has no type.";
         }

@@ -10,8 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EnergyAlternativeQuestion">
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.questions.EnergyAlternativeQuestionCtrl">
    <children>
       <ProgressBar fx:id="pb" layoutX="500.0" layoutY="84.0" prefHeight="20.0" prefWidth="320.0" progress="0.0" />
       <Pane layoutX="600.0" layoutY="365.0" prefHeight="110.0" prefWidth="145.0" style="-fx-background-color: ffffff;">
@@ -67,7 +66,7 @@
             <Font size="29.0" />
          </font>
       </Text>
-      <Text fx:id="youCouldDoText" layoutX="489.0" layoutY="342.0" strokeType="OUTSIDE" strokeWidth="0.0" text="you could do ..." textAlignment="CENTER">
+      <Text layoutX="569.0" layoutY="331.0" strokeType="OUTSIDE" strokeWidth="0.0" text="you could do ..." textAlignment="CENTER">
          <font>
             <Font size="29.0" />
          </font>
