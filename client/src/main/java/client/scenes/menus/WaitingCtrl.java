@@ -10,7 +10,6 @@ import com.talanlabs.avatargenerator.eightbit.EightBitAvatar;
 import commons.Lobby;
 import commons.Player;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -18,7 +17,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableCell;
@@ -27,10 +25,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
-
-import javax.imageio.ImageIO;
 import javax.inject.Inject;
-import java.io.File;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.List;
@@ -100,12 +95,14 @@ public class WaitingCtrl implements Initializable{
 
     // Big credits to "https://codereview.stackexchange.com/questions/220969/javafx-lazy-loading-of-images-in-tableview"
     //for the idea of using executor services to schedule the load and/or generation of images
-    //it's the only somewhat efficient solution I found, since it makes use of listeners to cancel and monitor on-going tasks
+    //it's the only somewhat efficient solution I found, since it makes use of
+    // listeners to cancel and monitor on-going tasks
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
-        usernameColumn.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().name));
+        usernameColumn.setCellValueFactory(q ->
+                new SimpleStringProperty(q.getValue().name));
 
         ExecutorService exec = Executors.newCachedThreadPool();
 

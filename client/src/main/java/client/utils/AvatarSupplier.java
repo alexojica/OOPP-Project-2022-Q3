@@ -82,8 +82,10 @@ public class AvatarSupplier{
 
     /**
      * Mathod that generates a new BufferedImage with given name and saves it in the finalPath
-     * which might look something like "C:\OOPP\Project\repository-template\client\src\main\resources\images\avatar\Simi3271836267810498327.png"
-     * The temporary images created should automatically delete after the program exits (rn it doesn't seem to work idk why)
+     * which might look something like
+     * "C:\OOPP\Project\repository-template\client\src\main\resources\images\avatar\Simi3271836267810498327.png"
+     * The temporary images created should automatically delete
+     * after the program exits (rn it doesn't seem to work idk why)
      * @param bi
      * @param name
      * @return

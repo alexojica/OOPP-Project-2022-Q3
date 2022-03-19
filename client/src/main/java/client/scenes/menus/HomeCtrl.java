@@ -116,7 +116,8 @@ public class HomeCtrl {
 
     /**
      * Method that updates the avatar based on a given inputName, from which it will construct the seed
-     * If the avatarPath is null(first pass), it will assign it a new path, and then only change the given image in that path
+     * If the avatarPath is null(first pass), it will assign it a new path, and
+     * then only change the given image in that path
      */
     public void updateAvatar()
     {
