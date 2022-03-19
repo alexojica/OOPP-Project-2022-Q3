@@ -140,7 +140,6 @@ public class ServerUtils {
                 .get(new GenericType<List<Player>>() {});
     }
 
-    //gives jsonparse exception that still needs to be fixed
     public Player updateScore(Player player) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/player/updateScore") //
