@@ -109,7 +109,7 @@ public class ServerUtils {
                 .target(SERVER).path("api/leaderboard/saveScore")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .post(Entity.entity(score, APPLICATION_JSON), LeaderboardEntry.class);
+                .put(Entity.entity(score, APPLICATION_JSON), LeaderboardEntry.class);
     }
 
     public Question getQuestion(long pointer, String lastLobby){
@@ -138,5 +138,14 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Player>>() {});
+    }
+
+    //gives jsonparse exception that still needs to be fixed
+    public Player updateScore(Player player) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/player/updateScore") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(player, APPLICATION_JSON), Player.class);
     }
 }

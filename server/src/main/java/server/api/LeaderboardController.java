@@ -20,7 +20,7 @@ public class LeaderboardController {
         return repository.findTop10ByOrderByScoreDesc();
     }
 
-    @PostMapping("/saveScore")
+    @PutMapping("/saveScore")
     @ResponseBody
     public LeaderboardEntry saveScore(@RequestBody LeaderboardEntry score) {
         repository.save(score);

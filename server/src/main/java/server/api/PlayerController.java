@@ -64,4 +64,13 @@ public class PlayerController {
         repository.deleteById(id);
         return "Success";
     }
+
+    @PutMapping("/updateScore")
+    public String updateScore(@RequestBody Player player) throws WrongParameterException{
+        if(player==null){
+            throw new WrongParameterException();
+        }
+        repository.updateScore(player.getScore(), player.getId());
+        return "Score updated!";
+    }
 }

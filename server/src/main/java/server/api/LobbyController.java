@@ -126,15 +126,7 @@ public class LobbyController {
             return null;
         }
         List<Player> players = lobby.get().getPlayersInLobby();
-        Collections.sort(players, (p1, p2) -> {
-            if (p1.getScore() > p2.getScore()) {
-                return 1;
-            }
-            if (p1.getScore() < p2.getScore()) {
-                return -1;
-            }
-            return 0;
-        });
+        //sorting algorithm to be implemented here to sort on score
         return players;
     }
 }
