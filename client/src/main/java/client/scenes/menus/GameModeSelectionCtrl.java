@@ -44,7 +44,9 @@ public class GameModeSelectionCtrl {
                 try{
                     //TODO: add timer progress bar / UI text with counter depleting until the start of the game
 
-                    server.send("/app/nextQuestion", new WebsocketMessage(ResponseCodes.NEXT_QUESTION, "SINGLE_PLAYER", clientData.getClientPointer()));
+                    server.send("/app/nextQuestion",
+                            new WebsocketMessage(ResponseCodes.NEXT_QUESTION,
+                                    "SINGLE_PLAYER", clientData.getClientPointer()));
 
                     Thread.sleep(3000);
 
