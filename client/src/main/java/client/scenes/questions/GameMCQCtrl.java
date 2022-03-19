@@ -5,6 +5,8 @@ import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.Question;
+import commons.ResponseMessage;
+import constants.ResponseCodes;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressBar;
@@ -17,7 +19,7 @@ import java.util.Random;
 
 import static constants.QuestionTypes.MULTIPLE_CHOICE_QUESTION;
 
-public class GameMCQCtrl {
+public class GameMCQCtrl implements QuestionController {
 
     private final ServerUtils server;
     private final ClientUtils client;
@@ -53,6 +55,7 @@ public class GameMCQCtrl {
         this.mainCtrl = mainCtrl;
         this.client = client;
         this.clientData = clientData;
+        clientData.setCurrentQuestionController(this);
     }
 
     public void leaveGame(){
@@ -130,7 +133,10 @@ public class GameMCQCtrl {
                     Thread.sleep(2000);
 
                     //prepare the question again only if not host
-                    if(!clientData.getIsHost()) client.prepareQuestion();
+                    if(clientData.getIsHost())
+                        server.send("/app/nextQuestion",
+                                new ResponseMessage(ResponseCodes.NEXT_QUESTION,
+                                        clientData.getClientLobby().token, clientData.getClientPointer()));
 
                     //execute next question immediatly after sleep on current thread finishes execution
                     Platform.runLater(() -> client.getQuestion());

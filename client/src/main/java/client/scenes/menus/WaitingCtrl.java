@@ -3,9 +3,13 @@ package client.scenes.menus;
 import client.data.ClientData;
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
+import client.utils.ClientUtilsImpl;
 import client.utils.ServerUtils;
 import commons.Lobby;
 import commons.Player;
+import commons.ResponseMessage;
+import constants.ConnectionStatusCodes;
+import constants.ResponseCodes;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -57,6 +61,8 @@ public class WaitingCtrl implements Initializable{
         this.mainCtrl = mainCtrl;
         this.client = client;
         this.clientData = clientData;
+        clientData.setQuestionCounter(0);
+
     }
 
     /**
@@ -66,6 +72,30 @@ public class WaitingCtrl implements Initializable{
         tip.setText("Theres only one correct answer per question, get the most right to win.");
         lobbyCode.setText(lobbyCode.getText() + 59864);
         showActivePlayers();
+
+        if(client.getClass().equals(ClientUtilsImpl.class)) {
+            ((ClientUtilsImpl) client).setCurrentSceneCtrl(this);
+        }
+        server.registerForMessages("/topic/lobbyStart", a -> {
+            if(a.getCode() == ResponseCodes.START_GAME && a.getLobbyToken().equals(clientData.getClientLobby().token)) {
+                if(clientData.getIsHost())
+                    server.send("/app/nextQuestion",
+                            new ResponseMessage(ResponseCodes.NEXT_QUESTION,
+                                    clientData.getClientLobby().token, clientData.getClientPointer()));
+                //initiateGame();
+            }
+        });
+
+        server.registerForMessages("/topic/updateLobby", a -> {
+            if(a.getCode() == ResponseCodes.LOBBY_UPDATED
+                    && a.getLobbyToken().equals(clientData.getClientLobby().token)){
+                clientData.setLobby(server.getLobbyByToken(a.getLobbyToken()));
+                refresh();
+            }
+        });
+
+        server.send("/app/requestUpdate",
+                new ResponseMessage(ResponseCodes.LOBBY_UPDATED, clientData.getClientLobby().getToken()));
     }
 
     /**
@@ -93,6 +123,8 @@ public class WaitingCtrl implements Initializable{
                 refresh();
             }
         }, 0, 250);
+        //refresh();
+
     }
 
     public boolean isInLobby()
@@ -103,10 +135,12 @@ public class WaitingCtrl implements Initializable{
 
     public void refresh()
     {
+
         if(activePlayers != null && isInLobby())
         {
+            //System.out.println(clientData.getClientLobby().playersInLobby.size());
             String token = clientData.getClientLobby().getToken();
-            Lobby current = server.getLobbyByToken(token);
+            Lobby current = clientData.getClientLobby();
             clientData.setLobby(current);
             activePlayers = current.getPlayersInLobby();
             playerData = FXCollections.observableList(activePlayers);
@@ -114,7 +148,7 @@ public class WaitingCtrl implements Initializable{
 
             //check if game has started in this lobby
             if(current.getStarted()) {
-                timer.cancel();
+                //timer.cancel();
                 Platform.runLater(() -> initiateGame());
                 //initiateGame();
                 System.out.println("Game started in lobby " + token);
@@ -128,9 +162,12 @@ public class WaitingCtrl implements Initializable{
 
     public void initiateGame()
     {
-        clientData.setPointer(clientData.getClientLobby().getPlayerIds().get(0));
+        System.out.println("game initiated");
+        //clientData.setPointer(clientData.getClientLobby().getPlayerIds().get(0));
         clientData.setClientScore(0L);
-        clientData.setQuestionCounter(0);
+        //clientData.setQuestionCounter(0);
+
+
 
         //add delay until game starts
         Thread thread = new Thread(new Runnable() {
@@ -138,10 +175,10 @@ public class WaitingCtrl implements Initializable{
             public void run() {
                 try{
                     //TODO: add timer progress bar / UI text with counter depleting until the start of the game
-                    Thread.sleep(3000);
+                    Thread.sleep(300);
 
                     //prepare the question again only if not host
-                    if(!clientData.getIsHost()) client.prepareQuestion();
+
                     Platform.runLater(() -> client.getQuestion());
 
                 }catch (InterruptedException e){
@@ -161,13 +198,14 @@ public class WaitingCtrl implements Initializable{
     public void startGame(){
         //start the game for the other players as well
         String token = clientData.getClientLobby().getToken();
-        server.startLobby(token);
-
-        clientData.setPointer(clientData.getClientLobby().getPlayerIds().get(0));
-        clientData.setClientScore(0L);
-        clientData.setQuestionCounter(0);
-        clientData.setAsHost(true);
-
-        client.prepareQuestion();
+        if(server.startLobby(token).equals(ConnectionStatusCodes.YOU_ARE_HOST)) {
+            clientData.setAsHost(true);
+            clientData.setPointer(clientData.getClientLobby().getPlayerIds().get(0));
+            clientData.setClientScore(0L);
+            clientData.setQuestionCounter(0);
+            //client.prepareQuestion();
+            server.send("/app/lobbyStart",
+                    new ResponseMessage(ResponseCodes.START_GAME, clientData.getClientLobby().token));
+        }
     }
 }

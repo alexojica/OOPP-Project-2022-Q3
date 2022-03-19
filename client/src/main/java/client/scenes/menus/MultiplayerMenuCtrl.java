@@ -2,8 +2,8 @@ package client.scenes.menus;
 
 import client.data.ClientData;
 import client.scenes.MainCtrl;
+import client.utils.ClientUtils;
 import client.utils.ServerUtils;
-import commons.Lobby;
 import commons.Player;
 import constants.ConnectionStatusCodes;
 
@@ -14,12 +14,14 @@ public class MultiplayerMenuCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private final ClientData clientData;
+    private final ClientUtils client;
 
     @Inject
-    public MultiplayerMenuCtrl(ServerUtils server, MainCtrl mainCtrl, ClientData clientData) {
+    public MultiplayerMenuCtrl(ServerUtils server, MainCtrl mainCtrl, ClientData clientData, ClientUtils client) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.clientData = clientData;
+        this.client = client;
     }
 
     public void back(){
@@ -32,6 +34,8 @@ public class MultiplayerMenuCtrl {
 
         ConnectionStatusCodes permissionCode = server.getConnectPermission("COMMON", clientPlayer.name);
 
+
+
         switch(permissionCode){
             case USERNAME_ALREADY_USED:
                 mainCtrl.showPopUp("public");
@@ -40,16 +44,17 @@ public class MultiplayerMenuCtrl {
                 //lobby not found
                 break;
             case CONNECTION_PERMISSION_GRANTED:
-                Lobby commonLobby = server.getLobbyByToken("COMMON");
+                //Lobby commonLobby = server.getLobbyByToken("COMMON");
+                //client.registerForLobby();
                 //set client lobby static variable
-                clientData.setLobby(commonLobby);
+                clientData.setLobby(server.addMeToLobby("COMMON", clientPlayer));
 
                 //adds player to lobby (client sided)
-                commonLobby.addPlayerToLobby(clientPlayer);
+                //commonLobby.addPlayerToLobby(clientPlayer);
 
                 //save the new state of the lobby to the repository again
-                server.addLobby(commonLobby);
-
+                //server.addLobby(commonLobby);
+                if(clientData.getClientLobby().playersInLobby.contains(clientPlayer))
                 mainCtrl.showWaiting();
         }
 

@@ -1,5 +1,6 @@
 package client.data;
 
+import client.scenes.questions.QuestionController;
 import commons.Lobby;
 import commons.Player;
 import commons.Question;
@@ -35,4 +36,8 @@ public interface ClientData {
     void setLobby(Lobby lobby);
 
     Lobby getClientLobby();
+
+    QuestionController getCurrentQuestionController();
+
+    void setCurrentQuestionController(QuestionController questionController);
 }

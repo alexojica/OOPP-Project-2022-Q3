@@ -6,6 +6,8 @@ import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Question;
+import commons.ResponseMessage;
+import constants.ResponseCodes;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressBar;
@@ -14,7 +16,7 @@ import javafx.scene.text.Text;
 
 import static constants.QuestionTypes.ESTIMATION_QUESTION;
 
-public class EstimationQuestionCtrl {
+public class EstimationQuestionCtrl implements QuestionController {
 
     private final ServerUtils server;
 
@@ -54,6 +56,7 @@ public class EstimationQuestionCtrl {
         this.server = server;
         this.client = client;
         this.clientData = clientData;
+        clientData.setCurrentQuestionController(this);
     }
 
     public void load() {
@@ -94,7 +97,10 @@ public class EstimationQuestionCtrl {
                     Thread.sleep(2000);
 
                     //prepare the question again only if not host
-                    if(!clientData.getIsHost()) client.prepareQuestion();
+                    if(clientData.getIsHost())
+                        server.send("/app/nextQuestion",
+                                new ResponseMessage(ResponseCodes.NEXT_QUESTION,
+                                        clientData.getClientLobby().token, clientData.getClientPointer()));
 
                     //execute next question immediatly after sleep on current thread finishes execution
                     Platform.runLater(() -> client.getQuestion());
@@ -110,12 +116,12 @@ public class EstimationQuestionCtrl {
     }
 
     private void updateCorrectAnswer() {
-
-        if(clientData.getIsHost())
-        {
-            //if host prepare next question
-            client.prepareQuestion();
-        }
+//
+//        if(clientData.getIsHost())
+//        {
+//            //if host prepare next question
+//            client.prepareQuestion();
+//        }
 
         if(submittedAnswer == null) {
             showStatus("No answer submitted!","red");

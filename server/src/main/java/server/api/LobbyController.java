@@ -4,8 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import commons.Player;
+import commons.ResponseMessage;
 import constants.ConnectionStatusCodes;
+import constants.ResponseCodes;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import server.database.LobbyRepository;
@@ -19,6 +24,9 @@ public class LobbyController {
 
     @Autowired
     private LobbyRepository repository;
+
+    @Autowired
+    private SimpMessagingTemplate template;
 
     public LobbyController(LobbyRepository repository){
         this.repository = repository;
@@ -58,16 +66,55 @@ public class LobbyController {
 
     @GetMapping("/startLobby")
     @ResponseBody
-    public Optional<Lobby> startLobby(@RequestParam String token){
+    public ConnectionStatusCodes startLobby(@RequestParam String token){
         Optional<Lobby> found = repository.findByToken(token);
         if(found.isPresent())
         {
             Lobby activeLobby = found.get();
+            if(activeLobby.getStarted())
+                return ConnectionStatusCodes.YOU_ARE_NOT_HOST;
             activeLobby.setStarted(true);
             repository.save(activeLobby);
+
+            //startGame(new ResponseMessage());
+            System.out.println("game started");
+            return YOU_ARE_HOST;
+        } else {
+            return LOBBY_NOT_FOUND;
         }
-        return found;
     }
+
+    @PostMapping("/addMeToLobby")
+    @ResponseBody
+    public Optional<Player> addMeToLobby(@RequestParam String token, @RequestBody Player player){
+        Optional<Lobby> found = repository.findByToken(token);
+        if(found.isPresent()){
+            found.get().addPlayerToLobby(player);
+            repository.save(found.get());
+        }
+
+        return Optional.of(player);
+    }
+
+    @MessageMapping("/lobbyStart")
+    @SendTo("/topic/lobbyStart")
+    public ResponseMessage startGame(ResponseMessage message){
+            return new ResponseMessage(ResponseCodes.START_GAME, message.getLobbyToken());
+    }
+
+    @MessageMapping("/requestUpdate")
+    @SendTo("/topic/updateLobby")
+    public ResponseMessage updateLobby(ResponseMessage message){
+        return new ResponseMessage(ResponseCodes.LOBBY_UPDATED, message.getLobbyToken());
+    }
+
+    @MessageMapping("/test")
+    @SendTo("/topic/lobby")
+    public ResponseMessage ok(String string){
+        System.out.println(string);
+        return new ResponseMessage(ResponseCodes.LOBBY_UPDATED, "test");
+    }
+
 
     /**
      *

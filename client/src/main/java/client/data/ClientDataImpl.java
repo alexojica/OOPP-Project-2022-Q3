@@ -1,5 +1,6 @@
 package client.data;
 
+import client.scenes.questions.QuestionController;
 import commons.Lobby;
 import commons.Player;
 import commons.Question;
@@ -18,7 +19,16 @@ public class ClientDataImpl implements ClientData {
     private Question clientQuestion;
     private Long clientScore;
     private Integer questionCounter;
+    private QuestionController currentQuestionController;
     private Boolean isHost = false; //remembers who the host of the lobby is
+
+    public QuestionController getCurrentQuestionController() {
+        return currentQuestionController;
+    }
+
+    public void setCurrentQuestionController(QuestionController currentQuestionController) {
+        this.currentQuestionController = currentQuestionController;
+    }
 
     public Boolean getIsHost() {
         return isHost;
@@ -78,4 +88,5 @@ public class ClientDataImpl implements ClientData {
     }
 
     public Lobby getClientLobby(){return clientLobby;}
+
 }

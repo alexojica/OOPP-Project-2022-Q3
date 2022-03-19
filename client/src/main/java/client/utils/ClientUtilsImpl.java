@@ -2,13 +2,14 @@ package client.utils;
 
 import client.data.ClientData;
 import client.scenes.MainCtrl;
+import client.scenes.menus.WaitingCtrl;
 import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
 import commons.Lobby;
 import commons.Player;
-import commons.Question;
 import constants.QuestionTypes;
 import javafx.application.Platform;
+import javafx.fxml.Initializable;
 import javafx.scene.control.ProgressBar;
 
 import javax.inject.Inject;
@@ -20,22 +21,49 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class ClientUtilsImpl implements ClientUtils {
 
-    @Inject
+    //@Inject
     private ServerUtils server;
 
-    @Inject
+    //@Inject
     private MainCtrl mainCtrl;
 
-    private final ClientData clientData;
+    private ClientData clientData;
+
+    public Initializable getCurrentSceneCtrl() {
+        return currentSceneCtrl;
+    }
+
+    public void setCurrentSceneCtrl(Initializable currentSceneCtrl) {
+        this.currentSceneCtrl = currentSceneCtrl;
+    }
+
+    private Initializable currentSceneCtrl;
 
     @Inject
-    public ClientUtilsImpl(ClientData clientData) {
+    public ClientUtilsImpl(ClientData clientData, ServerUtils server, MainCtrl mainCtrl) {
         this.clientData = clientData;
+        this.server = server;
+        this.mainCtrl = mainCtrl;
+
+        server.registerForMessages("/topic/nextQuestion", a -> {
+            System.out.println("next question received" + clientData.getQuestionCounter());
+            clientData.setQuestion(a.getQuestion());
+            clientData.setPointer(a.getQuestion().getPointer());
+            if(clientData.getQuestionCounter() == 0) {
+                ((WaitingCtrl) currentSceneCtrl).initiateGame();
+            } else {
+                //getQuestion();
+            }
+        });
     }
 
     @Override
     public boolean isInLobby() {
         return clientData.getClientLobby() != null;
+    }
+
+    public void nextQuestion(){
+
     }
 
     @Override
@@ -97,12 +125,12 @@ public class ClientUtilsImpl implements ClientUtils {
     @Override
     public void prepareQuestion()
     {
-        Question foundQuestion = server.getQuestion(
-                clientData.getClientPointer(), clientData.getClientLobby().getToken());
+//        Question foundQuestion = server.getQuestion(
+//                clientData.getClientPointer(), clientData.getClientLobby().getToken());
 
-        clientData.setQuestion(foundQuestion);
-
-        clientData.setPointer(foundQuestion.getPointer());
+//        clientData.setQuestion(foundQuestion);
+//
+//        clientData.setPointer(foundQuestion.getPointer());
     }
 
     @Override
@@ -118,10 +146,12 @@ public class ClientUtilsImpl implements ClientUtils {
         switch(clientData.getClientQuestion().getType())
         {
             case MULTIPLE_CHOICE_QUESTION:
+                System.out.println("should appear scene");
                 mainCtrl.showGameMCQ();
                 break;
 
             case ESTIMATION_QUESTION:
+                System.out.println("should appear scene");
                 mainCtrl.showGameEstimation();
                 break;
 
