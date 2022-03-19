@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
@@ -24,6 +25,9 @@ public class Player {
 
     @Column(name = "avatar")
     public String avatar; //folder path
+
+    @Column(name = "avatarCode")
+    public String avatarCode;
 
     @Column(name = "score")
     public Integer score;
@@ -91,9 +95,19 @@ public class Player {
         this.score = score;
     }
 
+    public String getAvatarCode() {
+        return avatarCode;
+    }
+
+    public void setAvatarCode(String avatarCode) {
+        this.avatarCode = avatarCode;
+    }
+
     public ArrayList<Boolean> getUsedPowerups() {
         return usedPowerups;
     }
+
+
 
     /**
      * Method that marks a user's power up (Joker) as used
@@ -107,16 +121,6 @@ public class Player {
     public void setUsedPowerups(ArrayList<Boolean> usedPowerups) {
         this.usedPowerups = usedPowerups;
     }
-
-    /*
-    public int getLobbyId() {
-        return lobbyId;
-    }
-
-    public void setLobbyId(int lobbyId) {
-        this.lobbyId = lobbyId;
-    }
-    */
 
     @Override
     public boolean equals(Object obj) {

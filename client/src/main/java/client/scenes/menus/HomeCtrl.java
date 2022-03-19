@@ -61,6 +61,7 @@ public class HomeCtrl {
 
             //update the avatar chosen to the specified path (String)
             clientData.getClientPlayer().setAvatar(avatarPath.toString());
+            clientData.getClientPlayer().setAvatarCode(baseAvatarName + seed + name.getText());
         }
         catch (WebApplicationException e)
         {
