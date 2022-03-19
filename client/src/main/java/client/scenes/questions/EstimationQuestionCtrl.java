@@ -5,6 +5,7 @@ import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Player;
 import commons.Question;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -169,6 +170,10 @@ public class EstimationQuestionCtrl {
         }
         clientData.setClientScore(clientData.getClientScore() + pointsToAdd);
         scoreTxt.setText("Score:" + clientData.getClientScore());
+
+        Player temp = clientData.getClientPlayer();
+        temp.setScore(Math.toIntExact(clientData.getClientScore()));
+        server.updateScore(temp);
     }
 
     public void showStatus(String text,String color)

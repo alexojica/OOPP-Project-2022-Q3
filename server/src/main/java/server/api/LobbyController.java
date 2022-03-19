@@ -1,5 +1,6 @@
 package server.api;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -119,14 +120,25 @@ public class LobbyController {
      * which can then be displayed in the table
      */
 
-    @GetMapping("/getTop10ByLobbyId")
-    public List<Player> getTop10ByLobbyId(@RequestParam String token) {
+    @GetMapping("/getTop10ByLobbyToken")
+    public List<Player> getTop10ByLobbyToken(@RequestParam String token) {
         Optional<Lobby> lobby = repository.findByToken(token);
         if(lobby.isEmpty()) {
             return null;
         }
         List<Player> players = lobby.get().getPlayersInLobby();
-        //sorting algorithm to be implemented here to sort on score
-        return players;
+        List<Player> playersSorted = new ArrayList<>();
+        Player temp;
+        while(players.isEmpty()==false){
+            temp = players.get(0);
+            for (int i = 1; i < players.size(); i++) {
+                if (players.get(i).getScore() > temp.getScore()) {
+                    temp = players.get(i);
+                }
+            }
+            playersSorted.add(temp);
+            players.remove(temp);
+        }
+        return playersSorted;
     }
 }

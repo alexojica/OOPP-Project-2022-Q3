@@ -131,9 +131,9 @@ public class ServerUtils {
                 .get(new GenericType<Lobby>() {});
     }
 
-    public List<Player> getTop10ByLobbyID(String token) {
+    public List<Player> getTop10ByLobbyToken(String token) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/lobby/getTop10ByLobbyId") //
+                .target(SERVER).path("api/lobby/getTop10ByLobbyToken") //
                 .queryParam("token", token)//
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
