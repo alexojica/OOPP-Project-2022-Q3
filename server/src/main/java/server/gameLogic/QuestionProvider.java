@@ -47,7 +47,7 @@ public class QuestionProvider {
     public void updatePointer() {
         newPointer = Math.abs(random.nextInt((int) (questionRepository.count()+1) * 21) + 1);
         System.out.println("[OLD POINTER] " + pointer + ", " + "[NEW POINTER]" + newPointer);
-        if (pointer == newPointer) ++newPointer;
+        if (pointer == newPointer) newPointer++;
     }
 
     public QuestionTypes getRandomQuestionType() {
