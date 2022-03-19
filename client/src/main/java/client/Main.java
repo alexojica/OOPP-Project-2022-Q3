@@ -51,7 +51,8 @@ public class Main extends Application {
         var waiting = FXML.load(WaitingCtrl.class, "client", "scenes", "Waiting.fxml");
         var gameMCQ = FXML.load(GameMCQCtrl.class, "client", "scenes", "GameMCQ.fxml");
         var estimationQuestion = FXML.load(EstimationQuestionCtrl.class, "client", "scenes", "EstimationQuestion.fxml");
-        var alternativeQuestion = FXML.load(EnergyAlternativeQuestionCtrl.class, "client", "scenes", "EnergyAlternativeQuestion.fxml");
+        var alternativeQuestion = FXML.load(
+                EnergyAlternativeQuestionCtrl.class, "client", "scenes", "EnergyAlternativeQuestion.fxml");
         var tempLeaderboard = FXML.load(TempLeaderboardCtrl.class, "client", "scenes", "TempLeaderboard.fxml");
         var gameOver = FXML.load(GameOverCtrl.class, "client", "scenes", "GameOver.fxml");
         var multiPlayerMenu = FXML.load(MultiplayerMenuCtrl.class, "client", "scenes", "MultiplayerMenu.fxml");
@@ -59,6 +60,7 @@ public class Main extends Application {
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, home, leaderboard, gameModeSelection, multiPlayerMenu,
-                            estimationQuestion, gameMCQ, alternativeQuestion, gameOver, waiting, tempLeaderboard, usernamePopUp);
+                            estimationQuestion, gameMCQ, alternativeQuestion, gameOver,
+                waiting, tempLeaderboard, usernamePopUp);
     }
 }

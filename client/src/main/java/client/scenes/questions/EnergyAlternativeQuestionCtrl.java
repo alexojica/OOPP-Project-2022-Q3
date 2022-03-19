@@ -13,7 +13,6 @@ import javafx.scene.text.Text;
 import javax.inject.Inject;
 
 import static constants.QuestionTypes.ENERGY_ALTERNATIVE_QUESTION;
-import static constants.QuestionTypes.MULTIPLE_CHOICE_QUESTION;
 
 public class EnergyAlternativeQuestionCtrl {
     private final ClientData clientData;
@@ -61,8 +60,10 @@ public class EnergyAlternativeQuestionCtrl {
     }
 
     /**
-     * Setting up UI: for now the first activity of the four returned from the server is the 'instead of' question
-     * while the rest are the other options
+     * Setting up the UI for this scene. Note that:
+     * the first activity returned from the server is the 'instead of' activity
+     * the second is the correct alternative
+     * the third and fourth are the wrong alternatives
      * @param question
      */
     private void resetUI(Question question) {
