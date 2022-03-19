@@ -2,7 +2,10 @@ package client.scenes.menus;
 
 import client.data.ClientData;
 import client.scenes.MainCtrl;
+import client.utils.AvatarSupplier;
 import client.utils.ServerUtils;
+import com.talanlabs.avatargenerator.Avatar;
+import com.talanlabs.avatargenerator.eightbit.EightBitAvatar;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 
@@ -12,9 +15,14 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 
 import commons.Player;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import commons.Lobby;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 public class HomeCtrl {
@@ -23,8 +31,16 @@ public class HomeCtrl {
     private final MainCtrl mainCtrl;
     private final ClientData clientData;
 
+    private final String baseAvatarName = "Simi";
+    private int seed = 0;
+    private Path avatarPath = null;
+    private Avatar playerAvatar;
+
     @FXML
     private TextField name;
+
+    @FXML
+    private ImageView avatarImage;
 
     @Inject
     public HomeCtrl(ServerUtils server, MainCtrl mainCtrl, ClientData clientData) {
@@ -34,7 +50,6 @@ public class HomeCtrl {
     }
 
     public void play(){
-
         try
         {
             Player p = getPlayer();
@@ -43,6 +58,9 @@ public class HomeCtrl {
 
             //store client player info received from the server
             clientData.setPlayer(serverPlayer);
+
+            //update the avatar chosen to the specified path (String)
+            clientData.getClientPlayer().setAvatar(avatarPath.toString());
         }
         catch (WebApplicationException e)
         {
@@ -52,7 +70,6 @@ public class HomeCtrl {
             alert.showAndWait();
             return;
         }
-
 
         mainCtrl.showGameModeSelection();
     }
@@ -73,6 +90,62 @@ public class HomeCtrl {
     {
         setRandomInitName();
         instantiateCommonLobby();
+        initAvatar();
+        setAvatarImage();
+    }
+
+    public void initAvatar()
+    {
+        AvatarSupplier.clearAllAvatars();
+        playerAvatar = EightBitAvatar.newMaleAvatarBuilder().build();
+    }
+
+    public void setAvatarImage()
+    {
+        updateAvatar();
+        updateImage();
+        System.out.println("Avatar image successfully generated at: " + avatarPath);
+
+        //set listener to look for changes
+        name.textProperty().addListener(((observable, oldValue, newValue) -> {
+            avatarPath = AvatarSupplier.generateAvatar(playerAvatar,newValue,avatarPath);
+            updateImage();
+        }));
+    }
+
+    /**
+     * Method that updates the avatar based on a given inputName, from which it will construct the seed
+     * If the avatarPath is null(first pass), it will assign it a new path, and then only change the given image in that path
+     */
+    public void updateAvatar()
+    {
+        String inputName = baseAvatarName + seed + name.getText();
+
+        avatarPath = AvatarSupplier.generateAvatar(playerAvatar, inputName, avatarPath);
+    }
+
+    public void updateImage()
+    {
+        try{
+            avatarImage.setImage(new Image(Files.newInputStream(avatarPath)));
+        }catch (IOException e)
+        {
+            System.out.println("Failed to set image");
+        }
+    }
+
+    public void incrementSeed()
+    {
+        seed ++;
+        updateAvatar();
+        updateImage();
+    }
+
+    public void decrementSeed()
+    {
+        seed --;
+        updateAvatar();
+        updateImage();
     }
 
     public void setRandomInitName()

@@ -31,10 +31,6 @@ public class Player {
     @Column(name = "jokers")
     public ArrayList<Boolean> usedPowerups;
 
-    /*
-    @Column(name = "lobbyId")
-    public Integer lobbyId;
-    */
 
     public Player() {
         // for object mapper
