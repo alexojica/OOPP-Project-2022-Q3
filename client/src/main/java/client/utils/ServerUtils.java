@@ -141,24 +141,21 @@ public class ServerUtils {
     }
 
 
-    public void registerForMessages(String dest, Consumer<ResponseMessage> consumer){
-        System.out.println(session.isConnected());
+    public void registerForMessages(String dest, Consumer<WebsocketMessage> consumer){
+        System.out.println("registered for " + dest);
         session.subscribe(dest, new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
-                return ResponseMessage.class;
+                return WebsocketMessage.class;
             }
 
-            //@SuppressWarnings("unchecked")
             @Override
             public void handleFrame(StompHeaders headers, Object payload) {
                 System.out.println("receiving message");
-                consumer.accept((ResponseMessage) payload);
+                consumer.accept((WebsocketMessage) payload);
             }
 
         });
-
-        //session.send("/app/test", "Test");
     }
 
     public Lobby addMeToLobby(String token, Player player){

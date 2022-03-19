@@ -7,7 +7,7 @@ import client.utils.ClientUtilsImpl;
 import client.utils.ServerUtils;
 import commons.Lobby;
 import commons.Player;
-import commons.ResponseMessage;
+import commons.WebsocketMessage;
 import constants.ConnectionStatusCodes;
 import constants.ResponseCodes;
 import javafx.application.Platform;
@@ -80,22 +80,13 @@ public class WaitingCtrl implements Initializable{
             if(a.getCode() == ResponseCodes.START_GAME && a.getLobbyToken().equals(clientData.getClientLobby().token)) {
                 if(clientData.getIsHost())
                     server.send("/app/nextQuestion",
-                            new ResponseMessage(ResponseCodes.NEXT_QUESTION,
+                            new WebsocketMessage(ResponseCodes.NEXT_QUESTION,
                                     clientData.getClientLobby().token, clientData.getClientPointer()));
-                //initiateGame();
-            }
-        });
-
-        server.registerForMessages("/topic/updateLobby", a -> {
-            if(a.getCode() == ResponseCodes.LOBBY_UPDATED
-                    && a.getLobbyToken().equals(clientData.getClientLobby().token)){
-                clientData.setLobby(server.getLobbyByToken(a.getLobbyToken()));
-                refresh();
             }
         });
 
         server.send("/app/requestUpdate",
-                new ResponseMessage(ResponseCodes.LOBBY_UPDATED, clientData.getClientLobby().getToken()));
+                new WebsocketMessage(ResponseCodes.LOBBY_UPDATED, clientData.getClientLobby().getToken()));
     }
 
     /**
@@ -123,8 +114,6 @@ public class WaitingCtrl implements Initializable{
                 refresh();
             }
         }, 0, 250);
-        //refresh();
-
     }
 
     public boolean isInLobby()
@@ -138,7 +127,6 @@ public class WaitingCtrl implements Initializable{
 
         if(activePlayers != null && isInLobby())
         {
-            //System.out.println(clientData.getClientLobby().playersInLobby.size());
             String token = clientData.getClientLobby().getToken();
             Lobby current = clientData.getClientLobby();
             clientData.setLobby(current);
@@ -146,13 +134,6 @@ public class WaitingCtrl implements Initializable{
             playerData = FXCollections.observableList(activePlayers);
             tableView.setItems(playerData);
 
-            //check if game has started in this lobby
-            if(current.getStarted()) {
-                //timer.cancel();
-                Platform.runLater(() -> initiateGame());
-                //initiateGame();
-                System.out.println("Game started in lobby " + token);
-            }
         }
     }
 
@@ -163,10 +144,7 @@ public class WaitingCtrl implements Initializable{
     public void initiateGame()
     {
         System.out.println("game initiated");
-        //clientData.setPointer(clientData.getClientLobby().getPlayerIds().get(0));
-        clientData.setClientScore(0L);
-        //clientData.setQuestionCounter(0);
-
+        clientData.setClientScore(0);
 
 
         //add delay until game starts
@@ -176,8 +154,6 @@ public class WaitingCtrl implements Initializable{
                 try{
                     //TODO: add timer progress bar / UI text with counter depleting until the start of the game
                     Thread.sleep(300);
-
-                    //prepare the question again only if not host
 
                     Platform.runLater(() -> client.getQuestion());
 
@@ -196,16 +172,17 @@ public class WaitingCtrl implements Initializable{
     //the rest use the pregenerated question
 
     public void startGame(){
-        //start the game for the other players as well
+
         String token = clientData.getClientLobby().getToken();
         if(server.startLobby(token).equals(ConnectionStatusCodes.YOU_ARE_HOST)) {
             clientData.setAsHost(true);
             clientData.setPointer(clientData.getClientLobby().getPlayerIds().get(0));
-            clientData.setClientScore(0L);
+            clientData.setClientScore(0);
             clientData.setQuestionCounter(0);
-            //client.prepareQuestion();
+
+            //start the game for the other players as well
             server.send("/app/lobbyStart",
-                    new ResponseMessage(ResponseCodes.START_GAME, clientData.getClientLobby().token));
+                    new WebsocketMessage(ResponseCodes.START_GAME, clientData.getClientLobby().token));
         }
     }
 }

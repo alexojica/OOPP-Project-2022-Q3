@@ -1,7 +1,7 @@
 package server.api;
 
 import commons.Question;
-import commons.ResponseMessage;
+import commons.WebsocketMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -26,11 +26,16 @@ public class QuestionController {
         return questionProvider.getQuestion(pointer, lastLobby, 30);
     }
 
+    /**
+     * Websocket mapping that sends back to client a new ResponseMessage containing a question.
+     * @param message
+     * @return
+     */
     @MessageMapping("/nextQuestion")
     @SendTo("/topic/nextQuestion")
-    public ResponseMessage nextQuestion(ResponseMessage message){
+    public WebsocketMessage nextQuestion(WebsocketMessage message){
         QuestionProvider questionProvider = new QuestionProvider(activitiesRepository, questionRepository);
-        return new ResponseMessage(message.getCode(),
+        return new WebsocketMessage(message.getCode(),
                 message.getLobbyToken(), questionProvider.getQuestion(message.getPointer(),
                 message.getLobbyToken(), 30));
     }

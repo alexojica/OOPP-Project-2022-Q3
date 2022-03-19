@@ -44,18 +44,11 @@ public class MultiplayerMenuCtrl {
                 //lobby not found
                 break;
             case CONNECTION_PERMISSION_GRANTED:
-                //Lobby commonLobby = server.getLobbyByToken("COMMON");
-                //client.registerForLobby();
                 //set client lobby static variable
                 clientData.setLobby(server.addMeToLobby("COMMON", clientPlayer));
 
-                //adds player to lobby (client sided)
-                //commonLobby.addPlayerToLobby(clientPlayer);
-
-                //save the new state of the lobby to the repository again
-                //server.addLobby(commonLobby);
                 if(clientData.getClientLobby().playersInLobby.contains(clientPlayer))
-                mainCtrl.showWaiting();
+                    mainCtrl.showWaiting();
         }
 
     }

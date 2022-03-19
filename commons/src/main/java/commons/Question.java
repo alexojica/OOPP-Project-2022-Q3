@@ -28,7 +28,7 @@ public class Question {
     @Column(name = "pointer")
     public Long pointer;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     public List<Activity> foundActivities;
 
     @Column(name = "lastLobbyToken")

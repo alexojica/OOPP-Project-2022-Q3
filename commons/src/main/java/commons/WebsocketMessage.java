@@ -2,7 +2,7 @@ package commons;
 
 import constants.ResponseCodes;
 
-public class ResponseMessage {
+public class WebsocketMessage {
 
     public ResponseCodes getCode() {
         return code;
@@ -20,6 +20,16 @@ public class ResponseMessage {
 
     private Long pointer;
 
+    private Player player;
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
     public Long getPointer() {
         return pointer;
     }
@@ -27,36 +37,38 @@ public class ResponseMessage {
     public Question getQuestion() {
         return question;
     }
-//private Lobby lobby;
 
-//    public Lobby getLobby() {
-//        return lobby;
-//    }
 
     /**
      * Constructor for start game
      * @param code
      * @param lobbyToken
      */
-    public ResponseMessage(ResponseCodes code, String lobbyToken/*, Optional<Lobby> lobby*/){
+    public WebsocketMessage(ResponseCodes code, String lobbyToken/*, Optional<Lobby> lobby*/){
         this.code = code;
         //this.lobby = null;
         this.lobbyToken = lobbyToken;
     }
 
-    public ResponseMessage(ResponseCodes code, String lobbyToken, Question question){
+    public WebsocketMessage(ResponseCodes code, String lobbyToken, Question question){
         this.code = code;
         this.question = question;
         this.lobbyToken = lobbyToken;
     }
 
-    public ResponseMessage(ResponseCodes code, String lobbyToken, Long pointer){
+    public WebsocketMessage(ResponseCodes code, String lobbyToken, Long pointer){
         this.code = code;
         this.pointer = pointer;
         this.lobbyToken = lobbyToken;
     }
 
-    public ResponseMessage(){
+    public WebsocketMessage(ResponseCodes code, String lobbyToken, Player player){
+        this.code = code;
+        this.player = player;
+        this.lobbyToken = lobbyToken;
+    }
+
+    public WebsocketMessage(){
 
     }
 

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import commons.Player;
-import commons.ResponseMessage;
+import commons.WebsocketMessage;
 import constants.ConnectionStatusCodes;
 import constants.ResponseCodes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +76,6 @@ public class LobbyController {
             activeLobby.setStarted(true);
             repository.save(activeLobby);
 
-            //startGame(new ResponseMessage());
             System.out.println("game started");
             return YOU_ARE_HOST;
         } else {
@@ -84,6 +83,13 @@ public class LobbyController {
         }
     }
 
+    /**
+     * An api endpoint that adds the player to a lobby in the database.
+     * In client the endpoint is used in combination with getLobbyByToken to update the local lobby
+     * @param token of the lobby that the player is added to
+     * @param player to be added to lobby
+     * @return player that was added to lobby
+     */
     @PostMapping("/addMeToLobby")
     @ResponseBody
     public Optional<Player> addMeToLobby(@RequestParam String token, @RequestBody Player player){
@@ -96,23 +102,55 @@ public class LobbyController {
         return Optional.of(player);
     }
 
+    /**
+     * Websocket mapping that processes the game start message from the player
+     * and redirects it to all clients subscribed to /topic/lobbyStart
+     * @param message received from the client containing the Response code and lobby token.
+     */
     @MessageMapping("/lobbyStart")
     @SendTo("/topic/lobbyStart")
-    public ResponseMessage startGame(ResponseMessage message){
-            return new ResponseMessage(ResponseCodes.START_GAME, message.getLobbyToken());
+    public WebsocketMessage startGame(WebsocketMessage message){
+            return new WebsocketMessage(ResponseCodes.START_GAME, message.getLobbyToken());
     }
 
+    @MessageMapping("/leaveLobby")
+    @SendTo("/topic/updateLobby")
+    public WebsocketMessage leaveLobby(WebsocketMessage message){
+        Optional<Lobby> found = getLobbyByToken(message.getLobbyToken());
+        if(found.isPresent()){
+            found.get().removePlayerByName(message.getPlayer().getName());
+            repository.save(found.get());
+        }
+
+        return new WebsocketMessage(ResponseCodes.LEAVE_LOBBY, message.getLobbyToken());
+    }
+
+    @MessageMapping("/updateScore")
+    @SendTo("/topic/updateLobby")
+    public WebsocketMessage updateScore(WebsocketMessage message){
+        Optional<Lobby> found = getLobbyByToken(message.getLobbyToken());
+        if(found.isPresent()){
+            for(Player p : found.get().playersInLobby){
+                if(p.name.equals(message.getPlayer().name))
+                    p.score = message.getPlayer().score;
+            }
+
+            repository.save(found.get());
+        }
+
+        return new WebsocketMessage(ResponseCodes.SCORE_UPDATED, message.getLobbyToken());
+    }
+
+    /**
+     * Websocket mapping that processes the update request message from the player
+     * and redirects it to all clients subscribed to /topic/updateLobby
+     * @param message received from the client containing the Response code and lobby token.
+     * @return
+     */
     @MessageMapping("/requestUpdate")
     @SendTo("/topic/updateLobby")
-    public ResponseMessage updateLobby(ResponseMessage message){
-        return new ResponseMessage(ResponseCodes.LOBBY_UPDATED, message.getLobbyToken());
-    }
-
-    @MessageMapping("/test")
-    @SendTo("/topic/lobby")
-    public ResponseMessage ok(String string){
-        System.out.println(string);
-        return new ResponseMessage(ResponseCodes.LOBBY_UPDATED, "test");
+    public WebsocketMessage updateLobby(WebsocketMessage message){
+        return new WebsocketMessage(ResponseCodes.LOBBY_UPDATED, message.getLobbyToken());
     }
 
 

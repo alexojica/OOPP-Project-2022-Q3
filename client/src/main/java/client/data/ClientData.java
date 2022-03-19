@@ -1,6 +1,5 @@
 package client.data;
 
-import client.scenes.questions.QuestionController;
 import commons.Lobby;
 import commons.Player;
 import commons.Question;
@@ -17,9 +16,9 @@ public interface ClientData {
 
     void setQuestionCounter(Integer counter);
 
-    Long getClientScore();
+    Integer getClientScore();
 
-    void setClientScore(Long score);
+    void setClientScore(Integer score);
 
     void setPlayer(Player player);
 
@@ -36,8 +35,4 @@ public interface ClientData {
     void setLobby(Lobby lobby);
 
     Lobby getClientLobby();
-
-    QuestionController getCurrentQuestionController();
-
-    void setCurrentQuestionController(QuestionController questionController);
 }

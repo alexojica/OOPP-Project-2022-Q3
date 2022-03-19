@@ -5,11 +5,11 @@ import client.scenes.MainCtrl;
 import client.scenes.menus.WaitingCtrl;
 import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
-import commons.Lobby;
 import commons.Player;
+import commons.WebsocketMessage;
 import constants.QuestionTypes;
+import constants.ResponseCodes;
 import javafx.application.Platform;
-import javafx.fxml.Initializable;
 import javafx.scene.control.ProgressBar;
 
 import javax.inject.Inject;
@@ -29,15 +29,15 @@ public class ClientUtilsImpl implements ClientUtils {
 
     private ClientData clientData;
 
-    public Initializable getCurrentSceneCtrl() {
+    public Object getCurrentSceneCtrl() {
         return currentSceneCtrl;
     }
 
-    public void setCurrentSceneCtrl(Initializable currentSceneCtrl) {
+    public void setCurrentSceneCtrl(Object currentSceneCtrl) {
         this.currentSceneCtrl = currentSceneCtrl;
     }
 
-    private Initializable currentSceneCtrl;
+    private Object currentSceneCtrl;
 
     @Inject
     public ClientUtilsImpl(ClientData clientData, ServerUtils server, MainCtrl mainCtrl) {
@@ -49,10 +49,18 @@ public class ClientUtilsImpl implements ClientUtils {
             System.out.println("next question received" + clientData.getQuestionCounter());
             clientData.setQuestion(a.getQuestion());
             clientData.setPointer(a.getQuestion().getPointer());
-            if(clientData.getQuestionCounter() == 0) {
+            if(currentSceneCtrl.getClass() == WaitingCtrl.class) {
                 ((WaitingCtrl) currentSceneCtrl).initiateGame();
-            } else {
-                //getQuestion();
+            }
+            clientData.setQuestionCounter(clientData.getQuestionCounter() + 1);
+        });
+
+        server.registerForMessages("/topic/updateLobby", a -> {
+            System.out.println(a.getCode());
+            if(a.getLobbyToken().equals(clientData.getClientLobby().token)){
+                clientData.setLobby(server.getLobbyByToken(a.getLobbyToken()));
+                if(currentSceneCtrl.getClass() == WaitingCtrl.class)
+                    ((WaitingCtrl) currentSceneCtrl).refresh();
             }
         });
     }
@@ -62,23 +70,24 @@ public class ClientUtilsImpl implements ClientUtils {
         return clientData.getClientLobby() != null;
     }
 
-    public void nextQuestion(){
-
-    }
-
     @Override
     public void leaveLobby() {
-        Lobby currentLobby = clientData.getClientLobby();
+        //Lobby currentLobby = clientData.getClientLobby();
         Player clientPlayer = clientData.getClientPlayer();
+
+        server.send("/app/leaveLobby", new WebsocketMessage(ResponseCodes.LEAVE_LOBBY,
+                clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
 
         //set client lobby to exited
         clientData.setLobby(null);
 
         //removes player from lobby (client sided)
-        currentLobby.removePlayerFromLobby(clientPlayer);
+        //currentLobby.removePlayerFromLobby(clientPlayer);
 
         //save the new state of the lobby to the repository again
-        server.addLobby(currentLobby);
+        //server.addLobby(currentLobby);
+
+
 
         mainCtrl.showGameModeSelection();
     }

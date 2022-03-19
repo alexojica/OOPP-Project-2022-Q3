@@ -15,6 +15,15 @@ public class WebsocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/websocket");
     }
 
+
+    /**
+     * Configures the message broker, the script that sends messages.
+     *   /app/"something" is the destination for incoming messages that have to be processed by the server,
+     * destination declared in any controller using @MessageMapping annotation
+     *   the server then sends the message to the message broker that redirects
+     * the message to all clients that are subscribed to /topic/"something",
+     * destination declared using @SendTo annotation
+     */
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config){
         config.enableSimpleBroker("/topic");
