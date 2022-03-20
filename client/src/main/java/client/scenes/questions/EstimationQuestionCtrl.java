@@ -96,10 +96,8 @@ public class EstimationQuestionCtrl{
                     Thread.sleep(2000);
 
                     //prepare the question again only if not host
-                    if(clientData.getIsHost())
-                        server.send("/app/nextQuestion",
-                                new WebsocketMessage(ResponseCodes.NEXT_QUESTION,
-                                        clientData.getClientLobby().token, clientData.getClientPointer()));
+                    //if(clientData.getIsHost())
+
 
                     //execute next question immediatly after sleep on current thread finishes execution
                     Platform.runLater(() -> client.getQuestion());
@@ -115,6 +113,12 @@ public class EstimationQuestionCtrl{
     }
 
     private void updateCorrectAnswer() {
+
+        if(clientData.getIsHost()){
+            server.send("/app/nextQuestion",
+                    new WebsocketMessage(ResponseCodes.NEXT_QUESTION,
+                            clientData.getClientLobby().token, clientData.getClientPointer()));
+        }
 
         if(submittedAnswer == null) {
             showStatus("No answer submitted!","red");

@@ -132,10 +132,8 @@ public class GameMCQCtrl{
                     Thread.sleep(2000);
 
                     //prepare the question again only if not host
-                    if(clientData.getIsHost())
-                        server.send("/app/nextQuestion",
-                                new WebsocketMessage(ResponseCodes.NEXT_QUESTION,
-                                        clientData.getClientLobby().token, clientData.getClientPointer()));
+                    //if(clientData.getIsHost())
+
 
                     //execute next question immediatly after sleep on current thread finishes execution
                     Platform.runLater(() -> client.getQuestion());
@@ -156,7 +154,11 @@ public class GameMCQCtrl{
         if(clientData.getIsHost())
         {
             //if host prepare next question
-            client.prepareQuestion();
+            //client.prepareQuestion();
+
+            server.send("/app/nextQuestion",
+                    new WebsocketMessage(ResponseCodes.NEXT_QUESTION,
+                            clientData.getClientLobby().token, clientData.getClientPointer()));
         }
 
         switch (correctAnswer)

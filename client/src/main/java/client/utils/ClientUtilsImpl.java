@@ -6,6 +6,7 @@ import client.scenes.menus.WaitingCtrl;
 import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
 import commons.Player;
+import commons.Question;
 import commons.WebsocketMessage;
 import constants.QuestionTypes;
 import constants.ResponseCodes;
@@ -44,6 +45,7 @@ public class ClientUtilsImpl implements ClientUtils {
         this.clientData = clientData;
         this.server = server;
         this.mainCtrl = mainCtrl;
+        System.out.println("Instance of client utils");
 
         server.registerForMessages("/topic/nextQuestion", a -> {
             System.out.println("next question received" + clientData.getQuestionCounter());
@@ -52,7 +54,7 @@ public class ClientUtilsImpl implements ClientUtils {
             if(currentSceneCtrl.getClass() == WaitingCtrl.class) {
                 ((WaitingCtrl) currentSceneCtrl).initiateGame();
             }
-            clientData.setQuestionCounter(clientData.getQuestionCounter() + 1);
+            //clientData.setQuestionCounter(clientData.getQuestionCounter() + 1);
         });
 
         server.registerForMessages("/topic/updateLobby", a -> {
@@ -80,14 +82,6 @@ public class ClientUtilsImpl implements ClientUtils {
 
         //set client lobby to exited
         clientData.setLobby(null);
-
-        //removes player from lobby (client sided)
-        //currentLobby.removePlayerFromLobby(clientPlayer);
-
-        //save the new state of the lobby to the repository again
-        //server.addLobby(currentLobby);
-
-
 
         mainCtrl.showGameModeSelection();
     }
@@ -134,12 +128,12 @@ public class ClientUtilsImpl implements ClientUtils {
     @Override
     public void prepareQuestion()
     {
-//        Question foundQuestion = server.getQuestion(
-//                clientData.getClientPointer(), clientData.getClientLobby().getToken());
+        Question foundQuestion = server.getQuestion(
+                clientData.getClientPointer(), clientData.getClientLobby().getToken());
 
-//        clientData.setQuestion(foundQuestion);
-//
-//        clientData.setPointer(foundQuestion.getPointer());
+        clientData.setQuestion(foundQuestion);
+
+        clientData.setPointer(foundQuestion.getPointer());
     }
 
     @Override
