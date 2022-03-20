@@ -20,14 +20,17 @@ import commons.Lobby;
 import commons.Player;
 import commons.Question;
 import constants.ConnectionStatusCodes;
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.core.GenericType;
-import org.glassfish.jersey.client.ClientConfig;
+
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 import java.util.List;
 
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import commons.LeaderboardEntry;
+import org.glassfish.jersey.client.ClientConfig;
+
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.GenericType;
 
 public class ServerUtils {
 
@@ -93,6 +96,22 @@ public class ServerUtils {
                 .get(new GenericType<Activity>() {});
     }
 
+    public List<LeaderboardEntry> getTop10Scores() {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/leaderboard/getTop10")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<List<LeaderboardEntry>>() {});
+    }
+
+    public LeaderboardEntry saveScore(LeaderboardEntry score) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/leaderboard/saveScore")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(score, APPLICATION_JSON), LeaderboardEntry.class);
+    }
+
     public Question getQuestion(long pointer, String lastLobby){
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/question/getQuestion") //
@@ -110,5 +129,22 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<Lobby>() {});
+    }
+
+    public List<Player> getTop10ByLobbyToken(String token) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/lobby/getTop10ByLobbyToken") //
+                .queryParam("token", token)//
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<List<Player>>() {});
+    }
+
+    public Player updateScore(Player player) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/player/updateScore") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(player, APPLICATION_JSON), Player.class);
     }
 }

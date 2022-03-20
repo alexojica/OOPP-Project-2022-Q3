@@ -4,6 +4,7 @@ import client.data.ClientData;
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
+import commons.Player;
 import commons.Question;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -186,5 +187,9 @@ public class GameMCQCtrl {
                 break;
         }
         scoreTxt.setText("Score:" + clientData.getClientScore());
+
+        Player temp = clientData.getClientPlayer();
+        temp.setScore(Math.toIntExact(clientData.getClientScore()));
+        server.updateScore(temp);
     }
 }
