@@ -72,7 +72,6 @@ public class EstimationQuestionCtrl{
 
         correctAnswer = question.getFoundActivities().get(0).getEnergyConsumption();
 
-       // answerPopUp.setText(correctAnswer.toString());
         answerPopUp.setStyle(" -fx-background-color: transparent; ");
         submittedAnswer = null;
 
@@ -95,10 +94,6 @@ public class EstimationQuestionCtrl{
 
                     Thread.sleep(2000);
 
-                    //prepare the question again only if not host
-                    //if(clientData.getIsHost())
-
-
                     //execute next question immediatly after sleep on current thread finishes execution
                     Platform.runLater(() -> client.getQuestion());
                     //client.getQuestion();
@@ -115,6 +110,7 @@ public class EstimationQuestionCtrl{
     private void updateCorrectAnswer() {
 
         if(clientData.getIsHost()){
+            //send a new question request to server so it has time to generate it
             server.send("/app/nextQuestion",
                     new WebsocketMessage(ResponseCodes.NEXT_QUESTION,
                             clientData.getClientLobby().token, clientData.getClientPointer()));

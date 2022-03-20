@@ -54,7 +54,6 @@ public class ClientUtilsImpl implements ClientUtils {
             if(currentSceneCtrl.getClass() == WaitingCtrl.class) {
                 ((WaitingCtrl) currentSceneCtrl).initiateGame();
             }
-            //clientData.setQuestionCounter(clientData.getQuestionCounter() + 1);
         });
 
         server.registerForMessages("/topic/updateLobby", a -> {

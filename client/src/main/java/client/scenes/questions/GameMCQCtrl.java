@@ -131,8 +131,6 @@ public class GameMCQCtrl{
 
                     Thread.sleep(2000);
 
-                    //prepare the question again only if not host
-                    //if(clientData.getIsHost())
 
 
                     //execute next question immediatly after sleep on current thread finishes execution
