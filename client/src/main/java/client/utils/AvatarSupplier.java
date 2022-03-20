@@ -56,6 +56,7 @@ public class AvatarSupplier{
         String finalPath = userDirectory + currentPath.toString();
         File dir = new File(finalPath);
         File[] savedAvatars = dir.listFiles();
+        if(savedAvatars == null) return;
         for (int i = 0; i < savedAvatars.length; i++)
         {
             File current = savedAvatars[i];
@@ -93,13 +94,19 @@ public class AvatarSupplier{
     public static Path generateImage(BufferedImage bi, String name, Path existingFilePath) {
         try {
             Path currentPath = Paths.get(FILE_PATH);
-            String finalPath = userDirectory + currentPath.toString();
+            String finalPath = userDirectory + currentPath;
 
             try {
                 if(existingFilePath == null || existingFilePath.toFile().isFile() == false)
                 {
                     //create it if the file does not exist
-                    Path file = Files.createTempFile(Paths.get(finalPath), name, ".png");
+                    Path newPath = Paths.get(finalPath + "/" + name + ".png");
+
+                    //check if the file already exists, if yes, just exit
+                    if(newPath.toFile().exists()) return newPath;
+
+                    Path file = Files.createFile(newPath);
+                    //Path file = Files.createTempFile(Paths.get(finalPath), name, ".png");
 
                     file.toFile().deleteOnExit();
                     ImageIO.write(bi, "png", file.toFile());
@@ -110,8 +117,6 @@ public class AvatarSupplier{
                 {
                     File checkFile = existingFilePath.toFile();
                     ImageIO.write(bi, "png", checkFile);
-
-                    System.out.println("Changing existing avatar image");
 
                     return existingFilePath;
                 }
@@ -125,5 +130,26 @@ public class AvatarSupplier{
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static Path renameAvatarFile(Path currentAvatarPath, String newName)
+    {
+        Path currentPath = Paths.get(FILE_PATH);
+        Path finalPath = Paths.get(userDirectory + currentPath + "/" + newName + ".png");
+
+        if(currentAvatarPath != null && currentAvatarPath.toFile().isFile())
+        {
+            //the provided file path was found in the directory so it needs renaming
+            boolean renamed = currentAvatarPath.toFile().renameTo(finalPath.toFile());
+            if(renamed) {
+                System.out.println("Renaming successful");
+                return finalPath;
+            }
+            else {
+                System.out.println("Renaming failed");
+                return null;
+            }
+        }else
+            return null;
     }
 }

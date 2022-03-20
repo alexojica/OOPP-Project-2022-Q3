@@ -32,7 +32,7 @@ public class HomeCtrl {
     private final MainCtrl mainCtrl;
     private final ClientData clientData;
 
-    private final String baseAvatarName = "Simi";
+    private final String baseAvatarName = "OOPPP";
     private int seed = 0;
     private Path avatarPath = null;
     private Avatar playerAvatar;
@@ -61,6 +61,7 @@ public class HomeCtrl {
             clientData.setPlayer(serverPlayer);
 
             //update the avatar chosen to the specified path (String)
+            renameFile();
             clientData.getClientPlayer().setAvatar(avatarPath.toString());
             clientData.getClientPlayer().setAvatarCode(baseAvatarName + seed + name.getText());
         }
@@ -105,8 +106,10 @@ public class HomeCtrl {
 
     public void setAvatarImage()
     {
-        if(clientData.getClientPlayer() == null || clientData.getClientPlayer().getAvatar() == null || clientData.getClientPlayer().getAvatar().equals(""))
-        {
+        if(clientData.getClientPlayer() == null ||
+                clientData.getClientPlayer().getAvatar() == null ||
+                clientData.getClientPlayer().getAvatar().equals("")
+        ){
             //first time generating the resource
             updateAvatar();
             updateImage();
@@ -143,10 +146,17 @@ public class HomeCtrl {
     {
         try{
             avatarImage.setImage(new Image(Files.newInputStream(avatarPath)));
-        }catch (IOException e)
+        }catch (IOException  | NullPointerException e)
         {
             System.out.println("Failed to set image");
         }
+
+    }
+
+    private void renameFile()
+    {
+        String inputName = baseAvatarName + seed + name.getText();
+        avatarPath = AvatarSupplier.renameAvatarFile(avatarPath,inputName);
     }
 
     public void incrementSeed()
