@@ -51,7 +51,7 @@ public class QuestionProvider {
     }
 
     public QuestionTypes getRandomQuestionType() {
-        switch (Math.abs(random.nextInt(2))) {
+        switch (Math.abs(random.nextInt(3))) {
             case 0:
                 return QuestionTypes.MULTIPLE_CHOICE_QUESTION;
             case 1:
@@ -121,18 +121,60 @@ public class QuestionProvider {
     public List<Activity> getAlternativeEnergyQuestionActivities(Activity activityPivot) {
         long small = activityPivot.getEnergyConsumption() * (100 - difficulty) / 100;
         long big = activityPivot.getEnergyConsumption() * (100 + difficulty) / 100;
-        List<Activity> foundActivities = activitiesRepository.findActivitiesInRange(small, big).get();
-        if (foundActivities.size() <= 4) {
-            foundActivities = activitiesRepository.findActivitiesInRange(small / 2, big * 2).get();
-        }
-        foundActivities.remove(activityPivot);
-        Collections.shuffle(foundActivities);
+
+        Activity correctAlternative = getCorrectAlternative(activityPivot, small, big);
+        List<Activity> wrongAlternatives = getWrongAlternatives(activityPivot, small, big);
         List<Activity> activities = new ArrayList<>();
+
+        // Pivot/'instead of' question goes first
         activities.add(activityPivot);
-        activities.add(foundActivities.get(0));
-        activities.add(foundActivities.get(1));
-        activities.add(foundActivities.get(2));
+
+        // Correct alternative goes next
+        activities.add(correctAlternative);
+
+        //Wrong alternatives go last
+        activities.addAll(wrongAlternatives);
         return activities;
+    }
+
+    /**
+     * Loop through alternative candidate activities until one that is not the pivot is found (chances are very small
+     * it will have to loop through but it could have been a weird bug)
+     * If by some weird reason there is no activity in the range of [small, big] then we recursivelly look in a
+     * biggger range
+     */
+    private Activity getCorrectAlternative(Activity activityPivot, long small, long big){
+        List<Activity> alternatives = activitiesRepository.findActivitiesInRange(small, big).get();
+        for(Activity activity : alternatives){
+            if(!activity.equals(activityPivot)){
+                return activity;
+            }
+        }
+        return getCorrectAlternative(activityPivot, small / 2, big * 2);
+    }
+
+    /**
+     * Gets two wrong alternative activities. It randomly selects two activities out of the [small, big] range.
+     * It could be one activity with lower energy consumption that the correct answer and one higher
+     */
+    private List<Activity> getWrongAlternatives(Activity activityPivot, long small, long big){
+        Random random = new Random();
+        int numActivitiesLower = random.nextInt(3);
+        int numActivitiesHigher = 2 - numActivitiesLower;
+        List<Activity> wrongActivities = new ArrayList<>();
+
+        // Get wrong, lower consumptions, alternative(s)
+        List<Activity> lowerWrongAlternatives =activitiesRepository.findActivitiesInRange(small / 100, small / 2).get();
+        for(int i=0; i<numActivitiesLower; i++){
+            wrongActivities.add(lowerWrongAlternatives.get(i));
+        }
+
+        // Get wrong, higher consumption, alternative(s)
+        List<Activity> higherWrongAlternatives = activitiesRepository.findActivitiesInRange(big * 2, small * 100).get();
+        for(int i=0; i<numActivitiesHigher; i++){
+            wrongActivities.add(higherWrongAlternatives.get(i));
+        }
+        return wrongActivities;
     }
 
     public List<Activity> getEstimationQuestionActivity(Activity activityPivot) {

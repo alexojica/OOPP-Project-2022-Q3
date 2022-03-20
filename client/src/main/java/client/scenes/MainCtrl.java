@@ -21,6 +21,7 @@ import client.scenes.menus.GameModeSelectionCtrl;
 import client.scenes.menus.HomeCtrl;
 import client.scenes.menus.MultiplayerMenuCtrl;
 import client.scenes.menus.WaitingCtrl;
+import client.scenes.questions.EnergyAlternativeQuestionCtrl;
 import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
 import client.utils.ClientUtils;
@@ -66,6 +67,9 @@ public class MainCtrl extends Application {
     private UsernamePopUpCtrl usernamePopUpCtrl;
     private Scene usernamePopUp;
 
+    private EnergyAlternativeQuestionCtrl energyAlternativeQuestionCtrl;
+    private Scene energyAlternative;
+
     private Stage incorrectUsernamePopUp;
 
     @Inject
@@ -74,8 +78,10 @@ public class MainCtrl extends Application {
     public void initialize(Stage primaryStage, Pair<HomeCtrl, Parent> home, Pair<LeaderboardCtrl, Parent> leaderboard,
                            Pair<GameModeSelectionCtrl, Parent> gameModeSelection, Pair<MultiplayerMenuCtrl,
                            Parent> multiplayerMenu, Pair<EstimationQuestionCtrl, Parent> estimationQuestion,
-                           Pair<GameMCQCtrl, Parent> gameMCQ, Pair<GameOverCtrl, Parent> gameOver,
-                           Pair<WaitingCtrl, Parent> waiting, Pair<TempLeaderboardCtrl, Parent> tempLeaderboard,
+                           Pair<GameMCQCtrl, Parent> gameMCQ,
+                           Pair<EnergyAlternativeQuestionCtrl, Parent> energyAlternative,
+                           Pair<GameOverCtrl, Parent> gameOver, Pair<WaitingCtrl, Parent> waiting,
+                           Pair<TempLeaderboardCtrl, Parent> tempLeaderboard,
                            Pair<UsernamePopUpCtrl, Parent> usernamePopUp) {
         this.primaryStage = primaryStage;
 
@@ -110,6 +116,9 @@ public class MainCtrl extends Application {
         this.usernamePopUpCtrl = usernamePopUp.getKey();
         this.usernamePopUp = new Scene(usernamePopUp.getValue());
 
+        this.energyAlternativeQuestionCtrl = energyAlternative.getKey();
+        this.energyAlternative = new Scene(energyAlternative.getValue());
+
         primaryStage.setOnCloseRequest(e -> {
             if(client.isInLobby()){
                 client.leaveLobby();
@@ -131,6 +140,12 @@ public class MainCtrl extends Application {
         primaryStage.setTitle("GameScreen");
         primaryStage.setScene(gameMCQ);
         gameMCQCtrl.load();
+    }
+
+    public void showEnergyAlternative(){
+        primaryStage.setTitle("GameScreen");
+        primaryStage.setScene(energyAlternative);
+        energyAlternativeQuestionCtrl.load();
     }
 
     public void showGameEstimation(){
