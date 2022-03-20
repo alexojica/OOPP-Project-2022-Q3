@@ -23,6 +23,7 @@ import commons.Lobby;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 public class HomeCtrl {
@@ -97,15 +98,27 @@ public class HomeCtrl {
 
     public void initAvatar()
     {
-        AvatarSupplier.clearAllAvatars();
+        //clear past avatars, only if the client is restarted, otherwise use already generated files
+        if(clientData.getClientPlayer() == null) AvatarSupplier.clearAllAvatars();
         playerAvatar = EightBitAvatar.newMaleAvatarBuilder().build();
     }
 
     public void setAvatarImage()
     {
-        updateAvatar();
-        updateImage();
-        System.out.println("Avatar image successfully generated at: " + avatarPath);
+        if(clientData.getClientPlayer() == null || clientData.getClientPlayer().getAvatar() == null || clientData.getClientPlayer().getAvatar().equals(""))
+        {
+            //first time generating the resource
+            updateAvatar();
+            updateImage();
+            System.out.println("Avatar image successfully generated at: " + avatarPath);
+        }
+        else
+        {
+            //reuse the same file
+            avatarPath = Paths.get(clientData.getClientPlayer().getAvatar());
+            updateImage();
+        }
+
 
         //set listener to look for changes
         name.textProperty().addListener(((observable, oldValue, newValue) -> {
@@ -156,7 +169,13 @@ public class HomeCtrl {
         //from a pool of possible name combinations
         // ex: MonkeyEye64, KingTower12 etc
 
-        this.name.setText("testPlayer");
+        if(clientData.getClientPlayer() == null) {
+            this.name.setText("testPlayer");
+        }
+        else
+        {
+            this.name.setText(clientData.getClientPlayer().getName());
+        }
     }
 
     public void instantiateCommonLobby()
