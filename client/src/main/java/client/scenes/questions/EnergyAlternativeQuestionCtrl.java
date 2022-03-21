@@ -49,7 +49,8 @@ public class EnergyAlternativeQuestionCtrl {
     private int correctAnswer;
 
     @Inject
-    public EnergyAlternativeQuestionCtrl(ClientData clientData, ClientUtils  client, ServerUtils server, MainCtrl mainCtrl) {
+    public EnergyAlternativeQuestionCtrl(ClientData clientData, ClientUtils  client, ServerUtils server,
+                                         MainCtrl mainCtrl) {
         this.clientData = clientData;
         this.client = client;
         this.server = server;
