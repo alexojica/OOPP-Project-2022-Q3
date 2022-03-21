@@ -1,10 +1,8 @@
 package client.scenes.questions;
 
 import client.data.ClientData;
-import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
-import commons.Player;
 import commons.Question;
 import commons.WebsocketMessage;
 import constants.ResponseCodes;
@@ -16,21 +14,12 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.Text;
 
 import javax.inject.Inject;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
-import static constants.QuestionTypes.MULTIPLE_CHOICE_QUESTION;
+import static constants.QuestionTypes.ENERGY_ALTERNATIVE_QUESTION;
 
-public class GameMCQCtrl{
-
-    private final ServerUtils server;
-    private final ClientUtils client;
-    private final MainCtrl mainCtrl;
+public class EnergyAlternativeQuestionCtrl {
     private final ClientData clientData;
-
-    @FXML
-    private ProgressBar pb;
+    private final ClientUtils client;
 
     @FXML
     private Text scoreTxt;
@@ -39,9 +28,14 @@ public class GameMCQCtrl{
     private Text nQuestionsTxt;
 
     @FXML
-    private Text questionTxt;
+    private ProgressBar pb;
 
-    final ToggleGroup radioGroup = new ToggleGroup(); 
+    @FXML
+    private Text insteadOfText;
+
+    final ToggleGroup radioGroup = new ToggleGroup();
+
+    private final ServerUtils server;
 
     @FXML
     private RadioButton answer1;
@@ -53,17 +47,11 @@ public class GameMCQCtrl{
     private int correctAnswer;
 
     @Inject
-    public GameMCQCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ClientData clientData) {
-        this.server = server;
-        this.mainCtrl = mainCtrl;
-        this.client = client;
+    public EnergyAlternativeQuestionCtrl(ClientData clientData, ClientUtils  client, ServerUtils server) {
         this.clientData = clientData;
+        this.client = client;
+        this.server = server;
     }
-
-    public void leaveGame(){
-        client.leaveLobby();
-    }
-
 
     public void load() {
 
@@ -73,8 +61,18 @@ public class GameMCQCtrl{
 
     }
 
-    public void resetUI(Question question)
-    {
+    public void leaveGame(){
+        client.leaveLobby();
+    }
+
+    /**
+     * Setting up the UI for this scene. Note that:
+     * the first activity returned from the server is the 'instead of' activity
+     * the second is the correct alternative
+     * the third and fourth are the wrong alternatives
+     * @param question
+     */
+    private void resetUI(Question question) {
         scoreTxt.setText("Score:" + clientData.getClientScore());
         nQuestionsTxt.setText(clientData.getQuestionCounter() + "/20");
 
@@ -86,17 +84,13 @@ public class GameMCQCtrl{
         answer2.setStyle(" -fx-background-color: transparent; ");
         answer3.setStyle(" -fx-background-color: transparent; ");
 
+        insteadOfText.setText(question.getText() + " " + question.getFoundActivities().get(0).getTitle());
 
         if(answer1.isSelected()) answer1.setSelected(false);
         if(answer2.isSelected()) answer2.setSelected(false);
         if(answer3.isSelected()) answer3.setSelected(false);
 
-        client.startTimer(pb,this, MULTIPLE_CHOICE_QUESTION);
-
-        questionTxt.setText(question.getText());
-
-        Random random = new Random();
-        correctAnswer = random.nextInt(3);
+        client.startTimer(pb,this, ENERGY_ALTERNATIVE_QUESTION);
 
         switch (correctAnswer)
         {
@@ -119,9 +113,9 @@ public class GameMCQCtrl{
 
     public void randomizeFields(RadioButton a, RadioButton b, RadioButton c, Question question)
     {
-        a.setText(question.getFoundActivities().get(0).getTitle());
-        b.setText(question.getFoundActivities().get(1).getTitle());
-        c.setText(question.getFoundActivities().get(2).getTitle());
+        a.setText(question.getFoundActivities().get(1).getTitle());
+        b.setText(question.getFoundActivities().get(2).getTitle());
+        c.setText(question.getFoundActivities().get(3).getTitle());
     }
 
     public void nextQuestion(){
@@ -134,12 +128,6 @@ public class GameMCQCtrl{
 
                     Thread.sleep(2000);
 
-
-
-                    if(clientData.getQuestionCounter() == 3){
-                        Platform.runLater(() -> mainCtrl.showTempLeaderboard());
-                        Thread.sleep(5000);
-                    }
                     //execute next question immediatly after sleep on current thread finishes execution
                     Platform.runLater(() -> client.getQuestion());
                     //client.getQuestion();
@@ -159,8 +147,6 @@ public class GameMCQCtrl{
         if(clientData.getIsHost())
         {
             //if host prepare next question
-            //client.prepareQuestion();
-
             server.send("/app/nextQuestion",
                     new WebsocketMessage(ResponseCodes.NEXT_QUESTION,
                             clientData.getClientLobby().token, clientData.getClientPointer()));
@@ -171,10 +157,6 @@ public class GameMCQCtrl{
             case 0:
                 if(answer1.equals(radioGroup.getSelectedToggle())){
                     clientData.setClientScore(clientData.getClientScore() + 500);
-                    clientData.getClientPlayer().score = clientData.getClientScore();
-
-                    server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
-                            clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
                 }
                 answer1.setStyle(" -fx-background-color: green; ");
                 answer2.setStyle(" -fx-background-color: red; ");
@@ -183,10 +165,6 @@ public class GameMCQCtrl{
             case 1:
                 if(answer2.equals(radioGroup.getSelectedToggle())){
                     clientData.setClientScore(clientData.getClientScore() + 500);
-                    clientData.getClientPlayer().score = clientData.getClientScore();
-
-                    server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
-                            clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
                 }
                 answer2.setStyle(" -fx-background-color: green; ");
                 answer1.setStyle(" -fx-background-color: red; ");
@@ -195,10 +173,6 @@ public class GameMCQCtrl{
             case 2:
                 if(answer3.equals(radioGroup.getSelectedToggle())){
                     clientData.setClientScore(clientData.getClientScore() + 500);
-                    clientData.getClientPlayer().score = clientData.getClientScore();
-
-                    server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
-                            clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
                 }
                 answer3.setStyle(" -fx-background-color: green; ");
                 answer1.setStyle(" -fx-background-color: red; ");
@@ -210,9 +184,5 @@ public class GameMCQCtrl{
                 break;
         }
         scoreTxt.setText("Score:" + clientData.getClientScore());
-
-        Player temp = clientData.getClientPlayer();
-        temp.setScore(Math.toIntExact(clientData.getClientScore()));
-        server.updateScore(temp);
     }
 }

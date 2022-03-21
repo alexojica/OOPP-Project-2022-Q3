@@ -30,7 +30,7 @@ public class MainCtrlTest {
     @Test
     void initialize() {
         try {
-            sut.initialize(null, null, null, null, null, null, null, null, null,
+            sut.initialize(null, null, null, null, null, null, null, null, null, null,
                     null, null);
         } catch (Exception e){
             assert true;

@@ -37,7 +37,7 @@ public class Lobby {
     //might delete later
     //saves computation power when translating from ids to Players;
     //its even safer if we keep it can't hurt as if we don't store it in database
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     public List<Player> playersInLobby;
 
     public Lobby() {
@@ -77,6 +77,17 @@ public class Lobby {
     {
         playerIds.add(player.getId());
         playersInLobby.add(player);
+    }
+
+    public boolean removePlayerByName(String name){
+        for(int i = 0; i < playersInLobby.size(); ++i){
+            if(playersInLobby.get(i).name.equals(name)) {
+                playersInLobby.remove(i);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void removePlayerFromLobby(Player player)

@@ -14,4 +14,8 @@ public interface ClientUtils {
     void getQuestion();
 
     void prepareQuestion();
+
+    Object getCurrentSceneCtrl();
+
+    void setCurrentSceneCtrl(Object currentSceneCtrl);
 }

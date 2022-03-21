@@ -16,9 +16,9 @@ public interface ClientData {
 
     void setQuestionCounter(Integer counter);
 
-    Long getClientScore();
+    Integer getClientScore();
 
-    void setClientScore(Long score);
+    void setClientScore(Integer score);
 
     void setPlayer(Player player);
 

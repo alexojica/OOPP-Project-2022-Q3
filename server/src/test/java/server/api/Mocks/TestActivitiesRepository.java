@@ -91,6 +91,9 @@ public class TestActivitiesRepository implements ActivitiesRepository {
 
     @Override
     public <S extends Activity> List<S> saveAll(Iterable<S> entities) {
+        for(S a : entities){
+            activities.add(a);
+        }
         return null;
     }
 

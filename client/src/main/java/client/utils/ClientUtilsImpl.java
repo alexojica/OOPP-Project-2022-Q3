@@ -2,12 +2,15 @@ package client.utils;
 
 import client.data.ClientData;
 import client.scenes.MainCtrl;
+import client.scenes.menus.WaitingCtrl;
+import client.scenes.questions.EnergyAlternativeQuestionCtrl;
 import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
-import commons.Lobby;
 import commons.Player;
 import commons.Question;
+import commons.WebsocketMessage;
 import constants.QuestionTypes;
+import constants.ResponseCodes;
 import javafx.application.Platform;
 import javafx.scene.control.ProgressBar;
 
@@ -20,17 +23,48 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class ClientUtilsImpl implements ClientUtils {
 
-    @Inject
+    //@Inject
     private ServerUtils server;
 
-    @Inject
+    //@Inject
     private MainCtrl mainCtrl;
 
-    private final ClientData clientData;
+    private ClientData clientData;
+
+    public Object getCurrentSceneCtrl() {
+        return currentSceneCtrl;
+    }
+
+    public void setCurrentSceneCtrl(Object currentSceneCtrl) {
+        this.currentSceneCtrl = currentSceneCtrl;
+    }
+
+    private Object currentSceneCtrl;
 
     @Inject
-    public ClientUtilsImpl(ClientData clientData) {
+    public ClientUtilsImpl(ClientData clientData, ServerUtils server, MainCtrl mainCtrl) {
         this.clientData = clientData;
+        this.server = server;
+        this.mainCtrl = mainCtrl;
+        System.out.println("Instance of client utils");
+
+        server.registerForMessages("/topic/nextQuestion", a -> {
+            System.out.println("next question received" + clientData.getQuestionCounter());
+            clientData.setQuestion(a.getQuestion());
+            clientData.setPointer(a.getQuestion().getPointer());
+            if(currentSceneCtrl.getClass() == WaitingCtrl.class) {
+                ((WaitingCtrl) currentSceneCtrl).initiateGame();
+            }
+        });
+
+        server.registerForMessages("/topic/updateLobby", a -> {
+            System.out.println(a.getCode());
+            if(a.getLobbyToken().equals(clientData.getClientLobby().token)){
+                clientData.setLobby(server.getLobbyByToken(a.getLobbyToken()));
+                if(currentSceneCtrl.getClass() == WaitingCtrl.class)
+                    ((WaitingCtrl) currentSceneCtrl).refresh();
+            }
+        });
     }
 
     @Override
@@ -40,17 +74,14 @@ public class ClientUtilsImpl implements ClientUtils {
 
     @Override
     public void leaveLobby() {
-        Lobby currentLobby = clientData.getClientLobby();
+        //Lobby currentLobby = clientData.getClientLobby();
         Player clientPlayer = clientData.getClientPlayer();
+
+        server.send("/app/leaveLobby", new WebsocketMessage(ResponseCodes.LEAVE_LOBBY,
+                clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
 
         //set client lobby to exited
         clientData.setLobby(null);
-
-        //removes player from lobby (client sided)
-        currentLobby.removePlayerFromLobby(clientPlayer);
-
-        //save the new state of the lobby to the repository again
-        server.addLobby(currentLobby);
 
         mainCtrl.showGameModeSelection();
     }
@@ -84,6 +115,8 @@ public class ClientUtilsImpl implements ClientUtils {
                                 ((GameMCQCtrl) me).nextQuestion();
                             }else if(questionType == QuestionTypes.ESTIMATION_QUESTION){
                                 ((EstimationQuestionCtrl) me).nextQuestion();
+                            }else if(questionType == QuestionTypes.ENERGY_ALTERNATIVE_QUESTION){
+                                ((EnergyAlternativeQuestionCtrl) me).nextQuestion();
                             }
                             //getQuestion(server,mainCtrl);
                             ok.set(true);
@@ -118,15 +151,17 @@ public class ClientUtilsImpl implements ClientUtils {
         switch(clientData.getClientQuestion().getType())
         {
             case MULTIPLE_CHOICE_QUESTION:
+                System.out.println("should appear scene");
                 mainCtrl.showGameMCQ();
                 break;
 
             case ESTIMATION_QUESTION:
+                System.out.println("should appear scene");
                 mainCtrl.showGameEstimation();
                 break;
 
             case ENERGY_ALTERNATIVE_QUESTION:
-                mainCtrl.showGameMCQ(); // this is only a placeholder, should be changed later
+                mainCtrl.showEnergyAlternative();
                 break;
             default: break;
         }
