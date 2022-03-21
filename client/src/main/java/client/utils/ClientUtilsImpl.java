@@ -41,6 +41,8 @@ public class ClientUtilsImpl implements ClientUtils {
 
     private Object currentSceneCtrl;
 
+    AtomicReference<Double> progress;
+
     @Inject
     public ClientUtilsImpl(ClientData clientData, ServerUtils server, MainCtrl mainCtrl) {
         this.clientData = clientData;
@@ -94,7 +96,7 @@ public class ClientUtilsImpl implements ClientUtils {
 
         Timer timer = new Timer();
         AtomicBoolean ok = new AtomicBoolean(false);
-        AtomicReference<Double> progress = new AtomicReference<>((double) 1);
+        progress = new AtomicReference<>((double) 1);
         pb.setProgress(progress.get());
 
         timer.schedule(new TimerTask() {
@@ -125,6 +127,10 @@ public class ClientUtilsImpl implements ClientUtils {
                 });
             }
         },0,200);
+    }
+
+    public void halfTime(){
+        progress = new AtomicReference<>(progress.get() / 2);
     }
 
     @Override

@@ -53,12 +53,12 @@
             <Font size="24.0" />
          </font>
       </Text>
-      <Circle fill="DODGERBLUE" layoutX="537.0" layoutY="630.0" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
-      <Text layoutX="507.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Power up 1" />
-      <Circle fill="DODGERBLUE" layoutX="667.0" layoutY="630.0" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
-      <Text layoutX="637.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Power up 2" />
-      <Circle fill="DODGERBLUE" layoutX="797.0" layoutY="630.0" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
-      <Text layoutX="767.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Power up 3" />
+      <Circle fill="DODGERBLUE" layoutX="537.0" layoutY="630.0" onMouseClicked="#doublePoints" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
+      <Text layoutX="492.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" Double Points💰" />
+      <Circle fill="DODGERBLUE" layoutX="667.0" layoutY="630.0" onMouseClicked="#eliminateRandomWrongAnswer" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
+      <Text layoutX="614.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Eliminate an answer❌" />
+      <Circle fill="DODGERBLUE" layoutX="797.0" layoutY="630.0" onMouseClicked="#halfTimeForOthers" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
+      <Text layoutX="742.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Half time of others⏰" />
       <Circle fill="DODGERBLUE" layoutX="1220.0" layoutY="42.0" radius="18.0" stroke="BLACK" strokeType="INSIDE" />
       <Text layoutX="1200.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Emotes" />
       <Text fx:id="insteadOfText" layoutX="510.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Instead of ..." textAlignment="CENTER">
