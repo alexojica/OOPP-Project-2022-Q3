@@ -15,9 +15,6 @@ import com.google.inject.Inject;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class TempLeaderboardCtrl {
 
     private final ServerUtils server;

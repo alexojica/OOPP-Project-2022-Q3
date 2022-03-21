@@ -4,7 +4,6 @@ import client.data.ClientData;
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
-import commons.Player;
 import commons.Question;
 import commons.WebsocketMessage;
 import constants.ResponseCodes;
@@ -17,8 +16,6 @@ import javafx.scene.text.Text;
 
 import javax.inject.Inject;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static constants.QuestionTypes.MULTIPLE_CHOICE_QUESTION;
 
