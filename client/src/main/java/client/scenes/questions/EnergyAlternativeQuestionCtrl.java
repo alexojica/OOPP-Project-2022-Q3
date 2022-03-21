@@ -2,7 +2,10 @@ package client.scenes.questions;
 
 import client.data.ClientData;
 import client.utils.ClientUtils;
+import client.utils.ServerUtils;
 import commons.Question;
+import commons.WebsocketMessage;
+import constants.ResponseCodes;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressBar;
@@ -32,6 +35,8 @@ public class EnergyAlternativeQuestionCtrl {
 
     final ToggleGroup radioGroup = new ToggleGroup();
 
+    private final ServerUtils server;
+
     @FXML
     private RadioButton answer1;
     @FXML
@@ -42,9 +47,10 @@ public class EnergyAlternativeQuestionCtrl {
     private int correctAnswer;
 
     @Inject
-    public EnergyAlternativeQuestionCtrl(ClientData clientData, ClientUtils  client) {
+    public EnergyAlternativeQuestionCtrl(ClientData clientData, ClientUtils  client, ServerUtils server) {
         this.clientData = clientData;
         this.client = client;
+        this.server = server;
     }
 
     public void load() {
@@ -122,9 +128,6 @@ public class EnergyAlternativeQuestionCtrl {
 
                     Thread.sleep(2000);
 
-                    //prepare the question again only if not host
-                    if(!clientData.getIsHost()) client.prepareQuestion();
-
                     //execute next question immediatly after sleep on current thread finishes execution
                     Platform.runLater(() -> client.getQuestion());
                     //client.getQuestion();
@@ -144,7 +147,9 @@ public class EnergyAlternativeQuestionCtrl {
         if(clientData.getIsHost())
         {
             //if host prepare next question
-            client.prepareQuestion();
+            server.send("/app/nextQuestion",
+                    new WebsocketMessage(ResponseCodes.NEXT_QUESTION,
+                            clientData.getClientLobby().token, clientData.getClientPointer()));
         }
 
         switch (correctAnswer)
