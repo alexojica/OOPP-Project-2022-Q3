@@ -1,8 +1,10 @@
 package client.scenes.questions;
 
 import client.data.ClientData;
+import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
+import commons.Player;
 import commons.Question;
 import commons.WebsocketMessage;
 import constants.ResponseCodes;
@@ -20,6 +22,7 @@ import static constants.QuestionTypes.ENERGY_ALTERNATIVE_QUESTION;
 public class EnergyAlternativeQuestionCtrl {
     private final ClientData clientData;
     private final ClientUtils client;
+    private final MainCtrl mainCtrl;
 
     @FXML
     private Text scoreTxt;
@@ -47,10 +50,11 @@ public class EnergyAlternativeQuestionCtrl {
     private int correctAnswer;
 
     @Inject
-    public EnergyAlternativeQuestionCtrl(ClientData clientData, ClientUtils  client, ServerUtils server) {
+    public EnergyAlternativeQuestionCtrl(ClientData clientData, ClientUtils  client, ServerUtils server, MainCtrl mainCtrl) {
         this.clientData = clientData;
         this.client = client;
         this.server = server;
+        this.mainCtrl = mainCtrl;
     }
 
     public void load() {
@@ -128,6 +132,11 @@ public class EnergyAlternativeQuestionCtrl {
 
                     Thread.sleep(2000);
 
+                    if(clientData.getQuestionCounter() == 3){
+                        Platform.runLater(() -> mainCtrl.showTempLeaderboard());
+                        Thread.sleep(5000);
+                    }
+
                     //execute next question immediatly after sleep on current thread finishes execution
                     Platform.runLater(() -> client.getQuestion());
                     //client.getQuestion();
@@ -184,5 +193,9 @@ public class EnergyAlternativeQuestionCtrl {
                 break;
         }
         scoreTxt.setText("Score:" + clientData.getClientScore());
+
+        clientData.getClientPlayer().score = clientData.getClientScore();
+        server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
+                clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
     }
 }

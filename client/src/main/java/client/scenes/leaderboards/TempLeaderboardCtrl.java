@@ -46,11 +46,7 @@ public class TempLeaderboardCtrl {
     }
 
     public void load() {
-        //clientData.getClientLobby().getPlayersInLobby()
-        Player test = new Player("gmg", "gfgf");
-        List<Player> testList = new ArrayList<>();
-        testList.add(test);
-        currentTop10 = FXCollections.observableList(testList);//server communication needed?
+        currentTop10 = FXCollections.observableList(server.getTopByLobbyToken(clientData.getClientLobby().getToken()));
         nameColumn.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().name));
         avatarColumn.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().avatar));
         scoreColumn.setCellValueFactory(q -> new SimpleIntegerProperty(q.getValue().score).asObject());

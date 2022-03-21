@@ -204,8 +204,8 @@ public class LobbyController {
      * which can then be displayed in the table
      */
 
-    @GetMapping("/getTop10ByLobbyToken")
-    public List<Player> getTop10ByLobbyToken(@RequestParam String token) {
+    @GetMapping("/getTopByLobbyToken")
+    public List<Player> getTopByLobbyToken(@RequestParam String token) {
         Optional<Lobby> lobby = repository.findByToken(token);
         if(lobby.isEmpty()) {
             return null;

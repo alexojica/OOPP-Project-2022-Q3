@@ -140,9 +140,9 @@ public class ServerUtils {
                 .get(new GenericType<ConnectionStatusCodes>(){});
     }
 
-    public List<Player> getTop10ByLobbyToken(String token) {
+    public List<Player> getTopByLobbyToken(String token) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/lobby/getTop10ByLobbyToken") //
+                .target(SERVER).path("api/lobby/getTopByLobbyToken") //
                 .queryParam("token", token)//
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //

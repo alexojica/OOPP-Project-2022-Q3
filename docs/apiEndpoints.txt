@@ -20,4 +20,4 @@
     /leaderboard
         /saveScore
         /getTop10Scores
-        /getTop10ByLobbyToken
+        /getTopByLobbyToken

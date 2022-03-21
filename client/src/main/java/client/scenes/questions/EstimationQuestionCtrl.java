@@ -98,6 +98,7 @@ public class EstimationQuestionCtrl{
                         Platform.runLater(() -> mainCtrl.showTempLeaderboard());
                         Thread.sleep(5000);
                     }
+
                     //execute next question immediatly after sleep on current thread finishes execution
                     Platform.runLater(() -> client.getQuestion());
                     //client.getQuestion();
@@ -172,8 +173,8 @@ public class EstimationQuestionCtrl{
         }
         clientData.setClientScore((int) (clientData.getClientScore() + pointsToAdd));
         scoreTxt.setText("Score:" + clientData.getClientScore());
-        clientData.getClientPlayer().score = clientData.getClientScore();
 
+        clientData.getClientPlayer().score = clientData.getClientScore();
         server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
                 clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
     }

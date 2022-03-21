@@ -134,12 +134,11 @@ public class GameMCQCtrl{
 
                     Thread.sleep(2000);
 
-
-
                     if(clientData.getQuestionCounter() == 3){
                         Platform.runLater(() -> mainCtrl.showTempLeaderboard());
                         Thread.sleep(5000);
                     }
+
                     //execute next question immediatly after sleep on current thread finishes execution
                     Platform.runLater(() -> client.getQuestion());
                     //client.getQuestion();
@@ -171,10 +170,6 @@ public class GameMCQCtrl{
             case 0:
                 if(answer1.equals(radioGroup.getSelectedToggle())){
                     clientData.setClientScore(clientData.getClientScore() + 500);
-                    clientData.getClientPlayer().score = clientData.getClientScore();
-
-                    server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
-                            clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
                 }
                 answer1.setStyle(" -fx-background-color: green; ");
                 answer2.setStyle(" -fx-background-color: red; ");
@@ -183,10 +178,6 @@ public class GameMCQCtrl{
             case 1:
                 if(answer2.equals(radioGroup.getSelectedToggle())){
                     clientData.setClientScore(clientData.getClientScore() + 500);
-                    clientData.getClientPlayer().score = clientData.getClientScore();
-
-                    server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
-                            clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
                 }
                 answer2.setStyle(" -fx-background-color: green; ");
                 answer1.setStyle(" -fx-background-color: red; ");
@@ -195,10 +186,6 @@ public class GameMCQCtrl{
             case 2:
                 if(answer3.equals(radioGroup.getSelectedToggle())){
                     clientData.setClientScore(clientData.getClientScore() + 500);
-                    clientData.getClientPlayer().score = clientData.getClientScore();
-
-                    server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
-                            clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
                 }
                 answer3.setStyle(" -fx-background-color: green; ");
                 answer1.setStyle(" -fx-background-color: red; ");
@@ -211,8 +198,8 @@ public class GameMCQCtrl{
         }
         scoreTxt.setText("Score:" + clientData.getClientScore());
 
-        Player temp = clientData.getClientPlayer();
-        temp.setScore(Math.toIntExact(clientData.getClientScore()));
-        server.updateScore(temp);
+        clientData.getClientPlayer().score = clientData.getClientScore();
+        server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
+                clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
     }
 }
