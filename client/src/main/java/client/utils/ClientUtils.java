@@ -18,4 +18,6 @@ public interface ClientUtils {
     Object getCurrentSceneCtrl();
 
     void setCurrentSceneCtrl(Object currentSceneCtrl);
+
+    double getCoefficient();
 }

@@ -164,7 +164,7 @@ public class GameMCQCtrl{
         {
             case 0:
                 if(answer1.equals(radioGroup.getSelectedToggle())){
-                    clientData.setClientScore(clientData.getClientScore() + 500);
+                    clientData.setClientScore(clientData.getClientScore() + (int) (500 * client.getCoefficient()));
                     clientData.getClientPlayer().score = clientData.getClientScore();
 
                     server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
@@ -176,7 +176,7 @@ public class GameMCQCtrl{
                 break;
             case 1:
                 if(answer2.equals(radioGroup.getSelectedToggle())){
-                    clientData.setClientScore(clientData.getClientScore() + 500);
+                    clientData.setClientScore(clientData.getClientScore() + (int) (500 * client.getCoefficient()));
                     clientData.getClientPlayer().score = clientData.getClientScore();
 
                     server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
@@ -188,7 +188,7 @@ public class GameMCQCtrl{
                 break;
             case 2:
                 if(answer3.equals(radioGroup.getSelectedToggle())){
-                    clientData.setClientScore(clientData.getClientScore() + 500);
+                    clientData.setClientScore(clientData.getClientScore() + (int) (500 * client.getCoefficient()));
                     clientData.getClientPlayer().score = clientData.getClientScore();
 
                     server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
@@ -209,4 +209,19 @@ public class GameMCQCtrl{
         temp.setScore(Math.toIntExact(clientData.getClientScore()));
         server.updateScore(temp);
     }
+
+    public RadioButton getAnswer1() {
+        return answer1;
+    }
+
+
+    public RadioButton getAnswer2() {
+        return answer2;
+    }
+
+
+    public RadioButton getAnswer3() {
+        return answer3;
+    }
+
 }

@@ -26,6 +26,8 @@ public class EstimationQuestionCtrl{
 
     private final ClientData clientData;
 
+    private Double progress;
+
     @FXML
     private ProgressBar pb;
 
@@ -130,6 +132,7 @@ public class EstimationQuestionCtrl{
     public void submit() {
         try {
             submittedAnswer = Long.parseLong(answer.getText());
+            progress = pb.getProgress();
             answer.setStyle(" -fx-background-color: yellow; ");
         }catch (NumberFormatException e){
             System.out.println("Number not formatted correctly");
@@ -166,7 +169,7 @@ public class EstimationQuestionCtrl{
             //100% off -> get 150 points
             pointsToAdd = 150L;
         }
-        clientData.setClientScore((int) (clientData.getClientScore() + pointsToAdd));
+        clientData.setClientScore((int) (clientData.getClientScore() + pointsToAdd * progress));
         scoreTxt.setText("Score:" + clientData.getClientScore());
         clientData.getClientPlayer().score = clientData.getClientScore();
 
