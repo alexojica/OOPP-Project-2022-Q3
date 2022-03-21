@@ -9,7 +9,7 @@ application {
 
 javafx {
     version = "17.0.2"
-    modules = [ 'javafx.controls', 'javafx.fxml' ]
+    modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.swing' ]
 }
 
 
@@ -22,6 +22,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-websocket:2.6.3'
 
 	implementation group: 'jakarta.activation', name: 'jakarta.activation-api', version: '2.0.1'
+	implementation group: 'com.talanlabs', name: 'avatar-generator-8bit', version: '1.1.0'
+	implementation group: 'com.talanlabs', name: 'avatar-generator', version: '1.1.0'
 	
 	implementation 'com.google.inject:guice:5.0.1'
 	
