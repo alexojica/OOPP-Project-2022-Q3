@@ -6,6 +6,8 @@ import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.Player;
 import commons.Question;
+import commons.WebsocketMessage;
+import constants.ResponseCodes;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressBar;
@@ -18,7 +20,7 @@ import java.util.Random;
 
 import static constants.QuestionTypes.MULTIPLE_CHOICE_QUESTION;
 
-public class GameMCQCtrl {
+public class GameMCQCtrl{
 
     private final ServerUtils server;
     private final ClientUtils client;
@@ -130,8 +132,7 @@ public class GameMCQCtrl {
 
                     Thread.sleep(2000);
 
-                    //prepare the question again only if not host
-                    if(!clientData.getIsHost()) client.prepareQuestion();
+
 
                     //execute next question immediatly after sleep on current thread finishes execution
                     Platform.runLater(() -> client.getQuestion());
@@ -152,7 +153,11 @@ public class GameMCQCtrl {
         if(clientData.getIsHost())
         {
             //if host prepare next question
-            client.prepareQuestion();
+            //client.prepareQuestion();
+
+            server.send("/app/nextQuestion",
+                    new WebsocketMessage(ResponseCodes.NEXT_QUESTION,
+                            clientData.getClientLobby().token, clientData.getClientPointer()));
         }
 
         switch (correctAnswer)
@@ -160,6 +165,10 @@ public class GameMCQCtrl {
             case 0:
                 if(answer1.equals(radioGroup.getSelectedToggle())){
                     clientData.setClientScore(clientData.getClientScore() + 500);
+                    clientData.getClientPlayer().score = clientData.getClientScore();
+
+                    server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
+                            clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
                 }
                 answer1.setStyle(" -fx-background-color: green; ");
                 answer2.setStyle(" -fx-background-color: red; ");
@@ -168,6 +177,10 @@ public class GameMCQCtrl {
             case 1:
                 if(answer2.equals(radioGroup.getSelectedToggle())){
                     clientData.setClientScore(clientData.getClientScore() + 500);
+                    clientData.getClientPlayer().score = clientData.getClientScore();
+
+                    server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
+                            clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
                 }
                 answer2.setStyle(" -fx-background-color: green; ");
                 answer1.setStyle(" -fx-background-color: red; ");
@@ -176,6 +189,10 @@ public class GameMCQCtrl {
             case 2:
                 if(answer3.equals(radioGroup.getSelectedToggle())){
                     clientData.setClientScore(clientData.getClientScore() + 500);
+                    clientData.getClientPlayer().score = clientData.getClientScore();
+
+                    server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
+                            clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
                 }
                 answer3.setStyle(" -fx-background-color: green; ");
                 answer1.setStyle(" -fx-background-color: red; ");

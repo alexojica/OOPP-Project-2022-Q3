@@ -131,12 +131,14 @@ public class MainCtrl extends Application {
 
 
     public void showWaiting(){
+        client.setCurrentSceneCtrl(waitingCtrl);
         primaryStage.setTitle("WaitingScreen");
         primaryStage.setScene(waiting);
         waitingCtrl.load();
     }
 
     public void showGameMCQ(){
+        client.setCurrentSceneCtrl(gameMCQCtrl);
         primaryStage.setTitle("GameScreen");
         primaryStage.setScene(gameMCQ);
         gameMCQCtrl.load();
@@ -149,38 +151,45 @@ public class MainCtrl extends Application {
     }
 
     public void showGameEstimation(){
+        client.setCurrentSceneCtrl(estimationQuestionCtrl);
         primaryStage.setTitle("GameScreen");
         primaryStage.setScene(estimation);
         estimationQuestionCtrl.load();
     }
 
     public void showHome(){
+        client.setCurrentSceneCtrl(homeCtrl);
         primaryStage.setTitle("Home");
         primaryStage.setScene(home);
         homeCtrl.onLoad();
     }
 
     public void showLeaderboard(){
+        client.setCurrentSceneCtrl(leaderboardCtrl);
         primaryStage.setTitle("Leaderboard");
         primaryStage.setScene(leaderboard);
         leaderboardCtrl.load();
     }
     public void showGameModeSelection(){
+        client.setCurrentSceneCtrl(gameModeSelectionCtrl);
         primaryStage.setTitle("GameModeSelection");
         primaryStage.setScene(gameModeSelection);
     }
 
     public void showGameOver(){
+        client.setCurrentSceneCtrl(gameOverCtrl);
         primaryStage.setTitle("GameOver");
         primaryStage.setScene(home);
     }
 
     public void showMultiplayerMenu(){
+        client.setCurrentSceneCtrl(multiplayerMenuCtrl);
         primaryStage.setTitle("MultiplayerMenu");
         primaryStage.setScene(multiplayerMenu);
     }
 
     public void showTempLeaderboard(){
+        client.setCurrentSceneCtrl(tempLeaderboardCtrl);
         primaryStage.setTitle("TempLeaderboard");
         primaryStage.setScene(tempLeaderboard);
     }

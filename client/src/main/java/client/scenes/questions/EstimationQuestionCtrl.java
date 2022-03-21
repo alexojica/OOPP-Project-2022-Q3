@@ -7,6 +7,8 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Player;
 import commons.Question;
+import commons.WebsocketMessage;
+import constants.ResponseCodes;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressBar;
@@ -15,7 +17,7 @@ import javafx.scene.text.Text;
 
 import static constants.QuestionTypes.ESTIMATION_QUESTION;
 
-public class EstimationQuestionCtrl {
+public class EstimationQuestionCtrl{
 
     private final ServerUtils server;
 
@@ -71,7 +73,6 @@ public class EstimationQuestionCtrl {
 
         correctAnswer = question.getFoundActivities().get(0).getEnergyConsumption();
 
-       // answerPopUp.setText(correctAnswer.toString());
         answerPopUp.setStyle(" -fx-background-color: transparent; ");
         submittedAnswer = null;
 
@@ -94,9 +95,6 @@ public class EstimationQuestionCtrl {
 
                     Thread.sleep(2000);
 
-                    //prepare the question again only if not host
-                    if(!clientData.getIsHost()) client.prepareQuestion();
-
                     //execute next question immediatly after sleep on current thread finishes execution
                     Platform.runLater(() -> client.getQuestion());
                     //client.getQuestion();
@@ -112,10 +110,11 @@ public class EstimationQuestionCtrl {
 
     private void updateCorrectAnswer() {
 
-        if(clientData.getIsHost())
-        {
-            //if host prepare next question
-            client.prepareQuestion();
+        if(clientData.getIsHost()){
+            //send a new question request to server so it has time to generate it
+            server.send("/app/nextQuestion",
+                    new WebsocketMessage(ResponseCodes.NEXT_QUESTION,
+                            clientData.getClientLobby().token, clientData.getClientPointer()));
         }
 
         if(submittedAnswer == null) {
@@ -168,12 +167,12 @@ public class EstimationQuestionCtrl {
             //100% off -> get 150 points
             pointsToAdd = 150L;
         }
-        clientData.setClientScore(clientData.getClientScore() + pointsToAdd);
+        clientData.setClientScore((int) (clientData.getClientScore() + pointsToAdd));
         scoreTxt.setText("Score:" + clientData.getClientScore());
+        clientData.getClientPlayer().score = clientData.getClientScore();
 
-        Player temp = clientData.getClientPlayer();
-        temp.setScore(Math.toIntExact(clientData.getClientScore()));
-        server.updateScore(temp);
+        server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
+                clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
     }
 
     public void showStatus(String text,String color)

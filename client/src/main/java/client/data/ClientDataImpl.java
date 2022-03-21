@@ -16,7 +16,7 @@ public class ClientDataImpl implements ClientData {
     private Lobby clientLobby;
     private Long clientPointer;
     private Question clientQuestion;
-    private Long clientScore;
+    private Integer clientScore;
     private Integer questionCounter;
     private Boolean isHost = false; //remembers who the host of the lobby is
 
@@ -43,11 +43,11 @@ public class ClientDataImpl implements ClientData {
         questionCounter = counter;
     }
 
-    public Long getClientScore() {
+    public Integer getClientScore() {
         return clientScore;
     }
 
-    public void setClientScore(Long score) {
+    public void setClientScore(Integer score) {
         clientScore = score;
     }
 
@@ -78,4 +78,5 @@ public class ClientDataImpl implements ClientData {
     }
 
     public Lobby getClientLobby(){return clientLobby;}
+
 }
