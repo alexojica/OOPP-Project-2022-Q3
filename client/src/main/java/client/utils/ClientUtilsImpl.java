@@ -197,6 +197,12 @@ public class ClientUtilsImpl implements ClientUtils {
                 break;
             default: break;
         }
+
+        if(clientData.getQuestionCounter() > 20){
+
+            mainCtrl.showGameOver();
+        }
+
     }
 
     public double getCoefficient() {
