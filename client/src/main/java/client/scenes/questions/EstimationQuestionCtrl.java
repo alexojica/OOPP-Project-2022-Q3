@@ -5,7 +5,6 @@ import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.Player;
 import commons.Question;
 import commons.WebsocketMessage;
 import constants.ResponseCodes;
