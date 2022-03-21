@@ -1,8 +1,6 @@
 package server.api;
 
 import commons.WebsocketMessage;
-import constants.JokerType;
-import constants.ResponseCodes;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.PostMapping;

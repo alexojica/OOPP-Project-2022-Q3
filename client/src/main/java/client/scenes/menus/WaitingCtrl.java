@@ -1,6 +1,7 @@
 package client.scenes.menus;
 
 import client.data.ClientData;
+import client.joker.JokerUtils;
 import client.scenes.MainCtrl;
 import client.utils.AvatarSupplier;
 import client.utils.ClientUtils;
@@ -67,12 +68,16 @@ public class WaitingCtrl implements Initializable{
     private Timer timer;
     private Avatar builder;
 
+    private JokerUtils jokerUtils;
+
     @Inject
-    public WaitingCtrl(ServerUtils server, MainCtrl mainCtrl, ClientUtils client, ClientData clientData) {
+    public WaitingCtrl(ServerUtils server, MainCtrl mainCtrl, ClientUtils client, ClientData clientData,
+                       JokerUtils jokerUtils) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.client = client;
         this.clientData = clientData;
+        this.jokerUtils = jokerUtils;
         clientData.setQuestionCounter(0);
 
     }
@@ -96,6 +101,7 @@ public class WaitingCtrl implements Initializable{
                     server.send("/app/nextQuestion",
                             new WebsocketMessage(ResponseCodes.NEXT_QUESTION,
                                     clientData.getClientLobby().token, clientData.getClientPointer()));
+                jokerUtils.registerForJokerUpdates();
             }
         });
 
