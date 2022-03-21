@@ -1,5 +1,6 @@
 package commons;
 
+import constants.JokerType;
 import constants.ResponseCodes;
 
 public class WebsocketMessage {
@@ -21,6 +22,12 @@ public class WebsocketMessage {
     private Long pointer;
 
     private Player player;
+
+    private JokerType jokerType;
+
+    public JokerType getJokerType() {
+        return jokerType;
+    }
 
     public Player getPlayer() {
         return player;
@@ -47,6 +54,11 @@ public class WebsocketMessage {
     public WebsocketMessage(ResponseCodes code, String lobbyToken/*, Optional<Lobby> lobby*/){
         this.code = code;
         //this.lobby = null;
+        this.lobbyToken = lobbyToken;
+    }
+
+    public WebsocketMessage(JokerType jokerType, String lobbyToken) {
+        this.jokerType = jokerType;
         this.lobbyToken = lobbyToken;
     }
 

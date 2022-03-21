@@ -1,6 +1,8 @@
 package client.scenes.questions;
 
 import client.data.ClientData;
+import client.joker.JokerPowerUps;
+import client.joker.JokerUtils;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.Question;
@@ -15,9 +17,11 @@ import javafx.scene.text.Text;
 
 import javax.inject.Inject;
 
+import java.util.Random;
+
 import static constants.QuestionTypes.ENERGY_ALTERNATIVE_QUESTION;
 
-public class EnergyAlternativeQuestionCtrl {
+public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
     private final ClientData clientData;
     private final ClientUtils client;
 
@@ -47,10 +51,13 @@ public class EnergyAlternativeQuestionCtrl {
     private int correctAnswer;
 
     @Inject
-    public EnergyAlternativeQuestionCtrl(ClientData clientData, ClientUtils  client, ServerUtils server) {
+    public EnergyAlternativeQuestionCtrl(ClientData clientData, ClientUtils  client, ServerUtils server,
+                                         JokerUtils jokerUtils) {
+        super(jokerUtils);
         this.clientData = clientData;
         this.client = client;
         this.server = server;
+        doublePoints = false;
     }
 
     public void load() {
@@ -143,6 +150,8 @@ public class EnergyAlternativeQuestionCtrl {
 
     public void updateCorrectAnswer()
     {
+        int pointsToAdd = doublePoints ? 1000 : 500;
+        doublePoints = false;
 
         if(clientData.getIsHost())
         {
@@ -154,9 +163,10 @@ public class EnergyAlternativeQuestionCtrl {
 
         switch (correctAnswer)
         {
+
             case 0:
                 if(answer1.equals(radioGroup.getSelectedToggle())){
-                    clientData.setClientScore(clientData.getClientScore() + 500);
+                    clientData.setClientScore(clientData.getClientScore() + pointsToAdd);
                 }
                 answer1.setStyle(" -fx-background-color: green; ");
                 answer2.setStyle(" -fx-background-color: red; ");
@@ -164,7 +174,7 @@ public class EnergyAlternativeQuestionCtrl {
                 break;
             case 1:
                 if(answer2.equals(radioGroup.getSelectedToggle())){
-                    clientData.setClientScore(clientData.getClientScore() + 500);
+                    clientData.setClientScore(clientData.getClientScore() + pointsToAdd);
                 }
                 answer2.setStyle(" -fx-background-color: green; ");
                 answer1.setStyle(" -fx-background-color: red; ");
@@ -172,7 +182,7 @@ public class EnergyAlternativeQuestionCtrl {
                 break;
             case 2:
                 if(answer3.equals(radioGroup.getSelectedToggle())){
-                    clientData.setClientScore(clientData.getClientScore() + 500);
+                    clientData.setClientScore(clientData.getClientScore() + pointsToAdd);
                 }
                 answer3.setStyle(" -fx-background-color: green; ");
                 answer1.setStyle(" -fx-background-color: red; ");
@@ -184,5 +194,26 @@ public class EnergyAlternativeQuestionCtrl {
                 break;
         }
         scoreTxt.setText("Score:" + clientData.getClientScore());
+    }
+
+    public void eliminateRandomWrongAnswer() {
+        int indexToRemove = new Random().nextInt(3);
+        if (indexToRemove == correctAnswer) {
+            indexToRemove++;
+        }
+        switch (indexToRemove) {
+            case 0:
+                answer1.setStyle(" -fx-background-color: red; ");
+                System.out.println("Disabled first answer");
+                break;
+            case 1:
+                answer2.setStyle(" -fx-background-color: red; ");
+                System.out.println("Disabled second answer");
+                break;
+            case 2:
+                answer3.setStyle(" -fx-background-color: red; ");
+                System.out.println("Disabled third answer");
+                break;
+        }
     }
 }

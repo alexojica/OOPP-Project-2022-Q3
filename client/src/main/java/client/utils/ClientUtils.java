@@ -11,6 +11,8 @@ public interface ClientUtils {
 
     void startTimer(ProgressBar pb, Object me, QuestionTypes questionType);
 
+    void halfTime();
+
     void getQuestion();
 
     void prepareQuestion();

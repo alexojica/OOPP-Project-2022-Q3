@@ -1,6 +1,8 @@
 package client.scenes.questions;
 
 import client.data.ClientData;
+import client.joker.JokerPowerUps;
+import client.joker.JokerUtils;
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
@@ -20,7 +22,7 @@ import java.util.Random;
 
 import static constants.QuestionTypes.MULTIPLE_CHOICE_QUESTION;
 
-public class GameMCQCtrl{
+public class GameMCQCtrl extends JokerPowerUps {
 
     private final ServerUtils server;
     private final ClientUtils client;
@@ -51,7 +53,9 @@ public class GameMCQCtrl{
     private int correctAnswer;
 
     @Inject
-    public GameMCQCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ClientData clientData) {
+    public GameMCQCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ClientData clientData,
+                       JokerUtils jokerUtils) {
+        super(jokerUtils);
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.client = client;
@@ -150,6 +154,9 @@ public class GameMCQCtrl{
     public void updateCorrectAnswer()
     {
 
+        int pointsToAdd = doublePoints ? 1000 : 500;
+        doublePoints = false;
+
         if(clientData.getIsHost())
         {
             //if host prepare next question
@@ -164,7 +171,7 @@ public class GameMCQCtrl{
         {
             case 0:
                 if(answer1.equals(radioGroup.getSelectedToggle())){
-                    clientData.setClientScore(clientData.getClientScore() + 500);
+                    clientData.setClientScore(clientData.getClientScore() + pointsToAdd);
                     clientData.getClientPlayer().score = clientData.getClientScore();
 
                     server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
@@ -176,7 +183,7 @@ public class GameMCQCtrl{
                 break;
             case 1:
                 if(answer2.equals(radioGroup.getSelectedToggle())){
-                    clientData.setClientScore(clientData.getClientScore() + 500);
+                    clientData.setClientScore(clientData.getClientScore() + pointsToAdd);
                     clientData.getClientPlayer().score = clientData.getClientScore();
 
                     server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
@@ -188,7 +195,7 @@ public class GameMCQCtrl{
                 break;
             case 2:
                 if(answer3.equals(radioGroup.getSelectedToggle())){
-                    clientData.setClientScore(clientData.getClientScore() + 500);
+                    clientData.setClientScore(clientData.getClientScore() + pointsToAdd);
                     clientData.getClientPlayer().score = clientData.getClientScore();
 
                     server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
@@ -208,5 +215,31 @@ public class GameMCQCtrl{
         Player temp = clientData.getClientPlayer();
         temp.setScore(Math.toIntExact(clientData.getClientScore()));
         server.updateScore(temp);
+    }
+
+    /**
+     * Get a random answer and if:
+     * a) the answer is wrong, mark it as disabled
+     * b) if the answer is the correct one, disable the answer after that (which will b a wrong one)
+     */
+    public void eliminateRandomWrongAnswer(){
+        int indexToRemove = new Random().nextInt(3);
+        if(indexToRemove == correctAnswer){
+            indexToRemove++;
+        }
+        switch (indexToRemove) {
+            case 0:
+                answer1.setStyle(" -fx-background-color: red; ");
+                System.out.println("Disabled first answer");
+                break;
+            case 1:
+                answer2.setStyle(" -fx-background-color: red; ");
+                System.out.println("Disabled second answer");
+                break;
+            case 2:
+                answer3.setStyle(" -fx-background-color: red; ");
+                System.out.println("Disabled third answer");
+                break;
+        }
     }
 }

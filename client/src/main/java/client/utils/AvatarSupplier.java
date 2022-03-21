@@ -87,6 +87,7 @@ public class AvatarSupplier{
      * "C:\OOPP\Project\repository-template\client\src\main\resources\images\avatar\Simi3271836267810498327.png"
      * The temporary images created should automatically delete
      * after the program exits (rn it doesn't seem to work idk why)
+     * TODO: contains temporary fix for weird root path issue, make sure that is solved sometime
      * @param bi
      * @param name
      * @return
@@ -94,6 +95,9 @@ public class AvatarSupplier{
     public static Path generateImage(BufferedImage bi, String name, Path existingFilePath) {
         try {
             Path currentPath = Paths.get(FILE_PATH);
+            if(userDirectory.contains("client/")){
+                userDirectory = userDirectory.replace("client/", "" );
+            }
             String finalPath = userDirectory + currentPath;
 
             try {
