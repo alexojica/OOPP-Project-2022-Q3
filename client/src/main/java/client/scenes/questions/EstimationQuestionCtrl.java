@@ -7,6 +7,7 @@ import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Activity;
 import commons.Question;
 import commons.WebsocketMessage;
 import constants.ResponseCodes;
@@ -76,7 +77,8 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
         scoreTxt.setText("Score:" + clientData.getClientScore());
         nQuestionsTxt.setText(clientData.getQuestionCounter() + "/20");
 
-        correctAnswer = question.getFoundActivities().stream().findFirst().get().getEnergyConsumption();
+        Activity polledActivity = server.getActivityByID(question.getFoundActivities().get(0)).get();
+        correctAnswer = polledActivity.getEnergyConsumption();
 
         answerPopUp.setStyle(" -fx-background-color: transparent; ");
         submittedAnswer = null;
@@ -87,7 +89,7 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
         client.startTimer(pb,this, ESTIMATION_QUESTION);
 
         questionTxt.setText(question.getText());
-        activityText.setText(question.getFoundActivities().stream().findFirst().get().getTitle());
+        activityText.setText(polledActivity.getTitle());
     }
 
     public void nextQuestion(){

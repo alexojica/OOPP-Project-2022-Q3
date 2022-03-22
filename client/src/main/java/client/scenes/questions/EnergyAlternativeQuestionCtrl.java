@@ -19,6 +19,7 @@ import javafx.scene.text.Text;
 import javax.inject.Inject;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -95,7 +96,7 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
         answer2.setStyle(" -fx-background-color: transparent; ");
         answer3.setStyle(" -fx-background-color: transparent; ");
 
-        Optional<Activity> act = question.getFoundActivities().stream().findFirst();
+        Optional<Activity> act = server.getActivityByID(question.getFoundActivities().stream().findFirst().get());
         String textMethod = question.getText();
         if(act.isPresent()) {
             textMethod += " " + act.get().getTitle();
@@ -129,7 +130,7 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
 
     public void randomizeFields(RadioButton a, RadioButton b, RadioButton c, Question question)
     {
-        ArrayList<Activity> list = new ArrayList<>(question.getFoundActivities());
+        List<Activity> list = server.getActivitiesFromIDs(new ArrayList(question.getFoundActivities()));
         a.setText(list.get(1).getTitle());
         b.setText(list.get(2).getTitle());
         c.setText(list.get(3).getTitle());

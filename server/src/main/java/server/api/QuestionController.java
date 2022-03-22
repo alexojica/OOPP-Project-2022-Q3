@@ -37,7 +37,6 @@ public class QuestionController {
         QuestionProvider questionProvider = new QuestionProvider(activitiesRepository, questionRepository);
         Question generatedQuestion = questionProvider.getQuestion(message.getPointer(),
                 message.getLobbyToken(), 30);
-        System.out.println("server says: " + generatedQuestion);
         return new WebsocketMessage(message.getCode(),
                 message.getLobbyToken(), generatedQuestion);
     }

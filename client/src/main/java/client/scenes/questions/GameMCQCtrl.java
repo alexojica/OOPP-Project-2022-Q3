@@ -20,6 +20,7 @@ import javafx.scene.text.Text;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import static constants.QuestionTypes.MULTIPLE_CHOICE_QUESTION;
@@ -123,7 +124,7 @@ public class GameMCQCtrl extends JokerPowerUps {
 
     public void randomizeFields(RadioButton a, RadioButton b, RadioButton c, Question question)
     {
-        ArrayList<Activity> list = new ArrayList<>(question.getFoundActivities());
+        List<Activity> list = server.getActivitiesFromIDs(question.getFoundActivities());
         a.setText(list.get(0).getTitle());
         b.setText(list.get(1).getTitle());
         c.setText(list.get(2).getTitle());
