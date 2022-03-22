@@ -31,6 +31,8 @@ public class ClientUtilsImpl implements ClientUtils {
 
     private ClientData clientData;
 
+    private double coefficient;
+
     public Object getCurrentSceneCtrl() {
         return currentSceneCtrl;
     }
@@ -40,6 +42,8 @@ public class ClientUtilsImpl implements ClientUtils {
     }
 
     private Object currentSceneCtrl;
+
+    AtomicReference<Double> progress;
 
     @Inject
     public ClientUtilsImpl(ClientData clientData, ServerUtils server, MainCtrl mainCtrl) {
@@ -91,10 +95,10 @@ public class ClientUtilsImpl implements ClientUtils {
     {
         AtomicInteger r= new AtomicInteger();
         AtomicInteger g= new AtomicInteger();
-
+        AtomicBoolean updateCoefficient = new AtomicBoolean(false);
         Timer timer = new Timer();
         AtomicBoolean ok = new AtomicBoolean(false);
-        AtomicReference<Double> progress = new AtomicReference<>((double) 1);
+        progress = new AtomicReference<>((double) 1);
         pb.setProgress(progress.get());
 
         timer.schedule(new TimerTask() {
@@ -107,6 +111,36 @@ public class ClientUtilsImpl implements ClientUtils {
                     g.set((int) Math.floor(progress.get() * 255));
                     pb.setStyle("-fx-accent: rgb(" + r + "," + g + ", " + 0 + ");");
 //                    System.out.println(pb.getProgress());
+                    if(!updateCoefficient.get()){
+                        if(currentSceneCtrl instanceof GameMCQCtrl){
+                            if(((GameMCQCtrl) currentSceneCtrl).getAnswer1().isSelected()){
+                                coefficient = pb.getProgress();
+                                updateCoefficient.set(true);
+                            }
+                            if(((GameMCQCtrl) currentSceneCtrl).getAnswer2().isSelected()){
+                                coefficient = pb.getProgress();
+                                updateCoefficient.set(true);
+                            }
+                            if(((GameMCQCtrl) currentSceneCtrl).getAnswer3().isSelected()){
+                                coefficient = pb.getProgress();
+                                updateCoefficient.set(true);
+                            }
+                        }
+                        if(currentSceneCtrl instanceof EnergyAlternativeQuestionCtrl){
+                            if(((EnergyAlternativeQuestionCtrl) currentSceneCtrl).getAnswer1().isSelected()){
+                                coefficient = pb.getProgress();
+                                updateCoefficient.set(true);
+                            }
+                            if(((EnergyAlternativeQuestionCtrl) currentSceneCtrl).getAnswer2().isSelected()){
+                                coefficient = pb.getProgress();
+                                updateCoefficient.set(true);
+                            }
+                            if(((EnergyAlternativeQuestionCtrl) currentSceneCtrl).getAnswer3().isSelected()){
+                                coefficient = pb.getProgress();
+                                updateCoefficient.set(true);
+                            }
+                        }
+                    }
                     if(pb.getProgress() <= 0)
                     {
                         timer.cancel();
@@ -125,6 +159,10 @@ public class ClientUtilsImpl implements ClientUtils {
                 });
             }
         },0,200);
+    }
+
+    public void halfTime(){
+        progress = new AtomicReference<>(progress.get() / 2);
     }
 
     @Override
@@ -165,5 +203,16 @@ public class ClientUtilsImpl implements ClientUtils {
                 break;
             default: break;
         }
+
+        if(clientData.getQuestionCounter() > 20){
+
+            mainCtrl.showGameOver();
+        }
+
     }
+
+    public double getCoefficient() {
+        return coefficient;
+    }
+
 }

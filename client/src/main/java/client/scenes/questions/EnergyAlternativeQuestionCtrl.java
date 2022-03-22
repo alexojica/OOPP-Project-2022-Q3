@@ -1,6 +1,8 @@
 package client.scenes.questions;
 
 import client.data.ClientData;
+import client.joker.JokerPowerUps;
+import client.joker.JokerUtils;
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
@@ -16,9 +18,11 @@ import javafx.scene.text.Text;
 
 import javax.inject.Inject;
 
+import java.util.Random;
+
 import static constants.QuestionTypes.ENERGY_ALTERNATIVE_QUESTION;
 
-public class EnergyAlternativeQuestionCtrl {
+public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
     private final ClientData clientData;
     private final ClientUtils client;
     private final MainCtrl mainCtrl;
@@ -50,11 +54,13 @@ public class EnergyAlternativeQuestionCtrl {
 
     @Inject
     public EnergyAlternativeQuestionCtrl(ClientData clientData, ClientUtils  client, ServerUtils server,
-                                         MainCtrl mainCtrl) {
+                                         MainCtrl mainCtrl, JokerUtils jokerUtils) {
+        super(jokerUtils);
         this.clientData = clientData;
         this.client = client;
         this.server = server;
         this.mainCtrl = mainCtrl;
+        doublePoints = false;
     }
 
     public void load() {
@@ -152,6 +158,8 @@ public class EnergyAlternativeQuestionCtrl {
 
     public void updateCorrectAnswer()
     {
+        int pointsToAdd = doublePoints ? 1000 : 500;
+        doublePoints = false;
 
         if(clientData.getIsHost())
         {
@@ -163,9 +171,11 @@ public class EnergyAlternativeQuestionCtrl {
 
         switch (correctAnswer)
         {
+
             case 0:
                 if(answer1.equals(radioGroup.getSelectedToggle())){
-                    clientData.setClientScore(clientData.getClientScore() + 500);
+                    clientData.setClientScore(clientData.getClientScore() +
+                            (int) (pointsToAdd* client.getCoefficient()));
                 }
                 answer1.setStyle(" -fx-background-color: green; ");
                 answer2.setStyle(" -fx-background-color: red; ");
@@ -173,7 +183,8 @@ public class EnergyAlternativeQuestionCtrl {
                 break;
             case 1:
                 if(answer2.equals(radioGroup.getSelectedToggle())){
-                    clientData.setClientScore(clientData.getClientScore() + 500);
+                    clientData.setClientScore(clientData.getClientScore() +
+                            (int) (pointsToAdd* client.getCoefficient()));
                 }
                 answer2.setStyle(" -fx-background-color: green; ");
                 answer1.setStyle(" -fx-background-color: red; ");
@@ -181,7 +192,8 @@ public class EnergyAlternativeQuestionCtrl {
                 break;
             case 2:
                 if(answer3.equals(radioGroup.getSelectedToggle())){
-                    clientData.setClientScore(clientData.getClientScore() + 500);
+                    clientData.setClientScore(clientData.getClientScore() +
+                            (int) (pointsToAdd* client.getCoefficient()));
                 }
                 answer3.setStyle(" -fx-background-color: green; ");
                 answer1.setStyle(" -fx-background-color: red; ");
@@ -197,5 +209,38 @@ public class EnergyAlternativeQuestionCtrl {
         clientData.getClientPlayer().score = clientData.getClientScore();
         server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
                 clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
+    }
+
+    public void eliminateRandomWrongAnswer() {
+        int indexToRemove = new Random().nextInt(3);
+        if (indexToRemove == correctAnswer) {
+            indexToRemove++;
+        }
+        switch (indexToRemove) {
+            case 0:
+                answer1.setStyle(" -fx-background-color: red; ");
+                System.out.println("Disabled first answer");
+                break;
+            case 1:
+                answer2.setStyle(" -fx-background-color: red; ");
+                System.out.println("Disabled second answer");
+                break;
+            case 2:
+                answer3.setStyle(" -fx-background-color: red; ");
+                System.out.println("Disabled third answer");
+                break;
+        }
+    }
+
+    public RadioButton getAnswer1() {
+        return answer1;
+    }
+
+    public RadioButton getAnswer2() {
+        return answer2;
+    }
+
+    public RadioButton getAnswer3() {
+        return answer3;
     }
 }

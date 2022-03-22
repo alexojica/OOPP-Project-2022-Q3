@@ -1,6 +1,8 @@
 package client.scenes.questions;
 
 import client.data.ClientData;
+import client.joker.JokerPowerUps;
+import client.joker.JokerUtils;
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
@@ -16,7 +18,7 @@ import javafx.scene.text.Text;
 
 import static constants.QuestionTypes.ESTIMATION_QUESTION;
 
-public class EstimationQuestionCtrl{
+public class EstimationQuestionCtrl extends JokerPowerUps{
 
     private final ServerUtils server;
 
@@ -25,6 +27,8 @@ public class EstimationQuestionCtrl{
     private final MainCtrl mainCtrl;
 
     private final ClientData clientData;
+
+    private Double progress;
 
     @FXML
     private ProgressBar pb;
@@ -51,7 +55,9 @@ public class EstimationQuestionCtrl{
     private Long correctAnswer;
 
     @Inject
-    public EstimationQuestionCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ClientData clientData) {
+    public EstimationQuestionCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ClientData clientData,
+                                  JokerUtils jokerUtils) {
+        super(jokerUtils);
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.client = client;
@@ -135,6 +141,7 @@ public class EstimationQuestionCtrl{
     public void submit() {
         try {
             submittedAnswer = Long.parseLong(answer.getText());
+            progress = pb.getProgress();
             answer.setStyle(" -fx-background-color: yellow; ");
         }catch (NumberFormatException e){
             System.out.println("Number not formatted correctly");
@@ -151,27 +158,28 @@ public class EstimationQuestionCtrl{
         if(correctAnswer * 70 / 100L <= submittedAnswer && submittedAnswer <= correctAnswer * 130/100L)
         {
             //30% off -> get full points
-            pointsToAdd = 500L;
+            pointsToAdd = doublePoints ? 1000L : 500L;
         }
         else
         if(correctAnswer * 50 / 100L <= submittedAnswer && submittedAnswer <= correctAnswer * 150/100L)
         {
             //50% off -> get 350 points
-            pointsToAdd = 350L;
+            pointsToAdd = doublePoints ? 700L : 350L;
         }
         else
         if(correctAnswer * 30 / 100L <= submittedAnswer && submittedAnswer <= correctAnswer * 170/100L)
         {
             //70% off -> get 250 points
-            pointsToAdd = 250L;
+            pointsToAdd = doublePoints ? 500L : 250L;
         }
         else
         if(correctAnswer * 1 / 2L <= submittedAnswer && submittedAnswer <= correctAnswer * 200/100L)
         {
             //100% off -> get 150 points
-            pointsToAdd = 150L;
+            pointsToAdd = doublePoints ? 300L : 150L;
         }
-        clientData.setClientScore((int) (clientData.getClientScore() + pointsToAdd));
+        doublePoints = false;
+        clientData.setClientScore((int) (clientData.getClientScore() + pointsToAdd * progress));
         scoreTxt.setText("Score:" + clientData.getClientScore());
 
         clientData.getClientPlayer().score = clientData.getClientScore();
@@ -188,4 +196,5 @@ public class EstimationQuestionCtrl{
     public void leaveGame() {
         client.leaveLobby();
     }
+
 }
