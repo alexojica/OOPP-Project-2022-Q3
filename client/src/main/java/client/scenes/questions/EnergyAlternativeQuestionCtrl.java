@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import static constants.QuestionTypes.ENERGY_ALTERNATIVE_QUESTION;
 
