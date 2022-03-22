@@ -25,16 +25,15 @@ public class Player {
     @Column(name = "avatar")
     public String avatar; //folder path
 
+    @Column(name = "avatarCode")
+    public String avatarCode;
+
     @Column(name = "score")
     public Integer score;
 
     @Column(name = "jokers")
     public ArrayList<Boolean> usedPowerups;
 
-    /*
-    @Column(name = "lobbyId")
-    public Integer lobbyId;
-    */
 
     public Player() {
         // for object mapper
@@ -95,9 +94,19 @@ public class Player {
         this.score = score;
     }
 
+    public String getAvatarCode() {
+        return avatarCode;
+    }
+
+    public void setAvatarCode(String avatarCode) {
+        this.avatarCode = avatarCode;
+    }
+
     public ArrayList<Boolean> getUsedPowerups() {
         return usedPowerups;
     }
+
+
 
     /**
      * Method that marks a user's power up (Joker) as used
@@ -111,16 +120,6 @@ public class Player {
     public void setUsedPowerups(ArrayList<Boolean> usedPowerups) {
         this.usedPowerups = usedPowerups;
     }
-
-    /*
-    public int getLobbyId() {
-        return lobbyId;
-    }
-
-    public void setLobbyId(int lobbyId) {
-        this.lobbyId = lobbyId;
-    }
-    */
 
     @Override
     public boolean equals(Object obj) {

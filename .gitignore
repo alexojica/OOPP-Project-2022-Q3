@@ -40,3 +40,4 @@ out/
 ### VS Code ###
 .vscode/
 /server/src/main/resources/activities.json
+/client/src/main/resources/images/avatar
