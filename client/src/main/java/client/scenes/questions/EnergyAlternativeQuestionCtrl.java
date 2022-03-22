@@ -25,6 +25,8 @@ import static constants.QuestionTypes.ENERGY_ALTERNATIVE_QUESTION;
 public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
     private final ClientData clientData;
     private final ClientUtils client;
+    private final ServerUtils server;
+    private final Game game;
 
     @FXML
     private Text scoreTxt;
@@ -39,9 +41,6 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
     private Text insteadOfText;
 
     final ToggleGroup radioGroup = new ToggleGroup();
-
-    private final ServerUtils server;
-    private final Game game;
 
     @FXML
     private RadioButton answer1;
@@ -166,7 +165,6 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
 
         switch (correctAnswer)
         {
-
             case 0:
                 if(answer1.equals(radioGroup.getSelectedToggle())){
                     clientData.setClientScore(clientData.getClientScore() +

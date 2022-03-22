@@ -61,7 +61,11 @@ public class HomeCtrl {
         }
     }
 
-
+    /**
+     * Method that is called when the play button is pressed, it:
+     * a) Adds the player to the server and
+     * b) Sets the avatar chosen from the user
+     */
     public void play(){
         try
         {
@@ -85,6 +89,7 @@ public class HomeCtrl {
 
         mainCtrl.showGameModeSelection();
     }
+
 
     private Player getPlayer()
     {

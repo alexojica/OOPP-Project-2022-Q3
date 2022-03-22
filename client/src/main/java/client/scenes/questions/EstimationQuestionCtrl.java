@@ -22,13 +22,9 @@ import static constants.QuestionTypes.ESTIMATION_QUESTION;
 public class EstimationQuestionCtrl extends JokerPowerUps{
 
     private final ServerUtils server;
-
     private final ClientUtils client;
-
     private final MainCtrl mainCtrl;
-
     private final ClientData clientData;
-
     private final Game game;
 
     private Double progress;
