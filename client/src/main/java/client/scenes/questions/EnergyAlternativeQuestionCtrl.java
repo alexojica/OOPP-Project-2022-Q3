@@ -166,7 +166,8 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
 
             case 0:
                 if(answer1.equals(radioGroup.getSelectedToggle())){
-                    clientData.setClientScore(clientData.getClientScore() + pointsToAdd);
+                    clientData.setClientScore(clientData.getClientScore() +
+                            (int) (pointsToAdd* client.getCoefficient()));
                 }
                 answer1.setStyle(" -fx-background-color: green; ");
                 answer2.setStyle(" -fx-background-color: red; ");
@@ -174,7 +175,8 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
                 break;
             case 1:
                 if(answer2.equals(radioGroup.getSelectedToggle())){
-                    clientData.setClientScore(clientData.getClientScore() + pointsToAdd);
+                    clientData.setClientScore(clientData.getClientScore() +
+                            (int) (pointsToAdd* client.getCoefficient()));
                 }
                 answer2.setStyle(" -fx-background-color: green; ");
                 answer1.setStyle(" -fx-background-color: red; ");
@@ -182,7 +184,8 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
                 break;
             case 2:
                 if(answer3.equals(radioGroup.getSelectedToggle())){
-                    clientData.setClientScore(clientData.getClientScore() + pointsToAdd);
+                    clientData.setClientScore(clientData.getClientScore() +
+                            (int) (pointsToAdd* client.getCoefficient()));
                 }
                 answer3.setStyle(" -fx-background-color: green; ");
                 answer1.setStyle(" -fx-background-color: red; ");
@@ -215,5 +218,17 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
                 System.out.println("Disabled third answer");
                 break;
         }
+    }
+
+    public RadioButton getAnswer1() {
+        return answer1;
+    }
+
+    public RadioButton getAnswer2() {
+        return answer2;
+    }
+
+    public RadioButton getAnswer3() {
+        return answer3;
     }
 }

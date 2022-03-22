@@ -171,7 +171,8 @@ public class GameMCQCtrl extends JokerPowerUps {
         {
             case 0:
                 if(answer1.equals(radioGroup.getSelectedToggle())){
-                    clientData.setClientScore(clientData.getClientScore() + pointsToAdd);
+                    clientData.setClientScore(clientData.getClientScore() +
+                            (int) (pointsToAdd* client.getCoefficient()));
                     clientData.getClientPlayer().score = clientData.getClientScore();
 
                     server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
@@ -183,7 +184,8 @@ public class GameMCQCtrl extends JokerPowerUps {
                 break;
             case 1:
                 if(answer2.equals(radioGroup.getSelectedToggle())){
-                    clientData.setClientScore(clientData.getClientScore() + pointsToAdd);
+                    clientData.setClientScore(clientData.getClientScore() +
+                            (int) (pointsToAdd* client.getCoefficient()));
                     clientData.getClientPlayer().score = clientData.getClientScore();
 
                     server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
@@ -195,7 +197,8 @@ public class GameMCQCtrl extends JokerPowerUps {
                 break;
             case 2:
                 if(answer3.equals(radioGroup.getSelectedToggle())){
-                    clientData.setClientScore(clientData.getClientScore() + pointsToAdd);
+                    clientData.setClientScore(clientData.getClientScore() +
+                            (int) (pointsToAdd* client.getCoefficient()));
                     clientData.getClientPlayer().score = clientData.getClientScore();
 
                     server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
@@ -242,4 +245,19 @@ public class GameMCQCtrl extends JokerPowerUps {
                 break;
         }
     }
+
+    public RadioButton getAnswer1() {
+        return answer1;
+    }
+
+
+    public RadioButton getAnswer2() {
+        return answer2;
+    }
+
+
+    public RadioButton getAnswer3() {
+        return answer3;
+    }
+
 }

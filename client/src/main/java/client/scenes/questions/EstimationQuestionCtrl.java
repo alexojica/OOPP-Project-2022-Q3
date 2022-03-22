@@ -28,6 +28,8 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
 
     private final ClientData clientData;
 
+    private Double progress;
+
     @FXML
     private ProgressBar pb;
 
@@ -134,6 +136,7 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
     public void submit() {
         try {
             submittedAnswer = Long.parseLong(answer.getText());
+            progress = pb.getProgress();
             answer.setStyle(" -fx-background-color: yellow; ");
         }catch (NumberFormatException e){
             System.out.println("Number not formatted correctly");
@@ -171,7 +174,7 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
             pointsToAdd = doublePoints ? 300L : 150L;
         }
         doublePoints = false;
-        clientData.setClientScore((int) (clientData.getClientScore() + pointsToAdd));
+        clientData.setClientScore((int) (clientData.getClientScore() + pointsToAdd * progress));
         scoreTxt.setText("Score:" + clientData.getClientScore());
         clientData.getClientPlayer().score = clientData.getClientScore();
 

@@ -31,6 +31,8 @@ public class ClientUtilsImpl implements ClientUtils {
 
     private ClientData clientData;
 
+    private double coefficient;
+
     public Object getCurrentSceneCtrl() {
         return currentSceneCtrl;
     }
@@ -93,7 +95,7 @@ public class ClientUtilsImpl implements ClientUtils {
     {
         AtomicInteger r= new AtomicInteger();
         AtomicInteger g= new AtomicInteger();
-
+        AtomicBoolean updateCoefficient = new AtomicBoolean(false);
         Timer timer = new Timer();
         AtomicBoolean ok = new AtomicBoolean(false);
         progress = new AtomicReference<>((double) 1);
@@ -109,6 +111,36 @@ public class ClientUtilsImpl implements ClientUtils {
                     g.set((int) Math.floor(progress.get() * 255));
                     pb.setStyle("-fx-accent: rgb(" + r + "," + g + ", " + 0 + ");");
 //                    System.out.println(pb.getProgress());
+                    if(!updateCoefficient.get()){
+                        if(currentSceneCtrl instanceof GameMCQCtrl){
+                            if(((GameMCQCtrl) currentSceneCtrl).getAnswer1().isSelected()){
+                                coefficient = pb.getProgress();
+                                updateCoefficient.set(true);
+                            }
+                            if(((GameMCQCtrl) currentSceneCtrl).getAnswer2().isSelected()){
+                                coefficient = pb.getProgress();
+                                updateCoefficient.set(true);
+                            }
+                            if(((GameMCQCtrl) currentSceneCtrl).getAnswer3().isSelected()){
+                                coefficient = pb.getProgress();
+                                updateCoefficient.set(true);
+                            }
+                        }
+                        if(currentSceneCtrl instanceof EnergyAlternativeQuestionCtrl){
+                            if(((EnergyAlternativeQuestionCtrl) currentSceneCtrl).getAnswer1().isSelected()){
+                                coefficient = pb.getProgress();
+                                updateCoefficient.set(true);
+                            }
+                            if(((EnergyAlternativeQuestionCtrl) currentSceneCtrl).getAnswer2().isSelected()){
+                                coefficient = pb.getProgress();
+                                updateCoefficient.set(true);
+                            }
+                            if(((EnergyAlternativeQuestionCtrl) currentSceneCtrl).getAnswer3().isSelected()){
+                                coefficient = pb.getProgress();
+                                updateCoefficient.set(true);
+                            }
+                        }
+                    }
                     if(pb.getProgress() <= 0)
                     {
                         timer.cancel();
@@ -171,5 +203,16 @@ public class ClientUtilsImpl implements ClientUtils {
                 break;
             default: break;
         }
+
+        if(clientData.getQuestionCounter() > 20){
+
+            mainCtrl.showGameOver();
+        }
+
     }
+
+    public double getCoefficient() {
+        return coefficient;
+    }
+
 }
