@@ -82,7 +82,8 @@ public class QuestionProvider {
                 activities = null;
         }
 
-        Question question = new Question(pointer, questionType, newPointer, activities, lastLobby);
+        Set<Activity> activitySet = new HashSet<>(activities);
+        Question question = new Question(pointer, questionType, newPointer, activitySet, lastLobby);
         questionRepository.save(question);
         System.out.println(question);
         return question;

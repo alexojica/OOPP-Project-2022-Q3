@@ -262,7 +262,7 @@ public class WaitingCtrl implements Initializable{
 
             //start the game for the other players as well
             server.send("/app/lobbyStart",
-                    new WebsocketMessage(ResponseCodes.START_GAME, clientData.getClientLobby().token));
+                    new WebsocketMessage(ResponseCodes.START_GAME, clientData.getClientLobby().getToken()));
         }
     }
 }

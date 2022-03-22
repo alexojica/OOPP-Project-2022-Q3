@@ -5,6 +5,7 @@ import client.joker.JokerPowerUps;
 import client.joker.JokerUtils;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
+import commons.Activity;
 import commons.Question;
 import commons.WebsocketMessage;
 import constants.ResponseCodes;
@@ -17,7 +18,10 @@ import javafx.scene.text.Text;
 
 import javax.inject.Inject;
 
+import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import static constants.QuestionTypes.ENERGY_ALTERNATIVE_QUESTION;
 
@@ -91,7 +95,12 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
         answer2.setStyle(" -fx-background-color: transparent; ");
         answer3.setStyle(" -fx-background-color: transparent; ");
 
-        insteadOfText.setText(question.getText() + " " + question.getFoundActivities().get(0).getTitle());
+        Optional<Activity> act = question.getFoundActivities().stream().findFirst();
+        String textMethod = question.getText();
+        if(act.isPresent()) {
+            textMethod += " " + act.get().getTitle();
+        }
+        insteadOfText.setText(textMethod);
 
         if(answer1.isSelected()) answer1.setSelected(false);
         if(answer2.isSelected()) answer2.setSelected(false);
@@ -120,9 +129,10 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
 
     public void randomizeFields(RadioButton a, RadioButton b, RadioButton c, Question question)
     {
-        a.setText(question.getFoundActivities().get(1).getTitle());
-        b.setText(question.getFoundActivities().get(2).getTitle());
-        c.setText(question.getFoundActivities().get(3).getTitle());
+        ArrayList<Activity> list = new ArrayList<>(question.getFoundActivities());
+        a.setText(list.get(1).getTitle());
+        b.setText(list.get(2).getTitle());
+        c.setText(list.get(3).getTitle());
     }
 
     public void nextQuestion(){
@@ -158,7 +168,7 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
             //if host prepare next question
             server.send("/app/nextQuestion",
                     new WebsocketMessage(ResponseCodes.NEXT_QUESTION,
-                            clientData.getClientLobby().token, clientData.getClientPointer()));
+                            clientData.getClientLobby().getToken(), clientData.getClientPointer()));
         }
 
         switch (correctAnswer)

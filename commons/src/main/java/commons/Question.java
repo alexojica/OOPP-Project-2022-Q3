@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 import static constants.QuestionTypes.MULTIPLE_CHOICE_QUESTION;
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
@@ -28,8 +29,10 @@ public class Question {
     @Column(name = "pointer")
     public Long pointer;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    public List<Activity> foundActivities;
+    @ElementCollection
+    @CollectionTable(name = "found_activities_ids", joinColumns = @JoinColumn(name = "activityID"))
+    @Column(name = "activitiesID")
+    public Set<Activity> foundActivities;
 
     @Column(name = "lastLobbyToken")
     public String lastLobbyToken;
@@ -38,7 +41,7 @@ public class Question {
         // for object mapper
     }
 
-    public Question(Long id, QuestionTypes type, Long pointer, List<Activity> foundActivities, String lastLobbyToken) {
+    public Question(Long id, QuestionTypes type, Long pointer, Set<Activity> foundActivities, String lastLobbyToken) {
         this.id = id;
         this.type = type;
         this.lastLobbyToken = lastLobbyToken;
@@ -88,11 +91,11 @@ public class Question {
         this.pointer = pointer;
     }
 
-    public List<Activity> getFoundActivities() {
+    public Set<Activity> getFoundActivities() {
         return foundActivities;
     }
 
-    public void setFoundActivities(List<Activity> foundActivities) {
+    public void setFoundActivities(Set<Activity> foundActivities) {
         this.foundActivities = foundActivities;
     }
 

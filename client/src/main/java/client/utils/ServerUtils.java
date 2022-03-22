@@ -157,6 +157,8 @@ public class ServerUtils {
                 .put(Entity.entity(player, APPLICATION_JSON), Player.class);
     }
 
+
+
     private StompSession session = connect("ws://localhost:8080/websocket");
 
     private StompSession connect(String url){

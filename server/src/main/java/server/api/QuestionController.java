@@ -35,8 +35,10 @@ public class QuestionController {
     @SendTo("/topic/nextQuestion")
     public WebsocketMessage nextQuestion(WebsocketMessage message){
         QuestionProvider questionProvider = new QuestionProvider(activitiesRepository, questionRepository);
+        Question generatedQuestion = questionProvider.getQuestion(message.getPointer(),
+                message.getLobbyToken(), 30);
+        System.out.println("server says: " + generatedQuestion);
         return new WebsocketMessage(message.getCode(),
-                message.getLobbyToken(), questionProvider.getQuestion(message.getPointer(),
-                message.getLobbyToken(), 30));
+                message.getLobbyToken(), generatedQuestion);
     }
 }

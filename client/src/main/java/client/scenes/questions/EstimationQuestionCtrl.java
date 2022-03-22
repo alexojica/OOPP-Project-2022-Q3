@@ -76,7 +76,7 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
         scoreTxt.setText("Score:" + clientData.getClientScore());
         nQuestionsTxt.setText(clientData.getQuestionCounter() + "/20");
 
-        correctAnswer = question.getFoundActivities().get(0).getEnergyConsumption();
+        correctAnswer = question.getFoundActivities().stream().findFirst().get().getEnergyConsumption();
 
         answerPopUp.setStyle(" -fx-background-color: transparent; ");
         submittedAnswer = null;
@@ -87,7 +87,7 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
         client.startTimer(pb,this, ESTIMATION_QUESTION);
 
         questionTxt.setText(question.getText());
-        activityText.setText(question.getFoundActivities().get(0).getTitle());
+        activityText.setText(question.getFoundActivities().stream().findFirst().get().getTitle());
     }
 
     public void nextQuestion(){
@@ -119,7 +119,7 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
             //send a new question request to server so it has time to generate it
             server.send("/app/nextQuestion",
                     new WebsocketMessage(ResponseCodes.NEXT_QUESTION,
-                            clientData.getClientLobby().token, clientData.getClientPointer()));
+                            clientData.getClientLobby().getToken(), clientData.getClientPointer()));
         }
 
         if(submittedAnswer == null) {
