@@ -59,7 +59,8 @@ public class LeaderboardCtrl {
         top10LeaderboardEntries = FXCollections.observableList(server.getTop10Scores());
         builder = EightBitAvatar.newMaleAvatarBuilder().build();
 
-        rank.setCellValueFactory((Callback<TableColumn.CellDataFeatures<LeaderboardEntry, String>, ObservableValue<String>>) q
+        rank.setCellValueFactory(
+                (Callback<TableColumn.CellDataFeatures<LeaderboardEntry, String>, ObservableValue<String>>) q
                 -> new SimpleStringProperty((table.getItems().indexOf(q.getValue()) + 1) + ""));
 
         nameColumn.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().name));
