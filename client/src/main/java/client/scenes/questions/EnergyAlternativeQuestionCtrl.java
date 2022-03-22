@@ -1,6 +1,7 @@
 package client.scenes.questions;
 
 import client.data.ClientData;
+import client.game.Game;
 import client.joker.JokerPowerUps;
 import client.joker.JokerUtils;
 import client.utils.ClientUtils;
@@ -40,6 +41,7 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
     final ToggleGroup radioGroup = new ToggleGroup();
 
     private final ServerUtils server;
+    private final Game game;
 
     @FXML
     private RadioButton answer1;
@@ -52,11 +54,12 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
 
     @Inject
     public EnergyAlternativeQuestionCtrl(ClientData clientData, ClientUtils  client, ServerUtils server,
-                                         JokerUtils jokerUtils) {
+                                         JokerUtils jokerUtils, Game game) {
         super(jokerUtils);
         this.clientData = clientData;
         this.client = client;
         this.server = server;
+        this.game = game;
         doublePoints = false;
     }
 
@@ -69,7 +72,7 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
     }
 
     public void leaveGame(){
-        client.leaveLobby();
+        game.leaveLobby();
     }
 
     /**

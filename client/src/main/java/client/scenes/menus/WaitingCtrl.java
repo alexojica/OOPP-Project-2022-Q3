@@ -13,9 +13,7 @@ import com.talanlabs.avatargenerator.eightbit.EightBitAvatar;
 import commons.Lobby;
 import commons.Player;
 import commons.WebsocketMessage;
-import constants.ConnectionStatusCodes;
 import constants.ResponseCodes;
-import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -212,7 +210,7 @@ public class WaitingCtrl implements Initializable{
     }
 
     public void leaveLobby(){
-        client.leaveLobby();
+        game.leaveLobby();
     }
 
     public void startGame(){

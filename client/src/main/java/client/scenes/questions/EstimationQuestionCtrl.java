@@ -1,6 +1,7 @@
 package client.scenes.questions;
 
 import client.data.ClientData;
+import client.game.Game;
 import client.joker.JokerPowerUps;
 import client.joker.JokerUtils;
 import client.scenes.MainCtrl;
@@ -27,6 +28,8 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
     private final MainCtrl mainCtrl;
 
     private final ClientData clientData;
+
+    private final Game game;
 
     private Double progress;
 
@@ -56,12 +59,13 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
 
     @Inject
     public EstimationQuestionCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ClientData clientData,
-                                  JokerUtils jokerUtils) {
+                                  JokerUtils jokerUtils, Game game) {
         super(jokerUtils);
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.client = client;
         this.clientData = clientData;
+        this.game = game;
     }
 
     public void load() {
@@ -189,7 +193,7 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
     }
 
     public void leaveGame() {
-        client.leaveLobby();
+        game.leaveLobby();
     }
 
 }

@@ -78,19 +78,6 @@ public class ClientUtilsImpl implements ClientUtils {
         return clientData.getClientLobby() != null;
     }
 
-    @Override
-    public void leaveLobby() {
-        //Lobby currentLobby = clientData.getClientLobby();
-        Player clientPlayer = clientData.getClientPlayer();
-
-        server.send("/app/leaveLobby", new WebsocketMessage(ResponseCodes.LEAVE_LOBBY,
-                clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
-
-        //set client lobby to exited
-        clientData.setLobby(null);
-
-        mainCtrl.showGameModeSelection();
-    }
 
     @Override
     public void startTimer(ProgressBar pb, Object me, QuestionTypes questionType)

@@ -5,7 +5,6 @@ import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
 import com.talanlabs.avatargenerator.Avatar;
 import com.talanlabs.avatargenerator.eightbit.EightBitAvatar;
-import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,7 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class AvatarGeneratorImpl implements AvatarGenerator {
+public class AvatarManagerImpl implements AvatarManager {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -31,7 +30,7 @@ public class AvatarGeneratorImpl implements AvatarGenerator {
     private ImageView avatarImage;
 
     @Inject
-    public AvatarGeneratorImpl(ServerUtils server, MainCtrl mainCtrl, ClientData clientData) {
+    public AvatarManagerImpl(ServerUtils server, MainCtrl mainCtrl, ClientData clientData) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.clientData = clientData;

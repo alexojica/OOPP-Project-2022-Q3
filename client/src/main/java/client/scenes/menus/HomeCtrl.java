@@ -1,6 +1,6 @@
 package client.scenes.menus;
 
-import client.avatar.AvatarGenerator;
+import client.avatar.AvatarManager;
 import client.data.ClientData;
 import client.scenes.MainCtrl;
 import client.utils.ServerUtils;
@@ -19,7 +19,7 @@ public class HomeCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private final ClientData clientData;
-    private final AvatarGenerator avatarGenerator;
+    private final AvatarManager avatarGenerator;
 
     @FXML
     private TextField name;
@@ -28,7 +28,7 @@ public class HomeCtrl {
     private ImageView avatarImage;
 
     @Inject
-    public HomeCtrl(ServerUtils server, MainCtrl mainCtrl, ClientData clientData, AvatarGenerator avatarGenerator) {
+    public HomeCtrl(ServerUtils server, MainCtrl mainCtrl, ClientData clientData, AvatarManager avatarGenerator) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.clientData = clientData;

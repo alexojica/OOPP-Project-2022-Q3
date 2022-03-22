@@ -13,6 +13,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Random;
 
+/**
+ * This class contains basic boilerplate avatar related methods which the AvatarManager uses
+ */
 public class AvatarSupplier{
 
     private static final String FILE_PATH = "client/src/main/resources/images/avatar/";

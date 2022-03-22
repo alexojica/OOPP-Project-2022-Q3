@@ -7,6 +7,8 @@ public interface Game {
 
     void joinPublicLobby();
 
+    void leaveLobby();
+
     void initiateMultiplayerGame();
 
     void startMultiplayerGame();

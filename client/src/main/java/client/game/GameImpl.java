@@ -91,8 +91,6 @@ public class GameImpl implements Game{
             }
         });
         thread.start();
-
-        //mainCtrl.showGameMCQ();
     }
 
     /**
@@ -145,10 +143,11 @@ public class GameImpl implements Game{
         thread.start();
     }
 
-    //Only one player presses start game
-    //that player now becomes the HOST
-    //the HOST precalculates the question - only one api call
-    //the rest use the pregenerated question
+    /**
+     * Only one player presses start game, that player becomes the host
+     * The host precalculates the question in the server with one api call
+     * The rest of the players use that question which the host asked to be precalculated on the server
+     */
     public void startMultiplayerGame(){
 
         String token = clientData.getClientLobby().getToken();
@@ -163,4 +162,15 @@ public class GameImpl implements Game{
                     new WebsocketMessage(ResponseCodes.START_GAME, clientData.getClientLobby().token));
         }
     }
+
+    public void leaveLobby() {
+        server.send("/app/leaveLobby", new WebsocketMessage(ResponseCodes.LEAVE_LOBBY,
+                clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
+
+        //set client lobby to exited
+        clientData.setLobby(null);
+
+        mainCtrl.showGameModeSelection();
+    }
+
 }

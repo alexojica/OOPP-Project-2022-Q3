@@ -3,7 +3,7 @@ package client.avatar;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 
-public interface AvatarGenerator {
+public interface AvatarManager {
 
     void setNameAndAvatarImage(TextField name, ImageView avatarImage);
 
