@@ -7,11 +7,8 @@ import client.scenes.menus.WaitingCtrl;
 import client.scenes.questions.EnergyAlternativeQuestionCtrl;
 import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
-import commons.Player;
 import commons.Question;
-import commons.WebsocketMessage;
 import constants.QuestionTypes;
-import constants.ResponseCodes;
 import javafx.application.Platform;
 import javafx.scene.control.ProgressBar;
 
