@@ -10,12 +10,29 @@ import java.util.Optional;
 
 import commons.Activity;
 
+/**
+ * Repository of Activities can be created, contains all the methods from crud repository.
+ * useful methods: save, findAll, delete().
+ */
 @Transactional
 public interface ActivitiesRepository extends JpaRepository<Activity, String> {
 
+    /**
+     * Given an energy consumption in wh
+     * Order the activities in the repo that has smaller energy consumptions than the parameter
+     * according to the energy consumption descending
+     * @param energyConsumption
+     * @return a list of activities
+     */
     @Query("select a from Activity a where a.energyConsumption <= ?1 order by a.energyConsumption desc")
     public List<Activity> findByEnergyConsumptionDesc(long energyConsumption );
 
+    /**
+     * Find all the activities that has energy consumption values between the given parameters
+     * @param small
+     * @param big
+     * @return a list of activities
+     */
     @Query("select a from Activity a where a.energyConsumption >= ?1 and a.energyConsumption <= ?2")
     public Optional<List<Activity>> findActivitiesInRange(long small, long big);
 
