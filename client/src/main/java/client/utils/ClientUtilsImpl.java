@@ -1,6 +1,7 @@
 package client.utils;
 
 import client.data.ClientData;
+import client.game.Game;
 import client.scenes.MainCtrl;
 import client.scenes.menus.WaitingCtrl;
 import client.scenes.questions.EnergyAlternativeQuestionCtrl;
@@ -23,13 +24,13 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class ClientUtilsImpl implements ClientUtils {
 
-    //@Inject
     private ServerUtils server;
 
-    //@Inject
     private MainCtrl mainCtrl;
 
     private ClientData clientData;
+
+    private final Game game;
 
     private double coefficient;
 
@@ -46,10 +47,11 @@ public class ClientUtilsImpl implements ClientUtils {
     AtomicReference<Double> progress;
 
     @Inject
-    public ClientUtilsImpl(ClientData clientData, ServerUtils server, MainCtrl mainCtrl) {
+    public ClientUtilsImpl(ClientData clientData, ServerUtils server, MainCtrl mainCtrl, Game game) {
         this.clientData = clientData;
         this.server = server;
         this.mainCtrl = mainCtrl;
+        this.game = game;
         System.out.println("Instance of client utils");
 
         server.registerForMessages("/topic/nextQuestion", a -> {
@@ -57,7 +59,7 @@ public class ClientUtilsImpl implements ClientUtils {
             clientData.setQuestion(a.getQuestion());
             clientData.setPointer(a.getQuestion().getPointer());
             if(currentSceneCtrl.getClass() == WaitingCtrl.class) {
-                ((WaitingCtrl) currentSceneCtrl).initiateGame();
+                game.initiateMultiplayerGame();
             }
         });
 

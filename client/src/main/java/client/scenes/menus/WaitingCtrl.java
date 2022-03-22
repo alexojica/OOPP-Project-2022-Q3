@@ -1,9 +1,10 @@
 package client.scenes.menus;
 
+import client.avatar.AvatarSupplier;
 import client.data.ClientData;
+import client.game.Game;
 import client.joker.JokerUtils;
 import client.scenes.MainCtrl;
-import client.utils.AvatarSupplier;
 import client.utils.ClientUtils;
 import client.utils.ClientUtilsImpl;
 import client.utils.ServerUtils;
@@ -30,6 +31,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
+
 import javax.inject.Inject;
 import java.net.URL;
 import java.nio.file.Path;
@@ -45,6 +47,7 @@ public class WaitingCtrl implements Initializable{
     private final ServerUtils server;
     private final ClientUtils client;
     private final ClientData clientData;
+    private final Game game;
 
     private final MainCtrl mainCtrl;
     private ObservableList<Player> playerData;
@@ -72,27 +75,27 @@ public class WaitingCtrl implements Initializable{
 
     @Inject
     public WaitingCtrl(ServerUtils server, MainCtrl mainCtrl, ClientUtils client, ClientData clientData,
-                       JokerUtils jokerUtils) {
+                       JokerUtils jokerUtils, Game game) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.client = client;
         this.clientData = clientData;
         this.jokerUtils = jokerUtils;
-        clientData.setQuestionCounter(0);
-
+        this.game = game;
     }
 
     /**
      * Method that sets up how the scene should look like when switched to
      */
     public void load(){
+        clientData.setQuestionCounter(0);
         tip.setText("Theres only one correct answer per question, get the most right to win.");
         lobbyCode.setText(lobbyCode.getText() + 59864);
         builder = EightBitAvatar.newMaleAvatarBuilder().build();
         showActivePlayers();
 
         if(client.getClass().equals(ClientUtilsImpl.class)) {
-            ((ClientUtilsImpl) client).setCurrentSceneCtrl(this);
+            client.setCurrentSceneCtrl(this);
         }
         server.registerForMessages("/topic/lobbyStart", a -> {
             if(a.getCode() == ResponseCodes.START_GAME && a.getLobbyToken().equals(clientData.getClientLobby().token)) {
@@ -113,11 +116,9 @@ public class WaitingCtrl implements Initializable{
      * Method that shows active players in a given lobby
      * The lobby field from CliendData should have been filled/updated prior to calling this method
      */
-
     public void showActivePlayers()
     {
         activePlayers = clientData.getClientLobby().getPlayersInLobby();
-
         refresh();
     }
 
@@ -125,7 +126,6 @@ public class WaitingCtrl implements Initializable{
     //for the idea of using executor services to schedule the load and/or generation of images
     //it's the only somewhat efficient solution I found, since it makes use of
     // listeners to cancel and monitor on-going tasks
-
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
@@ -183,7 +183,6 @@ public class WaitingCtrl implements Initializable{
             // Attach the imageview to the cell
             cell.setGraphic(imageview);
             return cell;
-
         });
         avatarColumn.setCellValueFactory(cellData ->  new SimpleStringProperty(cellData.getValue().getAvatarCode()));
 
@@ -196,24 +195,19 @@ public class WaitingCtrl implements Initializable{
         }, 0, 250);
     }
 
-    public boolean isInLobby()
-    {
-        if(clientData.getClientLobby() == null) return false;
-        return true;
-    }
 
+    /**
+     * Refresh waiting screen page
+     */
     public void refresh()
     {
-
-        if(activePlayers != null && isInLobby())
+        if(activePlayers != null && clientData.getClientPlayer() != null)
         {
-            String token = clientData.getClientLobby().getToken();
             Lobby current = clientData.getClientLobby();
             clientData.setLobby(current);
             activePlayers = current.getPlayersInLobby();
             playerData = FXCollections.observableList(activePlayers);
             tableView.setItems(playerData);
-
         }
     }
 
@@ -221,48 +215,7 @@ public class WaitingCtrl implements Initializable{
         client.leaveLobby();
     }
 
-    public void initiateGame()
-    {
-        System.out.println("game initiated");
-        clientData.setClientScore(0);
-
-
-        //add delay until game starts
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    //TODO: add timer progress bar / UI text with counter depleting until the start of the game
-                    Thread.sleep(300);
-
-                    Platform.runLater(() -> client.getQuestion());
-
-                }catch (InterruptedException e){
-                    e.printStackTrace();
-                    System.out.println("Something went wrong while waiting to start the game");
-                }
-            }
-        });
-        thread.start();
-    }
-
-    //Only one player presses start game
-    //that player now becomes the HOST
-    //the HOST precalculates the question - only one api call
-    //the rest use the pregenerated question
-
     public void startGame(){
-
-        String token = clientData.getClientLobby().getToken();
-        if(server.startLobby(token).equals(ConnectionStatusCodes.YOU_ARE_HOST)) {
-            clientData.setAsHost(true);
-            clientData.setPointer(clientData.getClientLobby().getPlayerIds().get(0));
-            clientData.setClientScore(0);
-            clientData.setQuestionCounter(0);
-
-            //start the game for the other players as well
-            server.send("/app/lobbyStart",
-                    new WebsocketMessage(ResponseCodes.START_GAME, clientData.getClientLobby().token));
-        }
+        game.startMultiplayerGame();
     }
 }

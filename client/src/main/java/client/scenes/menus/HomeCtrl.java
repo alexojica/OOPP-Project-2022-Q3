@@ -1,30 +1,25 @@
 package client.scenes.menus;
 
+import client.avatar.AvatarSupplier;
 import client.data.ClientData;
 import client.scenes.MainCtrl;
-import client.utils.AvatarSupplier;
 import client.utils.ServerUtils;
 import com.talanlabs.avatargenerator.Avatar;
 import com.talanlabs.avatargenerator.eightbit.EightBitAvatar;
+import commons.Player;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
-
-import javax.inject.Inject;
-
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
-
-import commons.Player;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
-import commons.Lobby;
 
+import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 
 public class HomeCtrl {
 
@@ -49,6 +44,43 @@ public class HomeCtrl {
         this.mainCtrl = mainCtrl;
         this.clientData = clientData;
     }
+
+    /**
+     * When home screen is shown, this method is called
+     */
+    public void load()
+    {
+        setRandomInitName();
+        initAvatar();
+        setAvatarImage();
+    }
+
+    /**
+     * Sets a random name to the prompt text of the player name-selection
+     * Name should be generated from a random selection of names (ex MonkeyEye64, KingTower12...)
+     */
+    public void setRandomInitName()
+    {
+        if(clientData.getClientPlayer() == null) {
+            name.setText("testPlayer");
+        }
+        else
+        {
+            name.setText(clientData.getClientPlayer().getName());
+        }
+    }
+
+    /**
+     *
+     */
+    public void initAvatar()
+    {
+        //clear past avatars, only if the client is restarted, otherwise use already generated files
+        if(clientData.getClientPlayer() == null) AvatarSupplier.clearAllAvatars();
+        playerAvatar = EightBitAvatar.newMaleAvatarBuilder().build();
+    }
+
+
 
     public void play(){
         try
@@ -87,22 +119,6 @@ public class HomeCtrl {
         return p;
     }
 
-    //these methods are called onLoad automatically
-
-    public void onLoad()
-    {
-        setRandomInitName();
-        instantiateCommonLobby();
-        initAvatar();
-        setAvatarImage();
-    }
-
-    public void initAvatar()
-    {
-        //clear past avatars, only if the client is restarted, otherwise use already generated files
-        if(clientData.getClientPlayer() == null) AvatarSupplier.clearAllAvatars();
-        playerAvatar = EightBitAvatar.newMaleAvatarBuilder().build();
-    }
 
     public void setAvatarImage()
     {
@@ -171,56 +187,6 @@ public class HomeCtrl {
         seed --;
         updateAvatar();
         updateImage();
-    }
-
-    public void setRandomInitName()
-    {
-        //this string should be randomly generated
-        //from a pool of possible name combinations
-        // ex: MonkeyEye64, KingTower12 etc
-
-        if(clientData.getClientPlayer() == null) {
-            this.name.setText("testPlayer");
-        }
-        else
-        {
-            this.name.setText(clientData.getClientPlayer().getName());
-        }
-    }
-
-    public void instantiateCommonLobby()
-    {
-        //this code should be private static string final somewhere
-        String commonCode = "COMMON";
-
-        List<Lobby> lobbies = server.getAllLobbies();
-
-        if(lobbies.size() == 0)
-        {
-            //no lobbies instantiated
-
-            Lobby mainLobby = new Lobby(commonCode);
-            server.addLobby(mainLobby);
-            System.out.println("Lobby created");
-        }
-        else
-        {
-            //lobbies exist, but there might not be any common lobby
-            //TASK: improve the search of lobbies; maybe server sided, not client sided
-
-            boolean commonLobbyExists = false;
-            for(Lobby l : lobbies)
-            {
-                if(l.getToken().equals(commonCode))
-                    commonLobbyExists = true;
-            }
-
-            if(!commonLobbyExists)
-            {
-                Lobby mainLobby = new Lobby(commonCode);
-                server.addLobby(mainLobby);
-            }
-        }
     }
 
 }

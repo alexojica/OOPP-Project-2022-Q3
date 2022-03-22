@@ -17,6 +17,8 @@ package client;
 
 import client.data.ClientData;
 import client.data.ClientDataImpl;
+import client.game.Game;
+import client.game.GameImpl;
 import client.scenes.GameOverCtrl;
 import client.scenes.MainCtrl;
 import client.scenes.leaderboards.LeaderboardCtrl;
@@ -56,5 +58,6 @@ public class MyModule implements Module {
         // Binding interfaces to concrete implementations
         binder.bind(ClientUtils.class).to(ClientUtilsImpl.class).in(Scopes.SINGLETON);
         binder.bind(ClientData.class).to(ClientDataImpl.class).in(Scopes.SINGLETON);
+        binder.bind(Game.class).to(GameImpl.class).in(Scopes.SINGLETON);
     }
 }

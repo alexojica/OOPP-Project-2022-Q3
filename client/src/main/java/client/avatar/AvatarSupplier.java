@@ -1,4 +1,4 @@
-package client.utils;
+package client.avatar;
 
 import com.talanlabs.avatargenerator.Avatar;
 import com.talanlabs.avatargenerator.utils.AvatarUtils;
@@ -64,11 +64,6 @@ public class AvatarSupplier{
         }
     }
 
-    /**
-     * Mathod that manually generates an integer seed from a given name
-     * @param name
-     * @return
-     */
 
     private static int generateSeed(String name)
     {

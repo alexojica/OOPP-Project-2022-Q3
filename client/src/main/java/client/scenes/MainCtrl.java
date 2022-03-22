@@ -161,7 +161,7 @@ public class MainCtrl extends Application {
         client.setCurrentSceneCtrl(homeCtrl);
         primaryStage.setTitle("Home");
         primaryStage.setScene(home);
-        homeCtrl.onLoad();
+        homeCtrl.load();
     }
 
     public void showLeaderboard(){
