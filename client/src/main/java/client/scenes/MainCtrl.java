@@ -180,6 +180,7 @@ public class MainCtrl extends Application {
         client.setCurrentSceneCtrl(gameOverCtrl);
         primaryStage.setTitle("GameOver");
         primaryStage.setScene(gameOver);
+        gameOverCtrl.load();
     }
 
     public void showMultiplayerMenu(){
