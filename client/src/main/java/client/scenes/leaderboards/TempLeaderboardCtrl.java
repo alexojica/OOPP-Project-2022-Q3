@@ -63,12 +63,9 @@ public class TempLeaderboardCtrl {
         currentTop10 = FXCollections.observableList(server.getTopByLobbyToken(clientData.getClientLobby().getToken()));
         builder = EightBitAvatar.newMaleAvatarBuilder().build();
 
-        rank.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Player, String>, ObservableValue<String>>() {
-            @Override public ObservableValue<String> call(TableColumn.CellDataFeatures<Player, String> p) {
-                return new ReadOnlyObjectWrapper((table.getItems().indexOf(p.getValue()) + 1) + "");
-            }
-        });
-        rank.setSortable(false);
+        rank.setCellValueFactory((Callback<TableColumn.CellDataFeatures<Player, String>, ObservableValue<String>>) q
+                -> new SimpleStringProperty((table.getItems().indexOf(q.getValue()) + 1) + ""));
+
         nameColumn.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().name));
 
         ExecutorService exec = Executors.newCachedThreadPool();
