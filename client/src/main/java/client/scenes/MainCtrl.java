@@ -21,6 +21,7 @@ import client.scenes.menus.GameModeSelectionCtrl;
 import client.scenes.menus.HomeCtrl;
 import client.scenes.menus.MultiplayerMenuCtrl;
 import client.scenes.menus.WaitingCtrl;
+import client.scenes.questions.EnergyAlternativeQuestionCtrl;
 import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
 import client.utils.ClientUtils;
@@ -66,6 +67,9 @@ public class MainCtrl extends Application {
     private UsernamePopUpCtrl usernamePopUpCtrl;
     private Scene usernamePopUp;
 
+    private EnergyAlternativeQuestionCtrl energyAlternativeQuestionCtrl;
+    private Scene energyAlternative;
+
     private Stage incorrectUsernamePopUp;
 
     @Inject
@@ -74,8 +78,10 @@ public class MainCtrl extends Application {
     public void initialize(Stage primaryStage, Pair<HomeCtrl, Parent> home, Pair<LeaderboardCtrl, Parent> leaderboard,
                            Pair<GameModeSelectionCtrl, Parent> gameModeSelection, Pair<MultiplayerMenuCtrl,
                            Parent> multiplayerMenu, Pair<EstimationQuestionCtrl, Parent> estimationQuestion,
-                           Pair<GameMCQCtrl, Parent> gameMCQ, Pair<GameOverCtrl, Parent> gameOver,
-                           Pair<WaitingCtrl, Parent> waiting, Pair<TempLeaderboardCtrl, Parent> tempLeaderboard,
+                           Pair<GameMCQCtrl, Parent> gameMCQ,
+                           Pair<EnergyAlternativeQuestionCtrl, Parent> energyAlternative,
+                           Pair<GameOverCtrl, Parent> gameOver, Pair<WaitingCtrl, Parent> waiting,
+                           Pair<TempLeaderboardCtrl, Parent> tempLeaderboard,
                            Pair<UsernamePopUpCtrl, Parent> usernamePopUp) {
         this.primaryStage = primaryStage;
 
@@ -110,6 +116,9 @@ public class MainCtrl extends Application {
         this.usernamePopUpCtrl = usernamePopUp.getKey();
         this.usernamePopUp = new Scene(usernamePopUp.getValue());
 
+        this.energyAlternativeQuestionCtrl = energyAlternative.getKey();
+        this.energyAlternative = new Scene(energyAlternative.getValue());
+
         primaryStage.setOnCloseRequest(e -> {
             if(client.isInLobby()){
                 client.leaveLobby();
@@ -122,49 +131,65 @@ public class MainCtrl extends Application {
 
 
     public void showWaiting(){
+        client.setCurrentSceneCtrl(waitingCtrl);
         primaryStage.setTitle("WaitingScreen");
         primaryStage.setScene(waiting);
         waitingCtrl.load();
     }
 
     public void showGameMCQ(){
+        client.setCurrentSceneCtrl(gameMCQCtrl);
         primaryStage.setTitle("GameScreen");
         primaryStage.setScene(gameMCQ);
         gameMCQCtrl.load();
     }
 
+    public void showEnergyAlternative(){
+        primaryStage.setTitle("GameScreen");
+        primaryStage.setScene(energyAlternative);
+        energyAlternativeQuestionCtrl.load();
+    }
+
     public void showGameEstimation(){
+        client.setCurrentSceneCtrl(estimationQuestionCtrl);
         primaryStage.setTitle("GameScreen");
         primaryStage.setScene(estimation);
         estimationQuestionCtrl.load();
     }
 
     public void showHome(){
+        client.setCurrentSceneCtrl(homeCtrl);
         primaryStage.setTitle("Home");
         primaryStage.setScene(home);
         homeCtrl.onLoad();
     }
 
     public void showLeaderboard(){
+        client.setCurrentSceneCtrl(leaderboardCtrl);
         primaryStage.setTitle("Leaderboard");
         primaryStage.setScene(leaderboard);
+        leaderboardCtrl.load();
     }
     public void showGameModeSelection(){
+        client.setCurrentSceneCtrl(gameModeSelectionCtrl);
         primaryStage.setTitle("GameModeSelection");
         primaryStage.setScene(gameModeSelection);
     }
 
     public void showGameOver(){
+        client.setCurrentSceneCtrl(gameOverCtrl);
         primaryStage.setTitle("GameOver");
-        primaryStage.setScene(home);
+        primaryStage.setScene(gameOver);
     }
 
     public void showMultiplayerMenu(){
+        client.setCurrentSceneCtrl(multiplayerMenuCtrl);
         primaryStage.setTitle("MultiplayerMenu");
         primaryStage.setScene(multiplayerMenu);
     }
 
     public void showTempLeaderboard(){
+        client.setCurrentSceneCtrl(tempLeaderboardCtrl);
         primaryStage.setTitle("TempLeaderboard");
         primaryStage.setScene(tempLeaderboard);
     }

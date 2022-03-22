@@ -1,11 +1,15 @@
 package client.scenes.questions;
 
 import client.data.ClientData;
+import client.joker.JokerPowerUps;
+import client.joker.JokerUtils;
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Question;
+import commons.WebsocketMessage;
+import constants.ResponseCodes;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressBar;
@@ -14,7 +18,7 @@ import javafx.scene.text.Text;
 
 import static constants.QuestionTypes.ESTIMATION_QUESTION;
 
-public class EstimationQuestionCtrl {
+public class EstimationQuestionCtrl extends JokerPowerUps{
 
     private final ServerUtils server;
 
@@ -23,6 +27,8 @@ public class EstimationQuestionCtrl {
     private final MainCtrl mainCtrl;
 
     private final ClientData clientData;
+
+    private Double progress;
 
     @FXML
     private ProgressBar pb;
@@ -49,7 +55,9 @@ public class EstimationQuestionCtrl {
     private Long correctAnswer;
 
     @Inject
-    public EstimationQuestionCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ClientData clientData) {
+    public EstimationQuestionCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ClientData clientData,
+                                  JokerUtils jokerUtils) {
+        super(jokerUtils);
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.client = client;
@@ -70,7 +78,6 @@ public class EstimationQuestionCtrl {
 
         correctAnswer = question.getFoundActivities().get(0).getEnergyConsumption();
 
-       // answerPopUp.setText(correctAnswer.toString());
         answerPopUp.setStyle(" -fx-background-color: transparent; ");
         submittedAnswer = null;
 
@@ -93,9 +100,6 @@ public class EstimationQuestionCtrl {
 
                     Thread.sleep(2000);
 
-                    //prepare the question again only if not host
-                    if(!clientData.getIsHost()) client.prepareQuestion();
-
                     //execute next question immediatly after sleep on current thread finishes execution
                     Platform.runLater(() -> client.getQuestion());
                     //client.getQuestion();
@@ -111,10 +115,11 @@ public class EstimationQuestionCtrl {
 
     private void updateCorrectAnswer() {
 
-        if(clientData.getIsHost())
-        {
-            //if host prepare next question
-            client.prepareQuestion();
+        if(clientData.getIsHost()){
+            //send a new question request to server so it has time to generate it
+            server.send("/app/nextQuestion",
+                    new WebsocketMessage(ResponseCodes.NEXT_QUESTION,
+                            clientData.getClientLobby().token, clientData.getClientPointer()));
         }
 
         if(submittedAnswer == null) {
@@ -131,6 +136,7 @@ public class EstimationQuestionCtrl {
     public void submit() {
         try {
             submittedAnswer = Long.parseLong(answer.getText());
+            progress = pb.getProgress();
             answer.setStyle(" -fx-background-color: yellow; ");
         }catch (NumberFormatException e){
             System.out.println("Number not formatted correctly");
@@ -147,28 +153,33 @@ public class EstimationQuestionCtrl {
         if(correctAnswer * 70 / 100L <= submittedAnswer && submittedAnswer <= correctAnswer * 130/100L)
         {
             //30% off -> get full points
-            pointsToAdd = 500L;
+            pointsToAdd = doublePoints ? 1000L : 500L;
         }
         else
         if(correctAnswer * 50 / 100L <= submittedAnswer && submittedAnswer <= correctAnswer * 150/100L)
         {
             //50% off -> get 350 points
-            pointsToAdd = 350L;
+            pointsToAdd = doublePoints ? 700L : 350L;
         }
         else
         if(correctAnswer * 30 / 100L <= submittedAnswer && submittedAnswer <= correctAnswer * 170/100L)
         {
             //70% off -> get 250 points
-            pointsToAdd = 250L;
+            pointsToAdd = doublePoints ? 500L : 250L;
         }
         else
         if(correctAnswer * 1 / 2L <= submittedAnswer && submittedAnswer <= correctAnswer * 200/100L)
         {
             //100% off -> get 150 points
-            pointsToAdd = 150L;
+            pointsToAdd = doublePoints ? 300L : 150L;
         }
-        clientData.setClientScore(clientData.getClientScore() + pointsToAdd);
+        doublePoints = false;
+        clientData.setClientScore((int) (clientData.getClientScore() + pointsToAdd * progress));
         scoreTxt.setText("Score:" + clientData.getClientScore());
+        clientData.getClientPlayer().score = clientData.getClientScore();
+
+        server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
+                clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
     }
 
     public void showStatus(String text,String color)
@@ -180,4 +191,5 @@ public class EstimationQuestionCtrl {
     public void leaveGame() {
         client.leaveLobby();
     }
+
 }

@@ -11,7 +11,15 @@ public interface ClientUtils {
 
     void startTimer(ProgressBar pb, Object me, QuestionTypes questionType);
 
+    void halfTime();
+
     void getQuestion();
 
     void prepareQuestion();
+
+    Object getCurrentSceneCtrl();
+
+    void setCurrentSceneCtrl(Object currentSceneCtrl);
+
+    double getCoefficient();
 }

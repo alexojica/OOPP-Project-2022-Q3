@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.questions.EnergyAlternativeQuestionCtrl">
+   <children>
+      <ProgressBar fx:id="pb" layoutX="500.0" layoutY="84.0" prefHeight="20.0" prefWidth="320.0" progress="0.0" />
+      <Pane layoutX="600.0" layoutY="365.0" prefHeight="110.0" prefWidth="145.0" style="-fx-background-color: ffffff;">
+         <children>
+            <ImageView fitHeight="100.0" fitWidth="135.0" layoutX="7.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true" />
+         </children>
+      </Pane>
+      <Pane layoutX="550.0" layoutY="130.0" prefHeight="170.0" prefWidth="220.0" style="-fx-background-color: ffffff;">
+         <children>
+            <ImageView fitHeight="160.0" fitWidth="210.0" layoutX="5.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" />
+         </children>
+      </Pane>
+      <Pane layoutX="290.0" layoutY="365.0" prefHeight="110.0" prefWidth="145.0" style="-fx-background-color: ffffff;">
+         <children>
+            <ImageView fitHeight="100.0" fitWidth="135.0" layoutX="6.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true" />
+         </children>
+      </Pane>
+      <Pane layoutX="900.0" layoutY="365.0" prefHeight="110.0" prefWidth="145.0" style="-fx-background-color: ffffff;">
+         <children>
+            <ImageView fitHeight="100.0" fitWidth="135.0" layoutX="6.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true" />
+         </children>
+      </Pane>
+      <Text fx:id="scoreTxt" layoutX="21.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Score:" wrappingWidth="63.5999755859375">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text layoutX="464.0" layoutY="103.0" strokeType="OUTSIDE" strokeWidth="0.0" text="⏰" wrappingWidth="33.0">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Text>
+      <Button focusTraversable="false" layoutX="21.0" layoutY="650.0" mnemonicParsing="false" onAction="#leaveGame" prefHeight="43.0" prefWidth="110.0" text="Leave Game">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+      <Text fx:id="nQuestionsTxt" layoutX="1208.0" layoutY="687.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-/20" wrappingWidth="48.39996337890625">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Text>
+      <Circle fill="DODGERBLUE" layoutX="537.0" layoutY="630.0" onMouseClicked="#doublePoints" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
+      <Text layoutX="492.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" Double Points💰" />
+      <Circle fill="DODGERBLUE" layoutX="667.0" layoutY="630.0" onMouseClicked="#eliminateRandomWrongAnswer" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
+      <Text layoutX="614.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Eliminate an answer❌" />
+      <Circle fill="DODGERBLUE" layoutX="797.0" layoutY="630.0" onMouseClicked="#halfTimeForOthers" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
+      <Text layoutX="742.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Half time of others⏰" />
+      <Circle fill="DODGERBLUE" layoutX="1220.0" layoutY="42.0" radius="18.0" stroke="BLACK" strokeType="INSIDE" />
+      <Text layoutX="1200.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Emotes" />
+      <Text fx:id="insteadOfText" layoutX="510.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Instead of ..." textAlignment="CENTER">
+         <font>
+            <Font size="29.0" />
+         </font>
+      </Text>
+      <Text layoutX="569.0" layoutY="331.0" strokeType="OUTSIDE" strokeWidth="0.0" text="you could do ..." textAlignment="CENTER">
+         <font>
+            <Font size="29.0" />
+         </font>
+      </Text>
+      <RadioButton fx:id="answer1" focusTraversable="false" layoutX="348.0" layoutY="473.0" mnemonicParsing="false" prefHeight="131.0" prefWidth="130.0" text="Answer 1" textAlignment="CENTER" wrapText="true" />
+      <RadioButton fx:id="answer2" focusTraversable="false" layoutX="594.0" layoutY="473.0" mnemonicParsing="false" prefHeight="131.0" prefWidth="130.0" text="Answer 2" textAlignment="CENTER" wrapText="true" />
+      <RadioButton fx:id="answer3" focusTraversable="false" layoutX="831.0" layoutY="473.0" mnemonicParsing="false" prefHeight="131.0" prefWidth="130.0" text="Answer 3" textAlignment="CENTER" wrapText="true" />
+   </children>
+</AnchorPane>

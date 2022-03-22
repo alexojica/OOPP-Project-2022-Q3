@@ -25,10 +25,12 @@ import client.scenes.menus.GameModeSelectionCtrl;
 import client.scenes.menus.HomeCtrl;
 import client.scenes.menus.MultiplayerMenuCtrl;
 import client.scenes.menus.WaitingCtrl;
+import client.scenes.questions.EnergyAlternativeQuestionCtrl;
 import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
 import client.utils.ClientUtils;
 import client.utils.ClientUtilsImpl;
+import client.joker.JokerUtils;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
@@ -48,6 +50,8 @@ public class MyModule implements Module {
         binder.bind(MultiplayerMenuCtrl.class).in(Scopes.SINGLETON);
         binder.bind(TempLeaderboardCtrl.class).in(Scopes.SINGLETON);
         binder.bind(WaitingCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(EnergyAlternativeQuestionCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(JokerUtils.class).in(Scopes.SINGLETON);
 
         // Binding interfaces to concrete implementations
         binder.bind(ClientUtils.class).to(ClientUtilsImpl.class).in(Scopes.SINGLETON);

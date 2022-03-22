@@ -15,17 +15,29 @@
  */
 package client.utils;
 
-import commons.Activity;
-import commons.Lobby;
-import commons.Player;
-import commons.Question;
+import commons.*;
 import constants.ConnectionStatusCodes;
+
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+
+import java.util.List;
+
+import commons.LeaderboardEntry;
+import org.glassfish.jersey.client.ClientConfig;
+
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import org.glassfish.jersey.client.ClientConfig;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.simp.stomp.*;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
 
+import java.lang.reflect.Type;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -93,6 +105,22 @@ public class ServerUtils {
                 .get(new GenericType<Activity>() {});
     }
 
+    public List<LeaderboardEntry> getTop10Scores() {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/leaderboard/getTop10")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<List<LeaderboardEntry>>() {});
+    }
+
+    public LeaderboardEntry saveScore(LeaderboardEntry score) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/leaderboard/saveScore")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(score, APPLICATION_JSON), LeaderboardEntry.class);
+    }
+
     public Question getQuestion(long pointer, String lastLobby){
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/question/getQuestion") //
@@ -103,12 +131,85 @@ public class ServerUtils {
                 .get(new GenericType<Question>(){}); 
     }
 
-    public Lobby startLobby(String token) {
+    public ConnectionStatusCodes startLobby(String token) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/lobby/startLobby") //
                 .queryParam("token", token)//
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .get(new GenericType<Lobby>() {});
+                .get(new GenericType<ConnectionStatusCodes>(){});
+    }
+
+    public List<Player> getTop10ByLobbyToken(String token) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/lobby/getTop10ByLobbyToken") //
+                .queryParam("token", token)//
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<List<Player>>() {});
+    }
+
+    public Player updateScore(Player player) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/player/updateScore") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(player, APPLICATION_JSON), Player.class);
+    }
+
+    private StompSession session = connect("ws://localhost:8080/websocket");
+
+    private StompSession connect(String url){
+        StandardWebSocketClient client = new StandardWebSocketClient();
+        WebSocketStompClient stomp = new WebSocketStompClient(client);
+
+        stomp.setMessageConverter(new MappingJackson2MessageConverter());
+
+        try{
+            return stomp.connect(url, new StompSessionHandlerAdapter() {
+                @Override
+                public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
+                    System.out.println("connected");
+                }
+            }).get();
+        }catch (ExecutionException e) {
+            Thread.currentThread().interrupt();
+            System.out.println("not working");
+        } catch (InterruptedException e) {
+            System.out.println("not working");
+            throw new RuntimeException(e);
+        } throw new IllegalStateException();
+    }
+
+
+    public void registerForMessages(String dest, Consumer<WebsocketMessage> consumer){
+        System.out.println("registered for " + dest);
+        session.subscribe(dest, new StompFrameHandler() {
+            @Override
+            public Type getPayloadType(StompHeaders headers) {
+                return WebsocketMessage.class;
+            }
+
+            @Override
+            public void handleFrame(StompHeaders headers, Object payload) {
+                System.out.println("receiving message");
+                consumer.accept((WebsocketMessage) payload);
+            }
+
+        });
+    }
+
+    public Lobby addMeToLobby(String token, Player player){
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/lobby/addMeToLobby") //
+                .queryParam("token", token)//
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(player, APPLICATION_JSON), Player.class);
+        return getLobbyByToken(token);
+    }
+
+    public void send(String dest, Object o){
+        session.send(dest, o);
     }
 }

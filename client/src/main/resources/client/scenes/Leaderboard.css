@@ -4,15 +4,9 @@
     -fx-background-color: MintCream;
 }
 
-/*
-Since no data is displayed in the leaderboard right now, this is commented out.
-When the leaderboard is implemented this should be uncommented
- */
-/*
 .table-view {
     -fx-background-color: transparent;
 }
-*/
 
 .table-view .column-header {
     -fx-background-color: linear-gradient(to bottom, #00a6d6, #00cdff);
@@ -22,15 +16,18 @@ When the leaderboard is implemented this should be uncommented
     -fx-border-color: rgba(7, 7, 7, 0.07);
     -fx-padding: 2 0 2 10px;
 }
+
 .table-row-cell:hover {
     -fx-background-color: rgba(0, 255, 94, 0.07);
     -fx-text-background-color: red;
 }
+
 .table-row-cell:odd {
     -fx-background-color: rgba(0, 255, 94, 0.07);
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em;
 }
+
 .table-row-cell:even {
     -fx-background-color: #1dbbdd11;
     -fx-background-insets: 0, 0 0 1 0;

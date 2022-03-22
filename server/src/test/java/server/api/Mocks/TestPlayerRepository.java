@@ -170,4 +170,9 @@ public class TestPlayerRepository implements PlayerRepository {
                                           Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
     }
+
+    @Override
+    public void updateScore(int score, long id){
+        //temporary to avoid error
+    }
 }
