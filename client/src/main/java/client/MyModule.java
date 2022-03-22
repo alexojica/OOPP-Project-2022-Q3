@@ -15,6 +15,8 @@
  */
 package client;
 
+import client.avatar.AvatarGenerator;
+import client.avatar.AvatarGeneratorImpl;
 import client.data.ClientData;
 import client.data.ClientDataImpl;
 import client.game.Game;
@@ -59,5 +61,6 @@ public class MyModule implements Module {
         binder.bind(ClientUtils.class).to(ClientUtilsImpl.class).in(Scopes.SINGLETON);
         binder.bind(ClientData.class).to(ClientDataImpl.class).in(Scopes.SINGLETON);
         binder.bind(Game.class).to(GameImpl.class).in(Scopes.SINGLETON);
+        binder.bind(AvatarGenerator.class).to(AvatarGeneratorImpl.class).in(Scopes.SINGLETON);
     }
 }
