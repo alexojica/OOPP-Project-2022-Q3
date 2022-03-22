@@ -25,7 +25,7 @@ class LeaderboardRepositoryTest {
     @BeforeEach
     void initUseCase() {
         List<LeaderboardEntry> leaderboardEntries = Arrays.asList(
-                new LeaderboardEntry(100, "andi", "somepath"), new LeaderboardEntry(90, "johnny", "somepath")
+                new LeaderboardEntry(100, "andi", "somecode"), new LeaderboardEntry(90, "johnny", "somecode")
         );
         leaderboardRepository.saveAll(leaderboardEntries);
     }
@@ -38,9 +38,9 @@ class LeaderboardRepositoryTest {
     @Test
     void saveAll_success() {
         List<LeaderboardEntry> leaderboardEntries = Arrays.asList(
-                new LeaderboardEntry(30, "testPlayer", "someotherpath"),
-                new LeaderboardEntry(10, "testPlayer2", "someavatarpath"),
-                new LeaderboardEntry(99, "testPlayer3", "somepath")
+                new LeaderboardEntry(30, "testPlayer", "someothercode"),
+                new LeaderboardEntry(10, "testPlayer2", "someavatarcode"),
+                new LeaderboardEntry(99, "testPlayer3", "somecode")
         );
         Iterable<LeaderboardEntry> allCustomer = leaderboardRepository.saveAll(leaderboardEntries);
 
@@ -76,7 +76,7 @@ class LeaderboardRepositoryTest {
         leaderboardEntry = leaderboardRepository.findById(id).get();
         assertTrue(leaderboardEntry != null);
         assertTrue(leaderboardEntry.getName().equals("johnny"));
-        assertTrue(leaderboardEntry.getAvatarPath().equals("somepath"));
+        assertTrue(leaderboardEntry.getAvatarCode().equals("somecode"));
     }
 
     @Test
