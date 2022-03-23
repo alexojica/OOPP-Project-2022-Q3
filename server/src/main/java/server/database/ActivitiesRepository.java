@@ -11,12 +11,11 @@ import java.util.Optional;
 import commons.Activity;
 
 @Transactional
-public interface ActivitiesRepository extends JpaRepository<Activity, String> {
+public interface ActivitiesRepository extends JpaRepository<Activity, Long> {
 
     @Query("select a from Activity a where a.energyConsumption <= ?1 order by a.energyConsumption desc")
     public List<Activity> findByEnergyConsumptionDesc(long energyConsumption );
 
     @Query("select a from Activity a where a.energyConsumption >= ?1 and a.energyConsumption <= ?2")
     public Optional<List<Activity>> findActivitiesInRange(long small, long big);
-
 }

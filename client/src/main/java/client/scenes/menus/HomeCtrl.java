@@ -201,7 +201,7 @@ public class HomeCtrl {
 
             Lobby mainLobby = new Lobby(commonCode);
             server.addLobby(mainLobby);
-            System.out.println("Lobby created");
+            System.out.println("Lobby created: " + commonCode);
         }
         else
         {

@@ -17,10 +17,11 @@ class ActivityTest {
         act3 = new Activity("id1", "resources/image", "google query", 3526L, "http://source");
     }
 
-    @Test
-    void getId() {
-        assertEquals(act1.getId(), "id1");
-    }
+    //the id is now auto-generated
+//    @Test
+//    void getId() {
+//        assertEquals(act1.getId(), "id1");
+//    }
 
     @Test
     void getImagePath() {
