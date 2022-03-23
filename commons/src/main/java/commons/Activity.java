@@ -5,8 +5,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
@@ -14,7 +13,13 @@ import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 public class Activity {
 
     @Id
-    private String id;
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @JsonProperty("id")
+    @Column(name = "activityID", unique = true)
+    private String activityID;
     @JsonProperty("image_path")
     private String imagePath;
     private String title;
@@ -25,8 +30,8 @@ public class Activity {
     public Activity() {
     }
 
-    public Activity(String id, String imagePath, String title, Long energyConsumption, String source) {
-        this.id = id;
+    public Activity(String activityID, String imagePath, String title, Long energyConsumption, String source) {
+        this.activityID = activityID;
         this.imagePath = imagePath;
         this.title = title;
         this.energyConsumption = energyConsumption;
@@ -37,7 +42,7 @@ public class Activity {
         this.energyConsumption = energyConsumption;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 

@@ -7,6 +7,7 @@ import client.joker.JokerUtils;
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
+import commons.Activity;
 import commons.Player;
 import commons.Question;
 import commons.WebsocketMessage;
@@ -19,6 +20,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.Text;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.Random;
 
 import static constants.QuestionTypes.MULTIPLE_CHOICE_QUESTION;
@@ -124,9 +126,10 @@ public class GameMCQCtrl extends JokerPowerUps {
 
     public void randomizeFields(RadioButton a, RadioButton b, RadioButton c, Question question)
     {
-        a.setText(question.getFoundActivities().get(0).getTitle());
-        b.setText(question.getFoundActivities().get(1).getTitle());
-        c.setText(question.getFoundActivities().get(2).getTitle());
+        List<Activity> list = server.getActivitiesFromIDs(question.getFoundActivities());
+        a.setText(list.get(0).getTitle());
+        b.setText(list.get(1).getTitle());
+        c.setText(list.get(2).getTitle());
     }
 
     public void nextQuestion(){

@@ -52,7 +52,7 @@ class ActivitiesRepositoryTest {
 
         AtomicInteger validIdFound = new AtomicInteger();
         allCustomer.forEach(activity -> {
-            if(Integer.parseInt(activity.getId()) > 1){
+            if(activity.getId() > 1){
                 validIdFound.getAndIncrement();
             }
         });
@@ -74,13 +74,13 @@ class ActivitiesRepositoryTest {
 
     @Test
     void findById(){
-        long id = Integer.parseInt(activitiesRepository.findAll().get(0).getId());
-        Activity activity = activitiesRepository.findById(String.valueOf(id)).get();
+        long id = activitiesRepository.findAll().get(0).getId();
+        Activity activity = activitiesRepository.findById(id).get();
         assertTrue(activity != null);
         assertTrue(activity.getEnergyConsumption() == 300L);
         assertTrue(activity.getImagePath().equals("somepath"));
-        id = Integer.valueOf(activitiesRepository.findAll().get(1).getId());
-        activity = activitiesRepository.findById(String.valueOf(id)).get();
+        id = activitiesRepository.findAll().get(1).getId();
+        activity = activitiesRepository.findById(id).get();
         assertTrue(activity != null);
         assertTrue(activity.getEnergyConsumption() == 330L);
         assertTrue(activity.getImagePath().equals("somepath"));
@@ -100,10 +100,10 @@ class ActivitiesRepositoryTest {
         activitiesRepository.save(new Activity("5", "somepath2", "title2", 1000L, "somesource2"));
         Activity activity = activitiesRepository.findByEnergyConsumptionDesc(1000L).get(0);
         assertTrue(activity.getImagePath().equals("somepath"));
-        assertTrue(activity.getId().equals("4"));
+//        assertTrue(activity.getId().equals(4));
         activity = activitiesRepository.findByEnergyConsumptionDesc(1000L).get(1);
         assertTrue(activity.getImagePath().equals("somepath2"));
-        assertTrue(activity.getId().equals("5"));
+//        assertTrue(activity.getId().equals("5"));
     }
 
     @Test

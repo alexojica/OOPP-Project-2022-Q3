@@ -7,6 +7,7 @@ import server.database.ActivitiesRepository;
 import server.database.QuestionRepository;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class QuestionProvider {
     private ActivitiesRepository activitiesRepository;
@@ -65,24 +66,25 @@ public class QuestionProvider {
 
     public Question createNewQuestion() {
         QuestionTypes questionType = getRandomQuestionType();
-        List<Activity> activities;
+        List<Long> activitiesIDS;
         Activity activityPivot = getActivityPivot();
 
         switch (questionType) {
             case MULTIPLE_CHOICE_QUESTION:
-                activities = getMultipleChoiceQuestionActivities(activityPivot);
+                activitiesIDS = getMultipleChoiceQuestionActivities(activityPivot);
                 break;
             case ESTIMATION_QUESTION:
-                activities = getEstimationQuestionActivity(activityPivot);
+                activitiesIDS = getEstimationQuestionActivity(activityPivot);
                 break;
             case ENERGY_ALTERNATIVE_QUESTION:
-                activities = getAlternativeEnergyQuestionActivities(activityPivot);
+                activitiesIDS = getAlternativeEnergyQuestionActivities(activityPivot);
                 break;
             default:
-                activities = null;
+                activitiesIDS = null;
         }
 
-        Question question = new Question(pointer, questionType, newPointer, activities, lastLobby);
+        Set<Long> activitySet = new HashSet<>(activitiesIDS);
+        Question question = new Question(pointer, questionType, newPointer, activitySet, lastLobby);
         questionRepository.save(question);
         System.out.println(question);
         return question;
@@ -105,35 +107,35 @@ public class QuestionProvider {
         return activities.get(random.nextInt(activities.size()));
     }
 
-    public List<Activity> getMultipleChoiceQuestionActivities(Activity activityPivot) {
-        List<Activity> activities = new ArrayList<>();
+    public List<Long> getMultipleChoiceQuestionActivities(Activity activityPivot) {
+        List<Long> activitiesIDs = new ArrayList<>();
         Activity activityLeft = (activitiesRepository.findByEnergyConsumptionDesc(
                 activityPivot.getEnergyConsumption() * (100 - difficulty) / 100)).get(0);
         Activity activityRight = (activitiesRepository.findByEnergyConsumptionDesc(
                 activityPivot.getEnergyConsumption() * (100 + difficulty) / 100)).get(0);
 
-        activities.add(activityLeft);
-        activities.add(activityPivot);
-        activities.add(activityRight);
-        return activities;
+        activitiesIDs.add(activityLeft.getId());
+        activitiesIDs.add(activityPivot.getId());
+        activitiesIDs.add(activityRight.getId());
+        return activitiesIDs;
     }
 
-    public List<Activity> getAlternativeEnergyQuestionActivities(Activity activityPivot) {
+    public List<Long> getAlternativeEnergyQuestionActivities(Activity activityPivot) {
         long small = activityPivot.getEnergyConsumption() * (100 - difficulty) / 100;
         long big = activityPivot.getEnergyConsumption() * (100 + difficulty) / 100;
 
         Activity correctAlternative = getCorrectAlternative(activityPivot, small, big);
         List<Activity> wrongAlternatives = getWrongAlternatives(activityPivot, small, big);
-        List<Activity> activities = new ArrayList<>();
+        List<Long> activities = new ArrayList<>();
 
         // Pivot/'instead of' question goes first
-        activities.add(activityPivot);
+        activities.add(activityPivot.getId());
 
         // Correct alternative goes next
-        activities.add(correctAlternative);
+        activities.add(correctAlternative.getId());
 
         //Wrong alternatives go last
-        activities.addAll(wrongAlternatives);
+        activities.addAll(wrongAlternatives.stream().map(Activity::getId).collect(Collectors.toList()));
         return activities;
     }
 
@@ -177,9 +179,9 @@ public class QuestionProvider {
         return wrongActivities;
     }
 
-    public List<Activity> getEstimationQuestionActivity(Activity activityPivot) {
-        List<Activity> activities = new ArrayList<>();
-        activities.add(activityPivot);
+    public List<Long> getEstimationQuestionActivity(Activity activityPivot) {
+        List<Long> activities = new ArrayList<>();
+        activities.add(activityPivot.getId());
         return activities;
     }
 }

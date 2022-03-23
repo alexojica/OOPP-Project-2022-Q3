@@ -6,9 +6,12 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import static constants.QuestionTypes.MULTIPLE_CHOICE_QUESTION;
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
@@ -29,7 +32,8 @@ public class Question {
     public Long pointer;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    public List<Activity> foundActivities;
+    @Column(name = "foundActivities")
+    public Set<LongWrapper> foundActivities;
 
     @Column(name = "lastLobbyToken")
     public String lastLobbyToken;
@@ -38,7 +42,7 @@ public class Question {
         // for object mapper
     }
 
-    public Question(Long id, QuestionTypes type, Long pointer, List<Activity> foundActivities, String lastLobbyToken) {
+    public Question(Long id, QuestionTypes type, Long pointer, Set<Long> foundActivities, String lastLobbyToken) {
         this.id = id;
         this.type = type;
         this.lastLobbyToken = lastLobbyToken;
@@ -53,7 +57,11 @@ public class Question {
         }
         this.text = text;
         this.pointer = pointer;
-        this.foundActivities = foundActivities;
+        this.foundActivities = new HashSet<>();
+        for(Long l : foundActivities)
+        {
+            this.foundActivities.add(new LongWrapper(l));
+        }
     }
 
     public QuestionTypes getType() {
@@ -88,11 +96,11 @@ public class Question {
         this.pointer = pointer;
     }
 
-    public List<Activity> getFoundActivities() {
-        return foundActivities;
+    public List<Long> getFoundActivities() {
+        return (new ArrayList<>(foundActivities.stream().map(LongWrapper::getId).collect(Collectors.toList())));
     }
 
-    public void setFoundActivities(List<Activity> foundActivities) {
+    public void setFoundActivities(Set<LongWrapper> foundActivities) {
         this.foundActivities = foundActivities;
     }
 

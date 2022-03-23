@@ -21,7 +21,40 @@ public class GameModeSelectionCtrl {
     }
 
     public void singleplayer(){
-        game.startSingleplayer();
+
+
+        Lobby mainLobby = new Lobby("SINGLE_PLAYER");
+        server.addLobby(mainLobby);
+        System.out.println("Lobby created: " + "SINGLE_PLAYER");
+        clientData.setLobby(mainLobby);
+        clientData.setPointer(clientData.getClientPlayer().getId());
+        clientData.setClientScore(0);
+        clientData.setQuestionCounter(0);
+        clientData.setAsHost(true);
+        server.addMeToLobby(clientData.getClientLobby().getToken(),clientData.getClientPlayer());
+
+        //add delay until game starts
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    //TODO: add timer progress bar / UI text with counter depleting until the start of the game
+
+                    server.send("/app/nextQuestion",
+                            new WebsocketMessage(ResponseCodes.NEXT_QUESTION,
+                                    clientData.getClientLobby().getToken(), clientData.getClientPointer()));
+
+                    Thread.sleep(3000);
+
+                    Platform.runLater(() -> client.getQuestion());
+
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                    System.out.println("Something went wrong while waiting to start the game");
+                }
+            }
+        });
+        thread.start();
     }
 
     public void multiplayer(){
