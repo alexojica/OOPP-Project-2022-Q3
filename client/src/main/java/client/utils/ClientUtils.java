@@ -7,8 +7,6 @@ public interface ClientUtils {
 
     boolean isInLobby();
 
-    void leaveLobby();
-
     void startTimer(ProgressBar pb, Object me, QuestionTypes questionType);
 
     void halfTime();

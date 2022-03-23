@@ -20,6 +20,7 @@ import constants.ConnectionStatusCodes;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import commons.LeaderboardEntry;
@@ -28,7 +29,6 @@ import org.glassfish.jersey.client.ClientConfig;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
-import org.glassfish.jersey.client.ClientConfig;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.*;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
@@ -36,10 +36,9 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
-
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
 
@@ -140,9 +139,9 @@ public class ServerUtils {
                 .get(new GenericType<ConnectionStatusCodes>(){});
     }
 
-    public List<Player> getTop10ByLobbyToken(String token) {
+    public List<Player> getTopByLobbyToken(String token) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/lobby/getTop10ByLobbyToken") //
+                .target(SERVER).path("api/lobby/getTopByLobbyToken") //
                 .queryParam("token", token)//
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
@@ -156,6 +155,29 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(player, APPLICATION_JSON), Player.class);
     }
+
+    public List<Activity> getActivitiesFromIDs(List<Long> listIds) {
+        List<Activity> result = new ArrayList<>();
+        for(Long l : listIds)
+        {
+            Activity activity = getActivityByID(l).get();
+            result.add(activity);
+        }
+        return result;
+    }
+
+    public Optional<Activity> getActivityByID(Long id)
+    {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/activity/getActivityByID") //
+                .queryParam("id", id)//
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {
+                });
+    }
+
+
 
     private StompSession session = connect("ws://localhost:8080/websocket");
 

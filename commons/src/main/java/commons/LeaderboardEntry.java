@@ -17,18 +17,20 @@ public class LeaderboardEntry {
     @Column(name = "name")
     public String name;
 
-    @Column(name = "avatar")
-    public String avatarPath;
+    @Column(name = "avatarCode")
+    public String avatarCode;
 
     @SuppressWarnings("unused")
     private LeaderboardEntry() {
         // for object mapper
     }
 
-    public LeaderboardEntry(int score, String name, String avatarPath) {
+    //For now I removed avatarPath from the constructor because I dont think it is needed anyway
+    //as we'll generate the avatar from the avatarCode when loading the leaderboard
+    public LeaderboardEntry(int score, String name, String avatarCode) {
         this.score = score;
         this.name = name;
-        this.avatarPath = avatarPath;
+        this.avatarCode = avatarCode;
     }
 
     public int getScore() {
@@ -47,11 +49,11 @@ public class LeaderboardEntry {
         this.name = name;
     }
 
-    public String getAvatarPath() {
-        return avatarPath;
+    public String getAvatarCode() {
+        return avatarCode;
     }
 
-    public void setAvatarPath(String avatarPath) {
-        this.avatarPath = avatarPath;
+    public void setAvatarCode(String avatarCode) {
+        this.avatarCode = avatarCode;
     }
 }

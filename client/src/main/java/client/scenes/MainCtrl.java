@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import client.game.Game;
 import client.scenes.leaderboards.LeaderboardCtrl;
 import client.scenes.leaderboards.TempLeaderboardCtrl;
 import client.scenes.menus.GameModeSelectionCtrl;
@@ -75,6 +76,9 @@ public class MainCtrl extends Application {
     @Inject
     private ClientUtils client;
 
+    @Inject
+    private Game game;
+
     public void initialize(Stage primaryStage, Pair<HomeCtrl, Parent> home, Pair<LeaderboardCtrl, Parent> leaderboard,
                            Pair<GameModeSelectionCtrl, Parent> gameModeSelection, Pair<MultiplayerMenuCtrl,
                            Parent> multiplayerMenu, Pair<EstimationQuestionCtrl, Parent> estimationQuestion,
@@ -121,7 +125,7 @@ public class MainCtrl extends Application {
 
         primaryStage.setOnCloseRequest(e -> {
             if(client.isInLobby()){
-                client.leaveLobby();
+                game.leaveLobby();
             }
         });
 
@@ -161,7 +165,7 @@ public class MainCtrl extends Application {
         client.setCurrentSceneCtrl(homeCtrl);
         primaryStage.setTitle("Home");
         primaryStage.setScene(home);
-        homeCtrl.onLoad();
+        homeCtrl.load();
     }
 
     public void showLeaderboard(){
@@ -180,6 +184,7 @@ public class MainCtrl extends Application {
         client.setCurrentSceneCtrl(gameOverCtrl);
         primaryStage.setTitle("GameOver");
         primaryStage.setScene(gameOver);
+        gameOverCtrl.load();
     }
 
     public void showMultiplayerMenu(){
@@ -192,6 +197,7 @@ public class MainCtrl extends Application {
         client.setCurrentSceneCtrl(tempLeaderboardCtrl);
         primaryStage.setTitle("TempLeaderboard");
         primaryStage.setScene(tempLeaderboard);
+        tempLeaderboardCtrl.load();
     }
 
     public void showPopUp(String lobbyType){

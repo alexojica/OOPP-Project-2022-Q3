@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import server.database.ActivitiesRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import commons.Activity;
@@ -26,6 +27,18 @@ public class ActivityController {
 
     }
 
+    @GetMapping("/getAll")
+    @ResponseBody
+    public List<Activity> getAll()
+    {
+        return repository.findAll();
+    }
+
+    /**
+     * given the energy consumption of an activity, find that activity
+     * @param energyConsumption the energy consumption of an activity in Wh
+     * @return the activity that has the energy consumption of the given parameter
+     */
     @GetMapping("/getActivityByWh")
     @ResponseBody
     public Activity getActivityByWh(@RequestParam Long energyConsumption) {
@@ -35,6 +48,10 @@ public class ActivityController {
         return act.get(0);
     }
 
+    /**
+     * get a random activity from the repo
+     * @return the activity found in random
+     */
     @GetMapping("/getRandomActivity")
     @ResponseBody
     public Activity getRandomActivity() {
@@ -43,5 +60,11 @@ public class ActivityController {
         if(allAct.isEmpty())
             return null;
         return allAct.get(ran.nextInt(allAct.size()));
+    }
+
+    @GetMapping("/getActivityByID")
+    @ResponseBody
+    public Optional<Activity> getActivityByID(Long id) {
+        return repository.findById(id);
     }
 }

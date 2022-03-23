@@ -1,10 +1,13 @@
 package client.scenes.questions;
 
 import client.data.ClientData;
+import client.game.Game;
 import client.joker.JokerPowerUps;
 import client.joker.JokerUtils;
+import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
+import commons.Activity;
 import commons.Question;
 import commons.WebsocketMessage;
 import constants.ResponseCodes;
@@ -17,6 +20,9 @@ import javafx.scene.text.Text;
 
 import javax.inject.Inject;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import static constants.QuestionTypes.ENERGY_ALTERNATIVE_QUESTION;
@@ -24,6 +30,9 @@ import static constants.QuestionTypes.ENERGY_ALTERNATIVE_QUESTION;
 public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
     private final ClientData clientData;
     private final ClientUtils client;
+    private final ServerUtils server;
+    private final MainCtrl mainCtrl;
+    private final Game game;
 
     @FXML
     private Text scoreTxt;
@@ -39,8 +48,6 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
 
     final ToggleGroup radioGroup = new ToggleGroup();
 
-    private final ServerUtils server;
-
     @FXML
     private RadioButton answer1;
     @FXML
@@ -52,11 +59,13 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
 
     @Inject
     public EnergyAlternativeQuestionCtrl(ClientData clientData, ClientUtils  client, ServerUtils server,
-                                         JokerUtils jokerUtils) {
+                                         JokerUtils jokerUtils, Game game, MainCtrl mainCtrl) {
         super(jokerUtils);
         this.clientData = clientData;
         this.client = client;
         this.server = server;
+        this.game = game;
+        this.mainCtrl = mainCtrl;
         doublePoints = false;
     }
 
@@ -69,7 +78,7 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
     }
 
     public void leaveGame(){
-        client.leaveLobby();
+        game.leaveLobby();
     }
 
     /**
@@ -91,7 +100,12 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
         answer2.setStyle(" -fx-background-color: transparent; ");
         answer3.setStyle(" -fx-background-color: transparent; ");
 
-        insteadOfText.setText(question.getText() + " " + question.getFoundActivities().get(0).getTitle());
+        Optional<Activity> act = server.getActivityByID(question.getFoundActivities().stream().findFirst().get());
+        String textMethod = question.getText();
+        if(act.isPresent()) {
+            textMethod += " " + act.get().getTitle();
+        }
+        insteadOfText.setText(textMethod);
 
         if(answer1.isSelected()) answer1.setSelected(false);
         if(answer2.isSelected()) answer2.setSelected(false);
@@ -120,9 +134,10 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
 
     public void randomizeFields(RadioButton a, RadioButton b, RadioButton c, Question question)
     {
-        a.setText(question.getFoundActivities().get(1).getTitle());
-        b.setText(question.getFoundActivities().get(2).getTitle());
-        c.setText(question.getFoundActivities().get(3).getTitle());
+        List<Activity> list = server.getActivitiesFromIDs(new ArrayList(question.getFoundActivities()));
+        a.setText(list.get(1).getTitle());
+        b.setText(list.get(2).getTitle());
+        c.setText(list.get(3).getTitle());
     }
 
     public void nextQuestion(){
@@ -134,6 +149,11 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
                     //sleep for two seconds to update ui and let the user see the correct answer
 
                     Thread.sleep(2000);
+
+                    if(clientData.getQuestionCounter() == 3){
+                        Platform.runLater(() -> mainCtrl.showTempLeaderboard());
+                        Thread.sleep(5000);
+                    }
 
                     //execute next question immediatly after sleep on current thread finishes execution
                     Platform.runLater(() -> client.getQuestion());
@@ -158,12 +178,11 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
             //if host prepare next question
             server.send("/app/nextQuestion",
                     new WebsocketMessage(ResponseCodes.NEXT_QUESTION,
-                            clientData.getClientLobby().token, clientData.getClientPointer()));
+                            clientData.getClientLobby().getToken(), clientData.getClientPointer()));
         }
 
         switch (correctAnswer)
         {
-
             case 0:
                 if(answer1.equals(radioGroup.getSelectedToggle())){
                     clientData.setClientScore(clientData.getClientScore() +
@@ -197,6 +216,10 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
                 break;
         }
         scoreTxt.setText("Score:" + clientData.getClientScore());
+
+        clientData.getClientPlayer().score = clientData.getClientScore();
+        server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
+                clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
     }
 
     public void eliminateRandomWrongAnswer() {

@@ -1,12 +1,13 @@
 package client.scenes.questions;
 
 import client.data.ClientData;
+import client.game.Game;
 import client.joker.JokerPowerUps;
 import client.joker.JokerUtils;
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
-import commons.Player;
+import commons.Activity;
 import commons.Question;
 import commons.WebsocketMessage;
 import constants.ResponseCodes;
@@ -18,6 +19,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.Text;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.Random;
 
 import static constants.QuestionTypes.MULTIPLE_CHOICE_QUESTION;
@@ -28,6 +30,7 @@ public class GameMCQCtrl extends JokerPowerUps {
     private final ClientUtils client;
     private final MainCtrl mainCtrl;
     private final ClientData clientData;
+    private final Game game;
 
     @FXML
     private ProgressBar pb;
@@ -54,16 +57,17 @@ public class GameMCQCtrl extends JokerPowerUps {
 
     @Inject
     public GameMCQCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ClientData clientData,
-                       JokerUtils jokerUtils) {
+                       JokerUtils jokerUtils, Game game) {
         super(jokerUtils);
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.client = client;
         this.clientData = clientData;
+        this.game = game;
     }
 
     public void leaveGame(){
-        client.leaveLobby();
+        game.leaveLobby();
     }
 
 
@@ -121,9 +125,10 @@ public class GameMCQCtrl extends JokerPowerUps {
 
     public void randomizeFields(RadioButton a, RadioButton b, RadioButton c, Question question)
     {
-        a.setText(question.getFoundActivities().get(0).getTitle());
-        b.setText(question.getFoundActivities().get(1).getTitle());
-        c.setText(question.getFoundActivities().get(2).getTitle());
+        List<Activity> list = server.getActivitiesFromIDs(question.getFoundActivities());
+        a.setText(list.get(0).getTitle());
+        b.setText(list.get(1).getTitle());
+        c.setText(list.get(2).getTitle());
     }
 
     public void nextQuestion(){
@@ -136,7 +141,10 @@ public class GameMCQCtrl extends JokerPowerUps {
 
                     Thread.sleep(2000);
 
-
+                    if(clientData.getQuestionCounter() == 3){
+                        Platform.runLater(() -> mainCtrl.showTempLeaderboard());
+                        Thread.sleep(5000);
+                    }
 
                     //execute next question immediatly after sleep on current thread finishes execution
                     Platform.runLater(() -> client.getQuestion());
@@ -173,10 +181,6 @@ public class GameMCQCtrl extends JokerPowerUps {
                 if(answer1.equals(radioGroup.getSelectedToggle())){
                     clientData.setClientScore(clientData.getClientScore() +
                             (int) (pointsToAdd* client.getCoefficient()));
-                    clientData.getClientPlayer().score = clientData.getClientScore();
-
-                    server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
-                            clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
                 }
                 answer1.setStyle(" -fx-background-color: green; ");
                 answer2.setStyle(" -fx-background-color: red; ");
@@ -186,10 +190,6 @@ public class GameMCQCtrl extends JokerPowerUps {
                 if(answer2.equals(radioGroup.getSelectedToggle())){
                     clientData.setClientScore(clientData.getClientScore() +
                             (int) (pointsToAdd* client.getCoefficient()));
-                    clientData.getClientPlayer().score = clientData.getClientScore();
-
-                    server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
-                            clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
                 }
                 answer2.setStyle(" -fx-background-color: green; ");
                 answer1.setStyle(" -fx-background-color: red; ");
@@ -199,10 +199,6 @@ public class GameMCQCtrl extends JokerPowerUps {
                 if(answer3.equals(radioGroup.getSelectedToggle())){
                     clientData.setClientScore(clientData.getClientScore() +
                             (int) (pointsToAdd* client.getCoefficient()));
-                    clientData.getClientPlayer().score = clientData.getClientScore();
-
-                    server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
-                            clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
                 }
                 answer3.setStyle(" -fx-background-color: green; ");
                 answer1.setStyle(" -fx-background-color: red; ");
@@ -215,9 +211,9 @@ public class GameMCQCtrl extends JokerPowerUps {
         }
         scoreTxt.setText("Score:" + clientData.getClientScore());
 
-        Player temp = clientData.getClientPlayer();
-        temp.setScore(Math.toIntExact(clientData.getClientScore()));
-        server.updateScore(temp);
+        clientData.getClientPlayer().score = clientData.getClientScore();
+        server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
+                clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
     }
 
     /**

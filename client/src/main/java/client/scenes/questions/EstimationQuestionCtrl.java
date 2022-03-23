@@ -1,12 +1,14 @@
 package client.scenes.questions;
 
 import client.data.ClientData;
+import client.game.Game;
 import client.joker.JokerPowerUps;
 import client.joker.JokerUtils;
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Activity;
 import commons.Question;
 import commons.WebsocketMessage;
 import constants.ResponseCodes;
@@ -21,12 +23,10 @@ import static constants.QuestionTypes.ESTIMATION_QUESTION;
 public class EstimationQuestionCtrl extends JokerPowerUps{
 
     private final ServerUtils server;
-
     private final ClientUtils client;
-
     private final MainCtrl mainCtrl;
-
     private final ClientData clientData;
+    private final Game game;
 
     private Double progress;
 
@@ -56,12 +56,13 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
 
     @Inject
     public EstimationQuestionCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ClientData clientData,
-                                  JokerUtils jokerUtils) {
+                                  JokerUtils jokerUtils, Game game) {
         super(jokerUtils);
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.client = client;
         this.clientData = clientData;
+        this.game = game;
     }
 
     public void load() {
@@ -76,7 +77,8 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
         scoreTxt.setText("Score:" + clientData.getClientScore());
         nQuestionsTxt.setText(clientData.getQuestionCounter() + "/20");
 
-        correctAnswer = question.getFoundActivities().get(0).getEnergyConsumption();
+        Activity polledActivity = server.getActivityByID(question.getFoundActivities().get(0)).get();
+        correctAnswer = polledActivity.getEnergyConsumption();
 
         answerPopUp.setStyle(" -fx-background-color: transparent; ");
         submittedAnswer = null;
@@ -87,7 +89,7 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
         client.startTimer(pb,this, ESTIMATION_QUESTION);
 
         questionTxt.setText(question.getText());
-        activityText.setText(question.getFoundActivities().get(0).getTitle());
+        activityText.setText(polledActivity.getTitle());
     }
 
     public void nextQuestion(){
@@ -99,6 +101,11 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
                     //sleep for two seconds to update ui and let the user see the correct answer
 
                     Thread.sleep(2000);
+
+                    if(clientData.getQuestionCounter() == 3){
+                        Platform.runLater(() -> mainCtrl.showTempLeaderboard());
+                        Thread.sleep(5000);
+                    }
 
                     //execute next question immediatly after sleep on current thread finishes execution
                     Platform.runLater(() -> client.getQuestion());
@@ -119,7 +126,7 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
             //send a new question request to server so it has time to generate it
             server.send("/app/nextQuestion",
                     new WebsocketMessage(ResponseCodes.NEXT_QUESTION,
-                            clientData.getClientLobby().token, clientData.getClientPointer()));
+                            clientData.getClientLobby().getToken(), clientData.getClientPointer()));
         }
 
         if(submittedAnswer == null) {
@@ -176,8 +183,8 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
         doublePoints = false;
         clientData.setClientScore((int) (clientData.getClientScore() + pointsToAdd * progress));
         scoreTxt.setText("Score:" + clientData.getClientScore());
-        clientData.getClientPlayer().score = clientData.getClientScore();
 
+        clientData.getClientPlayer().score = clientData.getClientScore();
         server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
                 clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
     }
@@ -189,7 +196,7 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
     }
 
     public void leaveGame() {
-        client.leaveLobby();
+        game.leaveLobby();
     }
 
 }
