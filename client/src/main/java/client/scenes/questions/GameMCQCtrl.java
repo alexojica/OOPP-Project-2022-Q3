@@ -8,7 +8,6 @@ import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.Activity;
-import commons.Player;
 import commons.Question;
 import commons.WebsocketMessage;
 import constants.ResponseCodes;
@@ -142,7 +141,10 @@ public class GameMCQCtrl extends JokerPowerUps {
 
                     Thread.sleep(2000);
 
-
+                    if(clientData.getQuestionCounter() == 3){
+                        Platform.runLater(() -> mainCtrl.showTempLeaderboard());
+                        Thread.sleep(5000);
+                    }
 
                     //execute next question immediatly after sleep on current thread finishes execution
                     Platform.runLater(() -> client.getQuestion());
@@ -179,10 +181,6 @@ public class GameMCQCtrl extends JokerPowerUps {
                 if(answer1.equals(radioGroup.getSelectedToggle())){
                     clientData.setClientScore(clientData.getClientScore() +
                             (int) (pointsToAdd* client.getCoefficient()));
-                    clientData.getClientPlayer().score = clientData.getClientScore();
-
-                    server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
-                            clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
                 }
                 answer1.setStyle(" -fx-background-color: green; ");
                 answer2.setStyle(" -fx-background-color: red; ");
@@ -192,10 +190,6 @@ public class GameMCQCtrl extends JokerPowerUps {
                 if(answer2.equals(radioGroup.getSelectedToggle())){
                     clientData.setClientScore(clientData.getClientScore() +
                             (int) (pointsToAdd* client.getCoefficient()));
-                    clientData.getClientPlayer().score = clientData.getClientScore();
-
-                    server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
-                            clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
                 }
                 answer2.setStyle(" -fx-background-color: green; ");
                 answer1.setStyle(" -fx-background-color: red; ");
@@ -205,10 +199,6 @@ public class GameMCQCtrl extends JokerPowerUps {
                 if(answer3.equals(radioGroup.getSelectedToggle())){
                     clientData.setClientScore(clientData.getClientScore() +
                             (int) (pointsToAdd* client.getCoefficient()));
-                    clientData.getClientPlayer().score = clientData.getClientScore();
-
-                    server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
-                            clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
                 }
                 answer3.setStyle(" -fx-background-color: green; ");
                 answer1.setStyle(" -fx-background-color: red; ");
@@ -221,9 +211,9 @@ public class GameMCQCtrl extends JokerPowerUps {
         }
         scoreTxt.setText("Score:" + clientData.getClientScore());
 
-        Player temp = clientData.getClientPlayer();
-        temp.setScore(Math.toIntExact(clientData.getClientScore()));
-        server.updateScore(temp);
+        clientData.getClientPlayer().score = clientData.getClientScore();
+        server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
+                clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
     }
 
     /**

@@ -4,6 +4,7 @@ import client.data.ClientData;
 import client.game.Game;
 import client.joker.JokerPowerUps;
 import client.joker.JokerUtils;
+import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.Activity;
@@ -147,6 +148,11 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
 
                     Thread.sleep(2000);
 
+                    if(clientData.getQuestionCounter() == 3){
+                        Platform.runLater(() -> mainCtrl.showTempLeaderboard());
+                        Thread.sleep(5000);
+                    }
+
                     //execute next question immediatly after sleep on current thread finishes execution
                     Platform.runLater(() -> client.getQuestion());
                     //client.getQuestion();
@@ -208,6 +214,10 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
                 break;
         }
         scoreTxt.setText("Score:" + clientData.getClientScore());
+
+        clientData.getClientPlayer().score = clientData.getClientScore();
+        server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
+                clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
     }
 
     public void eliminateRandomWrongAnswer() {
