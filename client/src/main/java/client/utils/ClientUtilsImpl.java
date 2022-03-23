@@ -53,7 +53,7 @@ public class ClientUtilsImpl implements ClientUtils {
         System.out.println("Instance of client utils");
 
         server.registerForMessages("/topic/nextQuestion", a -> {
-            System.out.println("next question received" + clientData.getQuestionCounter());
+            System.out.println("next question received " + clientData.getQuestionCounter());
             clientData.setQuestion(a.getQuestion());
             clientData.setPointer(a.getQuestion().getPointer());
             if(currentSceneCtrl.getClass() == WaitingCtrl.class) {
@@ -63,8 +63,10 @@ public class ClientUtilsImpl implements ClientUtils {
 
         server.registerForMessages("/topic/updateLobby", a -> {
             System.out.println(a.getCode());
-            if(a.getLobbyToken().equals(clientData.getClientLobby().token)){
+            if(a.getLobbyToken().equals(clientData.getClientLobby().getToken())){
+                System.out.println("Before: " + clientData.getClientLobby());
                 clientData.setLobby(server.getLobbyByToken(a.getLobbyToken()));
+                System.out.println("After: " + clientData.getClientLobby());
                 if(currentSceneCtrl.getClass() == WaitingCtrl.class)
                     ((WaitingCtrl) currentSceneCtrl).refresh();
             }
