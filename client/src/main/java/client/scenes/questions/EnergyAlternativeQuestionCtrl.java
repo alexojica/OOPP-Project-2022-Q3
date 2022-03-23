@@ -1,6 +1,7 @@
 package client.scenes.questions;
 
 import client.data.ClientData;
+import client.game.Game;
 import client.joker.JokerPowerUps;
 import client.joker.JokerUtils;
 import client.scenes.MainCtrl;
@@ -29,7 +30,9 @@ import static constants.QuestionTypes.ENERGY_ALTERNATIVE_QUESTION;
 public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
     private final ClientData clientData;
     private final ClientUtils client;
+    private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private final Game game;
 
     @FXML
     private Text scoreTxt;
@@ -45,8 +48,6 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
 
     final ToggleGroup radioGroup = new ToggleGroup();
 
-    private final ServerUtils server;
-
     @FXML
     private RadioButton answer1;
     @FXML
@@ -58,11 +59,12 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
 
     @Inject
     public EnergyAlternativeQuestionCtrl(ClientData clientData, ClientUtils  client, ServerUtils server,
-                                         MainCtrl mainCtrl, JokerUtils jokerUtils) {
+                                         JokerUtils jokerUtils, Game game, MainCtrl mainCtrl) {
         super(jokerUtils);
         this.clientData = clientData;
         this.client = client;
         this.server = server;
+        this.game = game;
         this.mainCtrl = mainCtrl;
         doublePoints = false;
     }
@@ -76,7 +78,7 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
     }
 
     public void leaveGame(){
-        client.leaveLobby();
+        game.leaveLobby();
     }
 
     /**
@@ -181,7 +183,6 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
 
         switch (correctAnswer)
         {
-
             case 0:
                 if(answer1.equals(radioGroup.getSelectedToggle())){
                     clientData.setClientScore(clientData.getClientScore() +

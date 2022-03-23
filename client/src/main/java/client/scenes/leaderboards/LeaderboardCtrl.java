@@ -1,13 +1,15 @@
 package client.scenes.leaderboards;
 
+import client.avatar.AvatarSupplier;
 import client.scenes.MainCtrl;
-import client.utils.AvatarSupplier;
 import client.utils.ServerUtils;
 import com.talanlabs.avatargenerator.Avatar;
 import com.talanlabs.avatargenerator.eightbit.EightBitAvatar;
 import commons.LeaderboardEntry;
-
-import javafx.beans.property.*;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

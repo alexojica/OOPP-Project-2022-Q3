@@ -1,6 +1,7 @@
 package client.scenes.questions;
 
 import client.data.ClientData;
+import client.game.Game;
 import client.joker.JokerPowerUps;
 import client.joker.JokerUtils;
 import client.scenes.MainCtrl;
@@ -29,6 +30,7 @@ public class GameMCQCtrl extends JokerPowerUps {
     private final ClientUtils client;
     private final MainCtrl mainCtrl;
     private final ClientData clientData;
+    private final Game game;
 
     @FXML
     private ProgressBar pb;
@@ -55,16 +57,17 @@ public class GameMCQCtrl extends JokerPowerUps {
 
     @Inject
     public GameMCQCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ClientData clientData,
-                       JokerUtils jokerUtils) {
+                       JokerUtils jokerUtils, Game game) {
         super(jokerUtils);
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.client = client;
         this.clientData = clientData;
+        this.game = game;
     }
 
     public void leaveGame(){
-        client.leaveLobby();
+        game.leaveLobby();
     }
 
 

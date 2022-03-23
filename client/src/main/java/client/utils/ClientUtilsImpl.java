@@ -1,16 +1,14 @@
 package client.utils;
 
 import client.data.ClientData;
+import client.game.Game;
 import client.scenes.MainCtrl;
 import client.scenes.menus.WaitingCtrl;
 import client.scenes.questions.EnergyAlternativeQuestionCtrl;
 import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
-import commons.Player;
 import commons.Question;
-import commons.WebsocketMessage;
 import constants.QuestionTypes;
-import constants.ResponseCodes;
 import javafx.application.Platform;
 import javafx.scene.control.ProgressBar;
 
@@ -23,13 +21,13 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class ClientUtilsImpl implements ClientUtils {
 
-    //@Inject
     private ServerUtils server;
 
-    //@Inject
     private MainCtrl mainCtrl;
 
     private ClientData clientData;
+
+    private final Game game;
 
     private double coefficient;
 
@@ -46,10 +44,11 @@ public class ClientUtilsImpl implements ClientUtils {
     AtomicReference<Double> progress;
 
     @Inject
-    public ClientUtilsImpl(ClientData clientData, ServerUtils server, MainCtrl mainCtrl) {
+    public ClientUtilsImpl(ClientData clientData, ServerUtils server, MainCtrl mainCtrl, Game game) {
         this.clientData = clientData;
         this.server = server;
         this.mainCtrl = mainCtrl;
+        this.game = game;
         System.out.println("Instance of client utils");
 
         server.registerForMessages("/topic/nextQuestion", a -> {
@@ -57,7 +56,7 @@ public class ClientUtilsImpl implements ClientUtils {
             clientData.setQuestion(a.getQuestion());
             clientData.setPointer(a.getQuestion().getPointer());
             if(currentSceneCtrl.getClass() == WaitingCtrl.class) {
-                ((WaitingCtrl) currentSceneCtrl).initiateGame();
+                game.initiateMultiplayerGame();
             }
         });
 
@@ -78,19 +77,6 @@ public class ClientUtilsImpl implements ClientUtils {
         return clientData.getClientLobby() != null;
     }
 
-    @Override
-    public void leaveLobby() {
-        //Lobby currentLobby = clientData.getClientLobby();
-        Player clientPlayer = clientData.getClientPlayer();
-
-        server.send("/app/leaveLobby", new WebsocketMessage(ResponseCodes.LEAVE_LOBBY,
-                clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
-
-        //set client lobby to exited
-        clientData.setLobby(null);
-
-        mainCtrl.showGameModeSelection();
-    }
 
     @Override
     public void startTimer(ProgressBar pb, Object me, QuestionTypes questionType)
