@@ -48,7 +48,7 @@ public class TestActivitiesRepository implements ActivitiesRepository {
     }
 
     @Override
-    public List<Activity> findAllById(Iterable<String> strings) {
+    public List<Activity> findAllById(Iterable<Long> longs) {
         return null;
     }
 
@@ -58,7 +58,7 @@ public class TestActivitiesRepository implements ActivitiesRepository {
     }
 
     @Override
-    public void deleteById(String s) {
+    public void deleteById(Long s) {
 
     }
 
@@ -69,7 +69,7 @@ public class TestActivitiesRepository implements ActivitiesRepository {
     }
 
     @Override
-    public void deleteAllById(Iterable<? extends String> strings) {
+    public void deleteAllById(Iterable<? extends Long> longs) {
 
     }
 
@@ -98,16 +98,16 @@ public class TestActivitiesRepository implements ActivitiesRepository {
     }
 
     @Override
-    public Optional<Activity> findById(String s) {
+    public Optional<Activity> findById(Long l) {
         for(Activity a : activities){
-            if(a.getId().equals(s))
+            if(a.getId().equals(l))
                 return Optional.of(a);
         }
         return Optional.empty();
     }
 
     @Override
-    public boolean existsById(String s) {
+    public boolean existsById(Long l) {
         return false;
     }
 
@@ -132,7 +132,7 @@ public class TestActivitiesRepository implements ActivitiesRepository {
     }
 
     @Override
-    public void deleteAllByIdInBatch(Iterable<String> strings) {
+    public void deleteAllByIdInBatch(Iterable<Long> longs) {
 
     }
 
@@ -142,12 +142,12 @@ public class TestActivitiesRepository implements ActivitiesRepository {
     }
 
     @Override
-    public Activity getOne(String s) {
+    public Activity getOne(Long aLong) {
         return null;
     }
 
     @Override
-    public Activity getById(String s) {
+    public Activity getById(Long aLong) {
         return null;
     }
 

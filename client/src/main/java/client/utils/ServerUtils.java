@@ -20,6 +20,7 @@ import constants.ConnectionStatusCodes;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import commons.LeaderboardEntry;
@@ -36,6 +37,7 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
@@ -156,6 +158,29 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(player, APPLICATION_JSON), Player.class);
     }
+
+    public List<Activity> getActivitiesFromIDs(List<Long> listIds) {
+        List<Activity> result = new ArrayList<>();
+        for(Long l : listIds)
+        {
+            Activity activity = getActivityByID(l).get();
+            result.add(activity);
+        }
+        return result;
+    }
+
+    public Optional<Activity> getActivityByID(Long id)
+    {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/activity/getActivityByID") //
+                .queryParam("id", id)//
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {
+                });
+    }
+
+
 
     private StompSession session = connect("ws://localhost:8080/websocket");
 

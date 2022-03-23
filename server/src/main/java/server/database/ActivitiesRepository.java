@@ -15,7 +15,7 @@ import commons.Activity;
  * useful methods: save, findAll, delete().
  */
 @Transactional
-public interface ActivitiesRepository extends JpaRepository<Activity, String> {
+public interface ActivitiesRepository extends JpaRepository<Activity, Long> {
 
     /**
      * Given an energy consumption in wh
@@ -35,5 +35,4 @@ public interface ActivitiesRepository extends JpaRepository<Activity, String> {
      */
     @Query("select a from Activity a where a.energyConsumption >= ?1 and a.energyConsumption <= ?2")
     public Optional<List<Activity>> findActivitiesInRange(long small, long big);
-
 }
