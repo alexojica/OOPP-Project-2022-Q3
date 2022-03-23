@@ -7,7 +7,6 @@ import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.Activity;
-import commons.Player;
 import commons.Question;
 import commons.WebsocketMessage;
 import constants.ResponseCodes;
