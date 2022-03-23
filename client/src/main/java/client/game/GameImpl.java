@@ -67,18 +67,26 @@ public class GameImpl implements Game{
      * Method that starts a single-player game
      */
     public void startSingleplayer(){
-        clientData.setLobby(new Lobby("SINGLE_PLAYER"));
+        Lobby mainLobby = new Lobby("SINGLE_PLAYER");
+        server.addLobby(mainLobby);
+        System.out.println("Lobby created: " + "SINGLE_PLAYER");
+        clientData.setLobby(mainLobby);
         clientData.setPointer(clientData.getClientPlayer().getId());
         clientData.setClientScore(0);
         clientData.setQuestionCounter(0);
+        clientData.setAsHost(true);
+        server.addMeToLobby(clientData.getClientLobby().getToken(),clientData.getClientPlayer());
 
+        //add delay until game starts
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try{
+                    //TODO: add timer progress bar / UI text with counter depleting until the start of the game
+
                     server.send("/app/nextQuestion",
                             new WebsocketMessage(ResponseCodes.NEXT_QUESTION,
-                                    "SINGLE_PLAYER", clientData.getClientPointer()));
+                                    clientData.getClientLobby().getToken(), clientData.getClientPointer()));
 
                     Thread.sleep(3000);
 
