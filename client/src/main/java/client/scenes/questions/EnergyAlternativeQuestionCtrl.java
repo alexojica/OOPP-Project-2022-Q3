@@ -3,6 +3,7 @@ package client.scenes.questions;
 import client.data.ClientData;
 import client.joker.JokerPowerUps;
 import client.joker.JokerUtils;
+import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.Activity;
@@ -28,6 +29,7 @@ import static constants.QuestionTypes.ENERGY_ALTERNATIVE_QUESTION;
 public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
     private final ClientData clientData;
     private final ClientUtils client;
+    private final MainCtrl mainCtrl;
 
     @FXML
     private Text scoreTxt;
@@ -56,11 +58,12 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
 
     @Inject
     public EnergyAlternativeQuestionCtrl(ClientData clientData, ClientUtils  client, ServerUtils server,
-                                         JokerUtils jokerUtils) {
+                                         MainCtrl mainCtrl, JokerUtils jokerUtils) {
         super(jokerUtils);
         this.clientData = clientData;
         this.client = client;
         this.server = server;
+        this.mainCtrl = mainCtrl;
         doublePoints = false;
     }
 
@@ -145,6 +148,11 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
 
                     Thread.sleep(2000);
 
+                    if(clientData.getQuestionCounter() == 3){
+                        Platform.runLater(() -> mainCtrl.showTempLeaderboard());
+                        Thread.sleep(5000);
+                    }
+
                     //execute next question immediatly after sleep on current thread finishes execution
                     Platform.runLater(() -> client.getQuestion());
                     //client.getQuestion();
@@ -207,6 +215,10 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
                 break;
         }
         scoreTxt.setText("Score:" + clientData.getClientScore());
+
+        clientData.getClientPlayer().score = clientData.getClientScore();
+        server.send("/app/updateScore", new WebsocketMessage(ResponseCodes.SCORE_UPDATED,
+                clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
     }
 
     public void eliminateRandomWrongAnswer() {

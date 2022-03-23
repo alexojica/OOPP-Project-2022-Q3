@@ -29,7 +29,6 @@ import org.glassfish.jersey.client.ClientConfig;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
-import org.glassfish.jersey.client.ClientConfig;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.*;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
@@ -40,8 +39,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
-
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
 
@@ -142,9 +139,9 @@ public class ServerUtils {
                 .get(new GenericType<ConnectionStatusCodes>(){});
     }
 
-    public List<Player> getTop10ByLobbyToken(String token) {
+    public List<Player> getTopByLobbyToken(String token) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/lobby/getTop10ByLobbyToken") //
+                .target(SERVER).path("api/lobby/getTopByLobbyToken") //
                 .queryParam("token", token)//
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //

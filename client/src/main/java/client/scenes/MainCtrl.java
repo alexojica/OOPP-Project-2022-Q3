@@ -180,6 +180,7 @@ public class MainCtrl extends Application {
         client.setCurrentSceneCtrl(gameOverCtrl);
         primaryStage.setTitle("GameOver");
         primaryStage.setScene(gameOver);
+        gameOverCtrl.load();
     }
 
     public void showMultiplayerMenu(){
@@ -192,6 +193,7 @@ public class MainCtrl extends Application {
         client.setCurrentSceneCtrl(tempLeaderboardCtrl);
         primaryStage.setTitle("TempLeaderboard");
         primaryStage.setScene(tempLeaderboard);
+        tempLeaderboardCtrl.load();
     }
 
     public void showPopUp(String lobbyType){
