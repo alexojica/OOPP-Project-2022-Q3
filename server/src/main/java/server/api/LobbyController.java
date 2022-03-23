@@ -37,6 +37,11 @@ public class LobbyController {
 
     }
 
+    /**
+     * Given a lobby object, save that to the lobby repository
+     * @param newLobby
+     * @return the lobby that was saved
+     */
     @PostMapping("/addLobby")
     @ResponseBody
     public Lobby addLobby(@RequestBody Lobby newLobby){
@@ -44,6 +49,10 @@ public class LobbyController {
         return newLobby;
     }
 
+    /**
+     * Find all the lobbies in the repository
+     * @return the full list of the lobbies that are in the repository
+     */
     @GetMapping("/getAllLobbies")
     @ResponseBody
     public List<Lobby> getAllLobbies(){
@@ -51,6 +60,11 @@ public class LobbyController {
         return lis;
     }
 
+    /**
+     * Given the id of the lobby find that lobby
+     * @param lobbyId
+     * @return If a lobby was found with the given id return that lobby
+     */
     @GetMapping("/getLobby")
     @ResponseBody
     public Optional<Lobby> getLobby(@RequestParam Long lobbyId){
@@ -58,6 +72,11 @@ public class LobbyController {
         return found;
     }
 
+    /**
+     * Given the token of the lobby find that lobby
+     * @param token
+     * @return If a lobby was found with the given token return that lobby
+     */
     @GetMapping("/getLobbyByToken")
     @ResponseBody
     public Optional<Lobby> getLobbyByToken(@RequestParam String token){
@@ -65,6 +84,11 @@ public class LobbyController {
         return found;
     }
 
+    /**
+     * Given the token of the lobby, start the game if the player that sends the request is the host of the lobby
+     * @param token
+     * @return if the player was able to start the game
+     */
     @GetMapping("/startLobby")
     @ResponseBody
     public ConnectionStatusCodes startLobby(@RequestParam String token){
@@ -180,12 +204,21 @@ public class LobbyController {
         }
     }
 
+    /**
+     * Deletes all the lobby objects in the repository
+     * @return a string that implies all the lobbies were deleted
+     */
     @GetMapping("/clear")
     protected String clear(){
         repository.deleteAll();
         return "Cleared";
     }
 
+    /**
+     * Given the id of the lobby object, delete that lobby from the repository
+     * @param id
+     * @return a string that whether the deletion was successful or not
+     */
     @GetMapping("/delete")
     public String deleteLobby(@RequestParam long id) {
         Optional<Lobby> lobby = repository.findById(id);
