@@ -31,6 +31,7 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
     private final ClientData clientData;
     private final ClientUtils client;
     private final ServerUtils server;
+    private final MainCtrl mainCtrl;
     private final Game game;
 
     @FXML
@@ -58,12 +59,13 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
 
     @Inject
     public EnergyAlternativeQuestionCtrl(ClientData clientData, ClientUtils  client, ServerUtils server,
-                                         JokerUtils jokerUtils, Game game) {
+                                         JokerUtils jokerUtils, Game game, MainCtrl mainCtrl) {
         super(jokerUtils);
         this.clientData = clientData;
         this.client = client;
         this.server = server;
         this.game = game;
+        this.mainCtrl = mainCtrl;
         doublePoints = false;
     }
 

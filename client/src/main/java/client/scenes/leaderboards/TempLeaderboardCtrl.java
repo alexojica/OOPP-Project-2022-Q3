@@ -1,22 +1,23 @@
 package client.scenes.leaderboards;
 
+import client.avatar.AvatarSupplier;
 import client.data.ClientData;
 import client.scenes.MainCtrl;
-import client.utils.AvatarSupplier;
 import client.utils.ServerUtils;
+import com.google.inject.Inject;
 import com.talanlabs.avatargenerator.Avatar;
 import com.talanlabs.avatargenerator.eightbit.EightBitAvatar;
 import commons.Player;
-
-import javafx.beans.property.*;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
-import com.google.inject.Inject;
-
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
