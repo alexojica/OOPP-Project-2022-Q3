@@ -19,10 +19,13 @@ public class QuestionProvider {
     private String lastLobby;
     private Random random;
 
+    private HashMap<String, HashSet<Question>> lobbyToQuestionsUsed;
+
     public QuestionProvider(ActivitiesRepository activitiesRepository, QuestionRepository questionRepository) {
         this.activitiesRepository = activitiesRepository;
         this.questionRepository = questionRepository;
         random = new Random();
+        lobbyToQuestionsUsed = new HashMap<>();
     }
 
     /**
@@ -33,17 +36,59 @@ public class QuestionProvider {
         this.pointer = pointer;
         this.lastLobby = lastLobby;
         this.difficulty = difficulty;
-        Optional<Question> foundQuestion = questionRepository.findById(pointer);
+        Optional<Question> foundQuestion;
+        foundQuestion = questionRepository.findById(pointer);
 
         updatePointer();
 
         if (foundQuestion.isEmpty()) {
-            System.out.println("New question created");
             return createNewQuestion();
         } else {
-            return useQuestionAfter(foundQuestion);
+            return returnFirstUnusedQustion(foundQuestion);
         }
     }
+
+    /**
+     * Method that scans through the linked structure of questions until either a new question is created or a
+     * question which has not yet been used is found
+     * @param foundQuestion
+     * @return
+     */
+    public Question returnFirstUnusedQustion(Optional<Question> foundQuestion){
+        Question nextQuestion = useQuestionAfter(foundQuestion.get());
+        while(questionAlreadyUsed(lastLobby, nextQuestion)){
+            nextQuestion = useQuestionAfter(nextQuestion);
+            if(nextQuestion == null){
+                System.out.println("New question created");
+                return createNewQuestion();
+            }
+        }
+        return nextQuestion;
+    }
+
+    /**
+     * Check using the lobbyToQuestionsUsed hash map whether the next question has already been used in the lobby
+     */
+    public boolean questionAlreadyUsed(String lobby, Question question){
+        HashSet<Question> questionsUsed = lobbyToQuestionsUsed.get(lobby);
+        if(questionsUsed != null){
+            return questionsUsed.contains(question);
+        }
+        return false;
+    }
+
+    /**
+     * Update the set containing all questions used in a given lobby
+     */
+    public void updateSetOfQuestions(String lastLobby, Question question){
+        HashSet<Question> set = lobbyToQuestionsUsed.get(lastLobby);
+        if(set == null){
+            set = new HashSet<>();
+        }else{
+            set.add(question);
+        }
+    }
+
 
     public void updatePointer() {
         newPointer = Math.abs(random.nextInt((int) (questionRepository.count()+1) * 21) + 1);
@@ -65,6 +110,7 @@ public class QuestionProvider {
     }
 
     public Question createNewQuestion() {
+        System.out.println("New question created");
         QuestionTypes questionType = getRandomQuestionType();
         List<Long> activitiesIDS;
         Activity activityPivot = getActivityPivot();
@@ -85,14 +131,14 @@ public class QuestionProvider {
 
         Set<Long> activitySet = new HashSet<>(activitiesIDS);
         Question question = new Question(pointer, questionType, newPointer, activitySet, lastLobby);
+        updateSetOfQuestions(lastLobby, question);
         questionRepository.save(question);
         System.out.println(question);
         return question;
     }
 
 
-    public Question useQuestionAfter(Optional<Question> foundQuestion) {
-        Question q = foundQuestion.get();
+    public Question useQuestionAfter(Question q) {
         if (!Objects.equals(q.getLastLobbyToken(), lastLobby)) {
             q.setPointer(newPointer);
             q.setLastLobbyToken(lastLobby);
@@ -183,5 +229,16 @@ public class QuestionProvider {
         List<Long> activities = new ArrayList<>();
         activities.add(activityPivot.getId());
         return activities;
+    }
+
+    /**
+     * Clears all questions which have been assined to a certain lobby
+     * @param lobby
+     */
+    public void clearAllQuestionsFromLobby(String lobby){
+        HashSet<Question> set = lobbyToQuestionsUsed.get(lastLobby);
+        if(set != null){
+            set.clear();
+        }
     }
 }
