@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.avatar.AvatarSupplier;
 import client.data.ClientData;
+import client.game.Game;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import com.talanlabs.avatargenerator.Avatar;
@@ -33,6 +34,7 @@ public class GameOverCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private final ClientData clientData;
+    private final Game game;
 
     private ObservableList<Player> currentTop10;
     private Avatar builder;
@@ -49,10 +51,11 @@ public class GameOverCtrl {
     private TableColumn<Player, Integer> scoreColumn;
 
     @Inject
-    public GameOverCtrl(ServerUtils server, MainCtrl mainCtrl, ClientData clientData) {
+    public GameOverCtrl(ServerUtils server, MainCtrl mainCtrl, ClientData clientData, Game game) {
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.clientData = clientData;
+        this.game = game;
     }
 
     public void playAgain() {
@@ -60,6 +63,7 @@ public class GameOverCtrl {
     }
 
     public void leaveGame() {
+        game.leaveLobby();
         mainCtrl.showHome();
     }
 

@@ -22,6 +22,8 @@ public class GameImpl implements Game{
     private final MainCtrl mainCtrl;
 
     private final String COMMON_CODE = "COMMON";
+    private final Integer questionsToEndGame = 2;
+    private final Integer questionsToDisplayLeaderboard = 10;
 
     @Inject
     public GameImpl(ServerUtils server, ClientUtils client, ClientData clientData, MainCtrl mainCtrl) {
@@ -159,7 +161,9 @@ public class GameImpl implements Game{
     public void startMultiplayerGame(){
 
         String token = clientData.getClientLobby().getToken();
-        if(server.startLobby(token).equals(ConnectionStatusCodes.YOU_ARE_HOST)) {
+        //start the lobby
+        ConnectionStatusCodes code = server.startLobby(token);
+        if(code.equals(ConnectionStatusCodes.YOU_ARE_HOST)) {
             clientData.setAsHost(true);
             clientData.setPointer(clientData.getClientLobby().getPlayerIds().get(0));
             clientData.setClientScore(0);
@@ -172,10 +176,16 @@ public class GameImpl implements Game{
     }
 
     public void leaveLobby() {
+        //kill ongoing timers
         client.killTimer();
+
         server.send("/app/leaveLobby", new WebsocketMessage(ResponseCodes.LEAVE_LOBBY,
                 clientData.getClientLobby().getToken(), clientData.getClientPlayer(), clientData.getIsHost()));
-        server.unsubscribeFromMessages();
+
+        //no more server polling for this client
+        client.unsubscribeFromMessages();
+
+        System.out.println("Left the lobby");
 
         clientData.setAsHost(false);
         //set client lobby to exited
@@ -184,4 +194,23 @@ public class GameImpl implements Game{
         mainCtrl.showGameModeSelection();
     }
 
+    public void endGame()
+    {
+        System.out.println("Game ended");
+        server.send("/app/lobbyEnd", new WebsocketMessage(ResponseCodes.END_GAME,
+                clientData.getClientLobby().getToken()));
+        client.unsubscribeFromMessages();
+        client.killTimer();
+        //uses the current lobby to load images, scores and names for the players
+        mainCtrl.showGameOver();
+    }
+
+    public Integer getQuestionsToEndGame(){
+        return questionsToEndGame;
+    }
+
+    public Integer getQuestionsToDisplayLeaderboard()
+    {
+        return questionsToDisplayLeaderboard;
+    }
 }

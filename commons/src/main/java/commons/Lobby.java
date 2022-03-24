@@ -79,16 +79,6 @@ public class Lobby {
         playersInLobby.add(player);
     }
 
-    public boolean removePlayerByName(String name){
-        for(int i = 0; i < playersInLobby.size(); ++i){
-            if(playersInLobby.get(i).name.equals(name)) {
-                playersInLobby.remove(i);
-                return true;
-            }
-        }
-
-        return false;
-    }
 
     public void removePlayerFromLobby(Player player)
     {
@@ -132,11 +122,11 @@ public class Lobby {
         this.playerIds = playerIds;
     }
 
-    public Boolean getStarted() {
+    public Boolean getIsStarted() {
         return isStarted;
     }
 
-    public void setStarted(Boolean started) {
+    public void setIsStarted(Boolean started) {
         isStarted = started;
     }
 

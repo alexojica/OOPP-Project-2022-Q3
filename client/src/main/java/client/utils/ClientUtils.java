@@ -17,6 +17,8 @@ public interface ClientUtils {
 
     void killTimer();
 
+    void unsubscribeFromMessages();
+
     Object getCurrentSceneCtrl();
 
     void setCurrentSceneCtrl(Object currentSceneCtrl);
