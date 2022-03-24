@@ -197,12 +197,18 @@ public class ClientUtilsImpl implements ClientUtils {
 
     }
 
+    //runlater done in order to avoid an illegalstateexception
     public void updateMessages(QuestionTypes q, String text){
-        if(q.equals(MULTIPLE_CHOICE_QUESTION)){
-            gameMCQCtrl.setMessageTxt3(gameMCQCtrl.getMessageTxt2().getText());
-            gameMCQCtrl.setMessageTxt2(gameMCQCtrl.getMessageTxt1().getText());
-            gameMCQCtrl.setMessageTxt1(text);
-        }
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                if(q.equals(MULTIPLE_CHOICE_QUESTION)){
+                    gameMCQCtrl.setMessageTxt3(gameMCQCtrl.getMessageTxt2().getText());
+                    gameMCQCtrl.setMessageTxt2(gameMCQCtrl.getMessageTxt1().getText());
+                    gameMCQCtrl.setMessageTxt1(text);
+                }
+            }
+        });
     }
 
     public double getCoefficient() {
