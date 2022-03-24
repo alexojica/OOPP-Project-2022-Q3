@@ -69,5 +69,21 @@
             <Font size="23.0" />
          </font>
       </Text>
+      <Text fx:id="messageTxt3" layoutX="14.0" layoutY="188.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Some question?" textAlignment="CENTER">
+         <font>
+            <Font size="29.0" />
+         </font>
+      </Text>
+      <Text fx:id="messageTxt2" layoutX="14.0" layoutY="246.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Some question?" textAlignment="CENTER">
+         <font>
+            <Font size="29.0" />
+         </font>
+      </Text>
+      <Button layoutX="1194.0" layoutY="109.0" mnemonicParsing="false" onAction="#testSend" text="send emote" />
+      <Text fx:id="messageTxt1" layoutX="14.0" layoutY="302.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Some question?" textAlignment="CENTER">
+         <font>
+            <Font size="29.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>

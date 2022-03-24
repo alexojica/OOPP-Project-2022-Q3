@@ -11,6 +11,8 @@ import commons.Question;
 import constants.QuestionTypes;
 import javafx.application.Platform;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.text.Text;
+import org.springframework.stereotype.Controller;
 
 import javax.inject.Inject;
 import java.util.Timer;
@@ -19,11 +21,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static constants.QuestionTypes.MULTIPLE_CHOICE_QUESTION;
+
 public class ClientUtilsImpl implements ClientUtils {
 
     private ServerUtils server;
 
     private MainCtrl mainCtrl;
+    private GameMCQCtrl gameMCQCtrl;
 
     private ClientData clientData;
 
@@ -31,24 +36,17 @@ public class ClientUtilsImpl implements ClientUtils {
 
     private double coefficient;
 
-    public Object getCurrentSceneCtrl() {
-        return currentSceneCtrl;
-    }
-
-    public void setCurrentSceneCtrl(Object currentSceneCtrl) {
-        this.currentSceneCtrl = currentSceneCtrl;
-    }
-
     private Object currentSceneCtrl;
 
     AtomicReference<Double> progress;
 
     @Inject
-    public ClientUtilsImpl(ClientData clientData, ServerUtils server, MainCtrl mainCtrl, Game game) {
+    public ClientUtilsImpl(ClientData clientData, ServerUtils server, MainCtrl mainCtrl, GameMCQCtrl gameMCQCtrl, Game game) {
         this.clientData = clientData;
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.game = game;
+        this.gameMCQCtrl = gameMCQCtrl;
         System.out.println("Instance of client utils");
 
         server.registerForMessages("/topic/nextQuestion", a -> {
@@ -133,7 +131,7 @@ public class ClientUtilsImpl implements ClientUtils {
                     {
                         timer.cancel();
                         if(!ok.get()) {
-                            if(questionType == QuestionTypes.MULTIPLE_CHOICE_QUESTION){
+                            if(questionType == MULTIPLE_CHOICE_QUESTION){
                                 ((GameMCQCtrl) me).nextQuestion();
                             }else if(questionType == QuestionTypes.ESTIMATION_QUESTION){
                                 ((EstimationQuestionCtrl) me).nextQuestion();
@@ -199,8 +197,24 @@ public class ClientUtilsImpl implements ClientUtils {
 
     }
 
+    public void updateMessages(QuestionTypes q, String text){
+        if(q.equals(MULTIPLE_CHOICE_QUESTION)){
+            gameMCQCtrl.setMessageTxt3(gameMCQCtrl.getMessageTxt2().getText());
+            gameMCQCtrl.setMessageTxt2(gameMCQCtrl.getMessageTxt1().getText());
+            gameMCQCtrl.setMessageTxt1(text);
+        }
+    }
+
     public double getCoefficient() {
         return coefficient;
+    }
+
+    public Object getCurrentSceneCtrl() {
+        return currentSceneCtrl;
+    }
+
+    public void setCurrentSceneCtrl(Object currentSceneCtrl) {
+        this.currentSceneCtrl = currentSceneCtrl;
     }
 
 }

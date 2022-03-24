@@ -16,6 +16,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import javax.inject.Inject;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Random;
 
 import static constants.QuestionTypes.MULTIPLE_CHOICE_QUESTION;
+import static javax.swing.text.html.CSS.Attribute.COLOR;
 
 public class GameMCQCtrl extends JokerPowerUps {
 
@@ -54,6 +56,13 @@ public class GameMCQCtrl extends JokerPowerUps {
     private RadioButton answer3;
 
     private int correctAnswer;
+
+    @FXML
+    private Text messageTxt1;
+    @FXML
+    private Text messageTxt2;
+    @FXML
+    private Text messageTxt3;
 
     @Inject
     public GameMCQCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ClientData clientData,
@@ -256,4 +265,32 @@ public class GameMCQCtrl extends JokerPowerUps {
         return answer3;
     }
 
+    public Text getMessageTxt1() {
+        return messageTxt1;
+    }
+
+    public Text getMessageTxt2() {
+        return messageTxt2;
+    }
+
+    public Text getMessageTxt3() {
+        return messageTxt3;
+    }
+
+    public void setMessageTxt1(String message) {
+        messageTxt1.setText(message);
+    }
+
+    public void setMessageTxt2(String message) {
+        messageTxt2.setText(message);
+    }
+
+    public void setMessageTxt3(String message) {
+        messageTxt3.setText(message);
+    }
+
+    public void testSend() {
+        server.send("/app/updateMessages",
+                new WebsocketMessage(MULTIPLE_CHOICE_QUESTION, clientData.getClientPlayer().getName() + ": " + new String(Character.toChars(0x1F35D))));
+    }
 }
