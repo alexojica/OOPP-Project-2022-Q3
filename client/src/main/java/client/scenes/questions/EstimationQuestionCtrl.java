@@ -12,11 +12,10 @@ import commons.Activity;
 import commons.Question;
 import commons.WebsocketMessage;
 import constants.ResponseCodes;
+import emotes.EmotesImpl;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.text.Text;
 
 import static constants.QuestionTypes.ESTIMATION_QUESTION;
@@ -27,6 +26,7 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
     private final ClientUtils client;
     private final MainCtrl mainCtrl;
     private final ClientData clientData;
+    private final EmotesImpl emotesImpl;
     private final Game game;
 
     private Double progress;
@@ -56,6 +56,9 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
     private Long correctAnswer;
 
     @FXML
+    private MenuButton emotes;
+    
+    @FXML
     private Label messageTxt1;
     @FXML
     private Label messageTxt2;
@@ -64,19 +67,27 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
 
     @Inject
     public EstimationQuestionCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ClientData clientData,
-                                  JokerUtils jokerUtils, Game game) {
+                                  JokerUtils jokerUtils, EmotesImpl emotesImpl, Game game) {
         super(jokerUtils);
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.client = client;
         this.clientData = clientData;
         this.game = game;
+        this.emotesImpl = emotesImpl;
     }
 
     public void load() {
 
-        Question question = clientData.getClientQuestion();
+        emotes.getItems().addAll(emotesImpl.getEmotesList());
+        for(MenuItem m : emotes.getItems()){
+            m.setOnAction(a -> {
+                server.send("/app/updateMessages", new WebsocketMessage(ESTIMATION_QUESTION,
+                        clientData.getClientPlayer().getName() + ": " + m.getText()));
+                    });
+        }
 
+        Question question = clientData.getClientQuestion();
         resetUI(question);
     }
 
@@ -247,4 +258,8 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
                         + ": " + new String(Character.toChars(0x1F35D))));
     }
 
+    public void sendEmote() {
+        server.send("/app/updateMessages",
+                new WebsocketMessage(ESTIMATION_QUESTION, "succ"));
+    }
 }

@@ -38,6 +38,8 @@ import client.joker.JokerUtils;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
+import emotes.Emotes;
+import emotes.EmotesImpl;
 
 public class MyModule implements Module {
 
@@ -62,5 +64,6 @@ public class MyModule implements Module {
         binder.bind(ClientData.class).to(ClientDataImpl.class).in(Scopes.SINGLETON);
         binder.bind(Game.class).to(GameImpl.class).in(Scopes.SINGLETON);
         binder.bind(AvatarManager.class).to(AvatarManagerImpl.class).in(Scopes.SINGLETON);
+        binder.bind(Emotes.class).to(EmotesImpl.class).in(Scopes.SINGLETON);
     }
 }
