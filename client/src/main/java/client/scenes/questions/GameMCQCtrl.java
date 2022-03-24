@@ -13,17 +13,22 @@ import commons.WebsocketMessage;
 import constants.ResponseCodes;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import javax.inject.Inject;
+import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
+import static com.sun.javafx.scene.control.skin.Utils.getResource;
 import static constants.QuestionTypes.MULTIPLE_CHOICE_QUESTION;
 import static javax.swing.text.html.CSS.Attribute.COLOR;
 
@@ -46,6 +51,9 @@ public class GameMCQCtrl extends JokerPowerUps {
 
     @FXML
     private Text questionTxt;
+
+    @FXML
+    private Pane pnae;
 
     final ToggleGroup radioGroup = new ToggleGroup(); 
 
@@ -85,7 +93,13 @@ public class GameMCQCtrl extends JokerPowerUps {
 
         Question question = clientData.getClientQuestion();
         resetUI(question);
-
+        try {
+            Pane newLoadedPane = FXMLLoader.load(getClass().getResource("/client/scenes/MessageTab.fxml"));
+            pnae.getChildren().add(newLoadedPane);
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
     }
 
     public void resetUI(Question question)

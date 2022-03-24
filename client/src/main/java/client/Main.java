@@ -17,6 +17,7 @@ package client;
 
 import client.scenes.GameOverCtrl;
 import client.scenes.MainCtrl;
+import client.scenes.MessageTabCtrl;
 import client.scenes.UsernamePopUpCtrl;
 import client.scenes.leaderboards.LeaderboardCtrl;
 import client.scenes.leaderboards.TempLeaderboardCtrl;
@@ -56,11 +57,12 @@ public class Main extends Application {
         var tempLeaderboard = FXML.load(TempLeaderboardCtrl.class, "client", "scenes", "TempLeaderboard.fxml");
         var gameOver = FXML.load(GameOverCtrl.class, "client", "scenes", "GameOver.fxml");
         var multiPlayerMenu = FXML.load(MultiplayerMenuCtrl.class, "client", "scenes", "MultiplayerMenu.fxml");
+        var messageTab = FXML.load(MessageTabCtrl.class, "client", "Scenes", "MessageTab.fxml");
         var usernamePopUp = FXML.load(UsernamePopUpCtrl.class, "client", "scenes", "UsernamePopUp.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, home, leaderboard, gameModeSelection, multiPlayerMenu,
                             estimationQuestion, gameMCQ, alternativeQuestion, gameOver,
-                waiting, tempLeaderboard, usernamePopUp);
+                waiting, tempLeaderboard, messageTab, usernamePopUp);
     }
 }
