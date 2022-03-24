@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static constants.QuestionTypes.MULTIPLE_CHOICE_QUESTION;
+import static constants.QuestionTypes.*;
 
 public class ClientUtilsImpl implements ClientUtils {
 
@@ -28,6 +28,8 @@ public class ClientUtilsImpl implements ClientUtils {
 
     private MainCtrl mainCtrl;
     private GameMCQCtrl gameMCQCtrl;
+    private EnergyAlternativeQuestionCtrl energyAlternativeQuestionCtrl;
+    private EstimationQuestionCtrl estimationQuestionCtrl;
     private MessageTabCtrl messageTabCtrl;
 
     private ClientData clientData;
@@ -42,12 +44,15 @@ public class ClientUtilsImpl implements ClientUtils {
 
     @Inject
     public ClientUtilsImpl(ClientData clientData, ServerUtils server, MainCtrl mainCtrl, MessageTabCtrl messageTabCtrl,
-                           GameMCQCtrl gameMCQCtrl, Game game) {
+                           GameMCQCtrl gameMCQCtrl, EnergyAlternativeQuestionCtrl energyAlternativeQuestionCtrl,
+                           EstimationQuestionCtrl estimationQuestionCtrl, Game game) {
         this.clientData = clientData;
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.game = game;
         this.gameMCQCtrl = gameMCQCtrl;
+        this.energyAlternativeQuestionCtrl = energyAlternativeQuestionCtrl;
+        this.estimationQuestionCtrl = estimationQuestionCtrl;
         this.messageTabCtrl = messageTabCtrl;
         System.out.println("Instance of client utils");
 
@@ -212,6 +217,18 @@ public class ClientUtilsImpl implements ClientUtils {
                     messageTabCtrl.setMessageTxt2(messageTabCtrl.getMessageTxt1().getText());
                     messageTabCtrl.setMessageTxt1(text);
                     //make pane reload to show changes i guess
+                }
+                if(q.equals(ENERGY_ALTERNATIVE_QUESTION)){
+                    energyAlternativeQuestionCtrl.setMessageTxt3(
+                            energyAlternativeQuestionCtrl.getMessageTxt2().getText());
+                    energyAlternativeQuestionCtrl.setMessageTxt2(
+                            energyAlternativeQuestionCtrl.getMessageTxt1().getText());
+                    energyAlternativeQuestionCtrl.setMessageTxt1(text);
+                }
+                if(q.equals(ESTIMATION_QUESTION)){
+                    estimationQuestionCtrl.setMessageTxt3(estimationQuestionCtrl.getMessageTxt2().getText());
+                    estimationQuestionCtrl.setMessageTxt2(estimationQuestionCtrl.getMessageTxt1().getText());
+                    estimationQuestionCtrl.setMessageTxt1(text);
                 }
             }
         });

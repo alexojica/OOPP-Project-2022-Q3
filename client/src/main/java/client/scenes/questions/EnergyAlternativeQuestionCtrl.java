@@ -13,6 +13,7 @@ import commons.WebsocketMessage;
 import constants.ResponseCodes;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
@@ -56,6 +57,13 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
     private RadioButton answer3;
 
     private int correctAnswer;
+
+    @FXML
+    private Label messageTxt1;
+    @FXML
+    private Label messageTxt2;
+    @FXML
+    private Label messageTxt3;
 
     @Inject
     public EnergyAlternativeQuestionCtrl(ClientData clientData, ClientUtils  client, ServerUtils server,
@@ -253,5 +261,45 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
 
     public RadioButton getAnswer3() {
         return answer3;
+    }
+
+    public Label getMessageTxt1() {
+        return messageTxt1;
+    }
+
+    public Label getMessageTxt2() {
+        return messageTxt2;
+    }
+
+    public Label getMessageTxt3() {
+        return messageTxt3;
+    }
+
+    //empty string check might be used later in order to make messages disappear after X time
+    public void setMessageTxt1(String message) {
+        messageTxt1.setText(message);
+        if(!(message.equals(""))){
+            messageTxt1.setStyle("-fx-background-color: darkgray; -fx-padding: 10px");
+        }
+    }
+
+    public void setMessageTxt2(String message) {
+        messageTxt2.setText(message);
+        if(!(message.equals(""))){
+            messageTxt2.setStyle("-fx-background-color: darkgray; -fx-padding: 10px");
+        }
+    }
+
+    public void setMessageTxt3(String message) {
+        messageTxt3.setText(message);
+        if(!(message.equals(""))){
+            messageTxt3.setStyle("-fx-background-color: darkgray; -fx-padding: 10px");
+        }
+    }
+
+    public void sendTest() {
+        server.send("/app/updateMessages",
+                new WebsocketMessage(ENERGY_ALTERNATIVE_QUESTION, clientData.getClientPlayer().getName()
+                        + ": " + new String(Character.toChars(0x1F35D))));
     }
 }
