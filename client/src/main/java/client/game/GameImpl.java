@@ -46,7 +46,6 @@ public class GameImpl implements Game{
         {
             Lobby mainLobby = new Lobby(COMMON_CODE);
             server.addLobby(mainLobby);
-            System.out.println("Lobby created");
         }
         else
         {
@@ -71,7 +70,6 @@ public class GameImpl implements Game{
     public void startSingleplayer(){
         Lobby mainLobby = new Lobby("SINGLE_PLAYER");
         server.addLobby(mainLobby);
-        System.out.println("Lobby created: " + "SINGLE_PLAYER");
         clientData.setLobby(mainLobby);
         clientData.setPointer(clientData.getClientPlayer().getId());
         clientData.setClientScore(0);

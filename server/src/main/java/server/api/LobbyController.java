@@ -45,7 +45,11 @@ public class LobbyController {
     @PostMapping("/addLobby")
     @ResponseBody
     public Lobby addLobby(@RequestBody Lobby newLobby){
-        repository.save(newLobby);
+        String token = newLobby.getToken();
+        if(repository.findByToken(token).isEmpty()) {
+            repository.save(newLobby);
+            System.out.println("Lobby created: " + newLobby.getToken());
+        }
         return newLobby;
     }
 
