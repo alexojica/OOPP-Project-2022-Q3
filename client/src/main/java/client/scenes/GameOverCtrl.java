@@ -8,6 +8,8 @@ import com.google.inject.Inject;
 import com.talanlabs.avatargenerator.Avatar;
 import com.talanlabs.avatargenerator.eightbit.EightBitAvatar;
 import commons.Player;
+import commons.WebsocketMessage;
+import constants.ResponseCodes;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -63,8 +65,10 @@ public class GameOverCtrl {
     }
 
     public void leaveGame() {
-        game.leaveLobby();
-        mainCtrl.showHome();
+        server.send("/app/leaveLobby", new WebsocketMessage(ResponseCodes.LEAVE_LOBBY,
+                clientData.getClientLobby().getToken(), clientData.getClientPlayer(), clientData.getIsHost()));
+        System.out.println("Left the lobby");
+        mainCtrl.showGameModeSelection();
     }
 
     public void load() {

@@ -178,6 +178,7 @@ public class MainCtrl extends Application {
         client.setCurrentSceneCtrl(gameModeSelectionCtrl);
         primaryStage.setTitle("GameModeSelection");
         primaryStage.setScene(gameModeSelection);
+        gameModeSelectionCtrl.load();
     }
 
     public void showGameOver(){

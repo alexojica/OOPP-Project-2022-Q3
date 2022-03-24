@@ -22,7 +22,7 @@ public class GameImpl implements Game{
     private final MainCtrl mainCtrl;
 
     private final String COMMON_CODE = "COMMON";
-    private final Integer questionsToEndGame = 2;
+    private final Integer questionsToEndGame = 20;
     private final Integer questionsToDisplayLeaderboard = 10;
 
     @Inject

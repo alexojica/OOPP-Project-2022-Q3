@@ -58,33 +58,45 @@ public class ClientUtilsImpl implements ClientUtils {
         this.game = game;
         System.out.println("Instance of client utils");
 
-        nextQuestionSubscription = server.registerForMessages("/topic/nextQuestion", a -> {
-            System.out.println("next question received " + clientData.getQuestionCounter());
-            clientData.setQuestion(a.getQuestion());
-            clientData.setPointer(a.getQuestion().getPointer());
-            if(currentSceneCtrl.getClass() == WaitingCtrl.class) {
-                game.initiateMultiplayerGame();
-            }
-        });
+        registerQuestionCommunication();
+        registerLobbyCommunication();
 
-        updateLobbySubscription = server.registerForMessages("/topic/updateLobby", a -> {
-            System.out.println(a.getCode());
-            if(a.getLobbyToken().equals(clientData.getClientLobby().getToken())){
+    }
 
-                clientData.setLobby(server.getLobbyByToken(a.getLobbyToken()));
-                if(a.getCode() == ResponseCodes.UPDATE_HOST)
-                {
-                    if(a.getPlayer().equals(clientData.getClientPlayer()))
-                    {
-                        System.out.println("New host is: " + clientData.getClientLobby());
-                        clientData.setAsHost(true);
+    public void registerLobbyCommunication()
+    {
+        if(updateLobbySubscription == null) {
+            updateLobbySubscription = server.registerForMessages("/topic/updateLobby", a -> {
+                System.out.println(a.getCode());
+                if (a.getLobbyToken().equals(clientData.getClientLobby().getToken())) {
+
+                    clientData.setLobby(server.getLobbyByToken(a.getLobbyToken()));
+                    if (a.getCode() == ResponseCodes.UPDATE_HOST) {
+                        if (a.getPlayer().equals(clientData.getClientPlayer())) {
+                            System.out.println("New host is: " + clientData.getClientLobby());
+                            clientData.setAsHost(true);
+                        }
                     }
-                }
 
-                if(currentSceneCtrl.getClass() == WaitingCtrl.class)
-                    ((WaitingCtrl) currentSceneCtrl).refresh();
-            }
-        });
+                    if (currentSceneCtrl.getClass() == WaitingCtrl.class)
+                        ((WaitingCtrl) currentSceneCtrl).refresh();
+                }
+            });
+        }
+    }
+
+    public void registerQuestionCommunication()
+    {
+        if(nextQuestionSubscription == null) {
+            nextQuestionSubscription = server.registerForMessages("/topic/nextQuestion", a -> {
+                System.out.println("next question received " + clientData.getQuestionCounter());
+                clientData.setQuestion(a.getQuestion());
+                clientData.setPointer(a.getQuestion().getPointer());
+                if (currentSceneCtrl.getClass() == WaitingCtrl.class) {
+                    game.initiateMultiplayerGame();
+                }
+            });
+        }
     }
 
     @Override
@@ -188,7 +200,7 @@ public class ClientUtilsImpl implements ClientUtils {
     @Override
     public void getQuestion() {
 
-        if (clientData.getQuestionCounter() > game.getQuestionsToEndGame()){
+        if (clientData.getQuestionCounter() >= game.getQuestionsToEndGame()){
             game.endGame();
         }
         else {
@@ -223,6 +235,10 @@ public class ClientUtilsImpl implements ClientUtils {
     public void unsubscribeFromMessages(){
         nextQuestionSubscription.unsubscribe();
         updateLobbySubscription.unsubscribe();
+
+        //I have to set to null
+        nextQuestionSubscription = null;
+        updateLobbySubscription = null;
     }
 
 
