@@ -74,6 +74,5 @@
       <Label fx:id="messageTxt1" layoutX="14.0" layoutY="282.0" />
       <Label fx:id="messageTxt2" layoutX="14.0" layoutY="229.0" />
       <Label fx:id="messageTxt3" layoutX="14.0" layoutY="179.0" />
-      <Pane fx:id="pnae" layoutX="148.0" layoutY="88.0" prefHeight="200.0" prefWidth="200.0" />
    </children>
 </AnchorPane>

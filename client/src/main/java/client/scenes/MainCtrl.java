@@ -71,9 +71,6 @@ public class MainCtrl extends Application {
     private EnergyAlternativeQuestionCtrl energyAlternativeQuestionCtrl;
     private Scene energyAlternative;
 
-    private MessageTabCtrl messageTabCtrl;
-    private Scene messageTab;
-
     private Stage incorrectUsernamePopUp;
 
     @Inject
@@ -89,7 +86,6 @@ public class MainCtrl extends Application {
                            Pair<EnergyAlternativeQuestionCtrl, Parent> energyAlternative,
                            Pair<GameOverCtrl, Parent> gameOver, Pair<WaitingCtrl, Parent> waiting,
                            Pair<TempLeaderboardCtrl, Parent> tempLeaderboard,
-                           Pair<MessageTabCtrl, Parent> messageTab,
                            Pair<UsernamePopUpCtrl, Parent> usernamePopUp) {
         this.primaryStage = primaryStage;
 
@@ -126,9 +122,6 @@ public class MainCtrl extends Application {
 
         this.energyAlternativeQuestionCtrl = energyAlternative.getKey();
         this.energyAlternative = new Scene(energyAlternative.getValue());
-
-        this.messageTabCtrl = messageTab.getKey();
-        this.messageTab = new Scene(messageTab.getValue());
 
         primaryStage.setOnCloseRequest(e -> {
             if(client.isInLobby()){

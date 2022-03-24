@@ -3,7 +3,6 @@ package client.utils;
 import client.data.ClientData;
 import client.game.Game;
 import client.scenes.MainCtrl;
-import client.scenes.MessageTabCtrl;
 import client.scenes.menus.WaitingCtrl;
 import client.scenes.questions.EnergyAlternativeQuestionCtrl;
 import client.scenes.questions.EstimationQuestionCtrl;
@@ -30,7 +29,6 @@ public class ClientUtilsImpl implements ClientUtils {
     private GameMCQCtrl gameMCQCtrl;
     private EnergyAlternativeQuestionCtrl energyAlternativeQuestionCtrl;
     private EstimationQuestionCtrl estimationQuestionCtrl;
-    private MessageTabCtrl messageTabCtrl;
 
     private ClientData clientData;
 
@@ -43,8 +41,8 @@ public class ClientUtilsImpl implements ClientUtils {
     AtomicReference<Double> progress;
 
     @Inject
-    public ClientUtilsImpl(ClientData clientData, ServerUtils server, MainCtrl mainCtrl, MessageTabCtrl messageTabCtrl,
-                           GameMCQCtrl gameMCQCtrl, EnergyAlternativeQuestionCtrl energyAlternativeQuestionCtrl,
+    public ClientUtilsImpl(ClientData clientData, ServerUtils server, MainCtrl mainCtrl, GameMCQCtrl gameMCQCtrl,
+                           EnergyAlternativeQuestionCtrl energyAlternativeQuestionCtrl,
                            EstimationQuestionCtrl estimationQuestionCtrl, Game game) {
         this.clientData = clientData;
         this.server = server;
@@ -53,7 +51,6 @@ public class ClientUtilsImpl implements ClientUtils {
         this.gameMCQCtrl = gameMCQCtrl;
         this.energyAlternativeQuestionCtrl = energyAlternativeQuestionCtrl;
         this.estimationQuestionCtrl = estimationQuestionCtrl;
-        this.messageTabCtrl = messageTabCtrl;
         System.out.println("Instance of client utils");
 
         server.registerForMessages("/topic/nextQuestion", a -> {
@@ -213,10 +210,6 @@ public class ClientUtilsImpl implements ClientUtils {
                     gameMCQCtrl.setMessageTxt3(gameMCQCtrl.getMessageTxt2().getText());
                     gameMCQCtrl.setMessageTxt2(gameMCQCtrl.getMessageTxt1().getText());
                     gameMCQCtrl.setMessageTxt1(text);
-                    messageTabCtrl.setMessageTxt3(messageTabCtrl.getMessageTxt2().getText());
-                    messageTabCtrl.setMessageTxt2(messageTabCtrl.getMessageTxt1().getText());
-                    messageTabCtrl.setMessageTxt1(text);
-                    //make pane reload to show changes i guess
                 }
                 if(q.equals(ENERGY_ALTERNATIVE_QUESTION)){
                     energyAlternativeQuestionCtrl.setMessageTxt3(
