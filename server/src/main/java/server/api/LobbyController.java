@@ -189,7 +189,8 @@ public class LobbyController {
                 {
                     repository.save(currentLobby);
                     //first remaining player in the lobby is assigned as the new host
-                    return new WebsocketMessage(ResponseCodes.UPDATE_HOST, message.getLobbyToken(), currentLobby.getPlayersInLobby().get(0));
+                    return new WebsocketMessage(ResponseCodes.UPDATE_HOST,
+                            message.getLobbyToken(), currentLobby.getPlayersInLobby().get(0));
                 }
             }
 

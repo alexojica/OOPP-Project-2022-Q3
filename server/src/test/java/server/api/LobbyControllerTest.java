@@ -55,7 +55,7 @@ class LobbyControllerTest {
 
     @Test
     void getAllLobbies(){
-        Lobby newLobby = new Lobby("private", 2);
+        Lobby newLobby = new Lobby("private2", 2);
         lobbyController.addLobby(newLobby);
         lobbyController.addLobby(publicLobby);
         lobbyController.addLobby(privateLobby);
