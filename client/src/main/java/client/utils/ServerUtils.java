@@ -217,8 +217,13 @@ public class ServerUtils {
                 System.out.println("receiving message");
                 consumer.accept((WebsocketMessage) payload);
             }
-
         });
+    }
+
+
+    public void unsubscribeFromMessages(){
+        System.out.println("unsubscribed");
+        session.disconnect();
     }
 
     public Lobby addMeToLobby(String token, Player player){

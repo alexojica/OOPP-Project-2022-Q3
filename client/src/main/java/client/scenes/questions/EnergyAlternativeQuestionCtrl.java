@@ -150,7 +150,7 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
 
                     Thread.sleep(2000);
 
-                    if(clientData.getQuestionCounter() == 3){
+                    if(clientData.getQuestionCounter() == 10){
                         Platform.runLater(() -> mainCtrl.showTempLeaderboard());
                         Thread.sleep(5000);
                     }

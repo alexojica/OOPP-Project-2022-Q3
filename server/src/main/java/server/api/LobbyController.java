@@ -143,8 +143,31 @@ public class LobbyController {
     public WebsocketMessage leaveLobby(WebsocketMessage message){
         Optional<Lobby> found = getLobbyByToken(message.getLobbyToken());
         if(found.isPresent()){
-            found.get().removePlayerByName(message.getPlayer().getName());
-            repository.save(found.get());
+            Player playerToRemove = message.getPlayer();
+            Lobby currentLobby = found.get();
+            currentLobby.removePlayerByName(playerToRemove.getName());
+
+            //check if the removed player was the host
+            //if yes, assign a new host
+            //if the lobby is now empty, terminate it
+
+            if(message.getIsPlayerHost())
+            {
+                if(currentLobby.getPlayersInLobby().size() == 0)
+                {
+                    //end lobby somehow
+
+
+                }
+                else
+                {
+                    repository.save(currentLobby);
+                    //first remaining player in the lobby is assigned as the new host
+                    return new WebsocketMessage(ResponseCodes.UPDATE_HOST, message.getLobbyToken(), currentLobby.getPlayersInLobby().get(0));
+                }
+            }
+
+            repository.save(currentLobby);
         }
 
         return new WebsocketMessage(ResponseCodes.LEAVE_LOBBY, message.getLobbyToken());

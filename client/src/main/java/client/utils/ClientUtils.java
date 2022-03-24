@@ -15,6 +15,8 @@ public interface ClientUtils {
 
     void prepareQuestion();
 
+    void killTimer();
+
     Object getCurrentSceneCtrl();
 
     void setCurrentSceneCtrl(Object currentSceneCtrl);

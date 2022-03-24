@@ -5,14 +5,6 @@ import constants.ResponseCodes;
 
 public class WebsocketMessage {
 
-    public ResponseCodes getCode() {
-        return code;
-    }
-
-    public String getLobbyToken() {
-        return lobbyToken;
-    }
-
     private ResponseCodes code;
 
     private String lobbyToken;
@@ -24,6 +16,8 @@ public class WebsocketMessage {
     private Player player;
 
     private JokerType jokerType;
+
+    private Boolean isPlayerHost;
 
     public JokerType getJokerType() {
         return jokerType;
@@ -45,6 +39,17 @@ public class WebsocketMessage {
         return question;
     }
 
+    public Boolean getIsPlayerHost() {
+        return isPlayerHost;
+    }
+
+    public ResponseCodes getCode() {
+        return code;
+    }
+
+    public String getLobbyToken() {
+        return lobbyToken;
+    }
 
     /**
      * Constructor for start game
@@ -78,6 +83,13 @@ public class WebsocketMessage {
         this.code = code;
         this.player = player;
         this.lobbyToken = lobbyToken;
+    }
+
+    public WebsocketMessage(ResponseCodes code, String lobbyToken, Player player, Boolean isPlayerHost){
+        this.code = code;
+        this.player = player;
+        this.lobbyToken = lobbyToken;
+        this.isPlayerHost = isPlayerHost;
     }
 
     public WebsocketMessage(){

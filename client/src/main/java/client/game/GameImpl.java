@@ -172,9 +172,12 @@ public class GameImpl implements Game{
     }
 
     public void leaveLobby() {
+        client.killTimer();
         server.send("/app/leaveLobby", new WebsocketMessage(ResponseCodes.LEAVE_LOBBY,
-                clientData.getClientLobby().getToken(), clientData.getClientPlayer()));
+                clientData.getClientLobby().getToken(), clientData.getClientPlayer(), clientData.getIsHost()));
+        server.unsubscribeFromMessages();
 
+        clientData.setAsHost(false);
         //set client lobby to exited
         clientData.setLobby(null);
 

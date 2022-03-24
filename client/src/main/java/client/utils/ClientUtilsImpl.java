@@ -9,6 +9,7 @@ import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
 import commons.Question;
 import constants.QuestionTypes;
+import constants.ResponseCodes;
 import javafx.application.Platform;
 import javafx.scene.control.ProgressBar;
 
@@ -31,6 +32,12 @@ public class ClientUtilsImpl implements ClientUtils {
 
     private double coefficient;
 
+    private Timer timer;
+
+    private Object currentSceneCtrl;
+
+    AtomicReference<Double> progress;
+
     public Object getCurrentSceneCtrl() {
         return currentSceneCtrl;
     }
@@ -39,9 +46,6 @@ public class ClientUtilsImpl implements ClientUtils {
         this.currentSceneCtrl = currentSceneCtrl;
     }
 
-    private Object currentSceneCtrl;
-
-    AtomicReference<Double> progress;
 
     @Inject
     public ClientUtilsImpl(ClientData clientData, ServerUtils server, MainCtrl mainCtrl, Game game) {
@@ -63,9 +67,17 @@ public class ClientUtilsImpl implements ClientUtils {
         server.registerForMessages("/topic/updateLobby", a -> {
             System.out.println(a.getCode());
             if(a.getLobbyToken().equals(clientData.getClientLobby().getToken())){
-                System.out.println("Before: " + clientData.getClientLobby());
+
+                if(a.getCode() == ResponseCodes.UPDATE_HOST)
+                {
+                    if(a.getPlayer().equals(clientData.getClientPlayer()))
+                    {
+                        System.out.println("New host is: " + clientData.getClientLobby());
+                        clientData.setAsHost(true);
+                    }
+                }
+
                 clientData.setLobby(server.getLobbyByToken(a.getLobbyToken()));
-                System.out.println("After: " + clientData.getClientLobby());
                 if(currentSceneCtrl.getClass() == WaitingCtrl.class)
                     ((WaitingCtrl) currentSceneCtrl).refresh();
             }
@@ -84,7 +96,7 @@ public class ClientUtilsImpl implements ClientUtils {
         AtomicInteger r= new AtomicInteger();
         AtomicInteger g= new AtomicInteger();
         AtomicBoolean updateCoefficient = new AtomicBoolean(false);
-        Timer timer = new Timer();
+        timer = new Timer();
         AtomicBoolean ok = new AtomicBoolean(false);
         progress = new AtomicReference<>((double) 1);
         pb.setProgress(progress.get());
@@ -147,6 +159,11 @@ public class ClientUtilsImpl implements ClientUtils {
                 });
             }
         },0,200);
+    }
+
+    public void killTimer()
+    {
+        timer.cancel();
     }
 
     public void halfTime(){
