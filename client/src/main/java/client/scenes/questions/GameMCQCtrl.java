@@ -5,6 +5,7 @@ import client.game.Game;
 import client.joker.JokerPowerUps;
 import client.joker.JokerUtils;
 import client.scenes.MainCtrl;
+import client.scenes.MessageTabCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.Activity;
@@ -19,24 +20,21 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import javax.inject.Inject;
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 
-import static com.sun.javafx.scene.control.skin.Utils.getResource;
 import static constants.QuestionTypes.MULTIPLE_CHOICE_QUESTION;
-import static javax.swing.text.html.CSS.Attribute.COLOR;
 
 public class GameMCQCtrl extends JokerPowerUps {
 
     private final ServerUtils server;
     private final ClientUtils client;
     private final MainCtrl mainCtrl;
+    private final MessageTabCtrl messageTabCtrl;
     private final ClientData clientData;
     private final Game game;
 
@@ -75,10 +73,11 @@ public class GameMCQCtrl extends JokerPowerUps {
 
     @Inject
     public GameMCQCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ClientData clientData,
-                       JokerUtils jokerUtils, Game game) {
+                       MessageTabCtrl messageTabCtrl, JokerUtils jokerUtils, Game game) {
         super(jokerUtils);
         this.server = server;
         this.mainCtrl = mainCtrl;
+        this.messageTabCtrl = messageTabCtrl;
         this.client = client;
         this.clientData = clientData;
         this.game = game;
@@ -93,6 +92,7 @@ public class GameMCQCtrl extends JokerPowerUps {
 
         Question question = clientData.getClientQuestion();
         resetUI(question);
+        //loads the pane with the messageTab fxml
         try {
             Pane newLoadedPane = FXMLLoader.load(getClass().getResource("/client/scenes/MessageTab.fxml"));
             pnae.getChildren().add(newLoadedPane);
@@ -314,7 +314,10 @@ public class GameMCQCtrl extends JokerPowerUps {
     }
 
     public void testSend() {
+        //using the messagetabctrl doesnt translate the changes to the fxml pane.
+        messageTabCtrl.setMessageTxt1("succes");
         server.send("/app/updateMessages",
-                new WebsocketMessage(MULTIPLE_CHOICE_QUESTION, clientData.getClientPlayer().getName() + ": " + new String(Character.toChars(0x1F35D))));
+                new WebsocketMessage(MULTIPLE_CHOICE_QUESTION, clientData.getClientPlayer().getName()
+                        + ": " + new String(Character.toChars(0x1F35D))));
     }
 }

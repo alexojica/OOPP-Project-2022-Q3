@@ -23,6 +23,7 @@ import client.game.Game;
 import client.game.GameImpl;
 import client.scenes.GameOverCtrl;
 import client.scenes.MainCtrl;
+import client.scenes.MessageTabCtrl;
 import client.scenes.leaderboards.LeaderboardCtrl;
 import client.scenes.leaderboards.TempLeaderboardCtrl;
 import client.scenes.menus.GameModeSelectionCtrl;
@@ -56,6 +57,7 @@ public class MyModule implements Module {
         binder.bind(WaitingCtrl.class).in(Scopes.SINGLETON);
         binder.bind(EnergyAlternativeQuestionCtrl.class).in(Scopes.SINGLETON);
         binder.bind(JokerUtils.class).in(Scopes.SINGLETON);
+        binder.bind(MessageTabCtrl.class).in(Scopes.SINGLETON);
 
         // Binding interfaces to concrete implementations
         binder.bind(ClientUtils.class).to(ClientUtilsImpl.class).in(Scopes.SINGLETON);

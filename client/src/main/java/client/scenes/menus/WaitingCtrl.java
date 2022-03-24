@@ -5,7 +5,6 @@ import client.data.ClientData;
 import client.game.Game;
 import client.joker.JokerUtils;
 import client.scenes.MainCtrl;
-import client.scenes.questions.GameMCQCtrl;
 import client.utils.ClientUtils;
 import client.utils.ClientUtilsImpl;
 import client.utils.ServerUtils;
@@ -40,8 +39,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import static constants.QuestionTypes.MULTIPLE_CHOICE_QUESTION;
 
 public class WaitingCtrl implements Initializable{
 
@@ -109,6 +106,7 @@ public class WaitingCtrl implements Initializable{
             }
         });
 
+        //might need to be moved to clientutils
         server.registerForMessages("/topic/playerMessages", a -> {
             client.updateMessages(a.getQuestionType(), a.getMessage());
         });

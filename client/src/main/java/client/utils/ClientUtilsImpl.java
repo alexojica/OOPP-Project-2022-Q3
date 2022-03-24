@@ -3,6 +3,7 @@ package client.utils;
 import client.data.ClientData;
 import client.game.Game;
 import client.scenes.MainCtrl;
+import client.scenes.MessageTabCtrl;
 import client.scenes.menus.WaitingCtrl;
 import client.scenes.questions.EnergyAlternativeQuestionCtrl;
 import client.scenes.questions.EstimationQuestionCtrl;
@@ -11,8 +12,6 @@ import commons.Question;
 import constants.QuestionTypes;
 import javafx.application.Platform;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.text.Text;
-import org.springframework.stereotype.Controller;
 
 import javax.inject.Inject;
 import java.util.Timer;
@@ -29,6 +28,7 @@ public class ClientUtilsImpl implements ClientUtils {
 
     private MainCtrl mainCtrl;
     private GameMCQCtrl gameMCQCtrl;
+    private MessageTabCtrl messageTabCtrl;
 
     private ClientData clientData;
 
@@ -41,12 +41,14 @@ public class ClientUtilsImpl implements ClientUtils {
     AtomicReference<Double> progress;
 
     @Inject
-    public ClientUtilsImpl(ClientData clientData, ServerUtils server, MainCtrl mainCtrl, GameMCQCtrl gameMCQCtrl, Game game) {
+    public ClientUtilsImpl(ClientData clientData, ServerUtils server, MainCtrl mainCtrl, MessageTabCtrl messageTabCtrl,
+                           GameMCQCtrl gameMCQCtrl, Game game) {
         this.clientData = clientData;
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.game = game;
         this.gameMCQCtrl = gameMCQCtrl;
+        this.messageTabCtrl = messageTabCtrl;
         System.out.println("Instance of client utils");
 
         server.registerForMessages("/topic/nextQuestion", a -> {
@@ -206,6 +208,10 @@ public class ClientUtilsImpl implements ClientUtils {
                     gameMCQCtrl.setMessageTxt3(gameMCQCtrl.getMessageTxt2().getText());
                     gameMCQCtrl.setMessageTxt2(gameMCQCtrl.getMessageTxt1().getText());
                     gameMCQCtrl.setMessageTxt1(text);
+                    messageTabCtrl.setMessageTxt3(messageTabCtrl.getMessageTxt2().getText());
+                    messageTabCtrl.setMessageTxt2(messageTabCtrl.getMessageTxt1().getText());
+                    messageTabCtrl.setMessageTxt1(text);
+                    //make pane reload to show changes i guess
                 }
             }
         });
