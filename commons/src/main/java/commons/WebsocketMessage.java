@@ -25,6 +25,8 @@ public class WebsocketMessage {
 
     private JokerType jokerType;
 
+    private String newToken;
+
     public JokerType getJokerType() {
         return jokerType;
     }
@@ -45,6 +47,9 @@ public class WebsocketMessage {
         return question;
     }
 
+    public String getNewToken() {
+        return newToken;
+    }
 
     /**
      * Constructor for start game
@@ -60,6 +65,12 @@ public class WebsocketMessage {
     public WebsocketMessage(JokerType jokerType, String lobbyToken) {
         this.jokerType = jokerType;
         this.lobbyToken = lobbyToken;
+    }
+
+    public WebsocketMessage(ResponseCodes responseCodes, String lobbyToken, String newToken) {
+        this.code = responseCodes;
+        this.lobbyToken = lobbyToken;
+        this.newToken = newToken;
     }
 
     public WebsocketMessage(ResponseCodes code, String lobbyToken, Question question){
