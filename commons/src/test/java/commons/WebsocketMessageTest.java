@@ -1,6 +1,5 @@
 package commons;
 
-import constants.QuestionTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,17 +12,12 @@ class WebsocketMessageTest {
 
     @BeforeEach
     void setUp(){
-        //these are test websocketmessages for the communication messages
-        wsm1 = new WebsocketMessage(QuestionTypes.MULTIPLE_CHOICE_QUESTION, "testMessage", "testToken");
-        wsm2 = new WebsocketMessage(QuestionTypes.ENERGY_ALTERNATIVE_QUESTION, "testMessage2", "testToken2");
-        wsm3 = new WebsocketMessage(QuestionTypes.MULTIPLE_CHOICE_QUESTION, "testMessage", "testToken");
+        //these are test websocketmessages for the communication of messages
+        wsm1 = new WebsocketMessage("testMessage", "testToken");
+        wsm2 = new WebsocketMessage("testMessage2", "testToken2");
+        wsm3 = new WebsocketMessage("testMessage", "testToken");
     }
 
-    @Test
-    void getQuestionTypeTest(){
-        assertEquals(wsm1.getQuestionType(), QuestionTypes.MULTIPLE_CHOICE_QUESTION);
-        assertNotEquals(wsm1.getQuestionType(), QuestionTypes.ESTIMATION_QUESTION);
-    }
     @Test
     void getMessageTest(){
         assertEquals(wsm1.getMessage(), "testMessage");

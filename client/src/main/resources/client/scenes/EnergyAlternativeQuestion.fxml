@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.image.ImageView?>
@@ -60,8 +61,6 @@
       <Text layoutX="614.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Eliminate an answer❌" />
       <Circle fill="DODGERBLUE" layoutX="797.0" layoutY="630.0" onMouseClicked="#halfTimeForOthers" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
       <Text layoutX="742.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Half time of others⏰" />
-      <Circle fill="DODGERBLUE" layoutX="1220.0" layoutY="42.0" radius="18.0" stroke="BLACK" strokeType="INSIDE" />
-      <Text layoutX="1200.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Emotes" />
       <Text fx:id="insteadOfText" layoutX="510.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Instead of ..." textAlignment="CENTER">
          <font>
             <Font size="29.0" />
@@ -78,6 +77,9 @@
       <Label fx:id="messageTxt2" layoutX="21.0" layoutY="215.0" />
       <Label fx:id="messageTxt1" layoutX="24.0" layoutY="292.0" />
       <Label fx:id="messageTxt3" layoutX="21.0" layoutY="150.0" />
-      <Button layoutX="1194.0" layoutY="96.0" mnemonicParsing="false" onAction="#sendTest" text="sned emote" />
+      <MenuButton fx:id="emotesMenu" layoutX="1172.0" layoutY="40.0" mnemonicParsing="false" text="emotes">
+         <items>
+         </items>
+      </MenuButton>
    </children>
 </AnchorPane>

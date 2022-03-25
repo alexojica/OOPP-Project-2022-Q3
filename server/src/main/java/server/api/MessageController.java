@@ -17,6 +17,6 @@ public class MessageController {
     @MessageMapping("/updateMessages")
     @SendTo("/topic/playerMessages")
     public WebsocketMessage updateMessages(WebsocketMessage message){
-        return new WebsocketMessage(message.getQuestionType(), message.getMessage(), message.getLobbyToken());
+        return new WebsocketMessage(message.getMessage(), message.getLobbyToken());
     }
 }

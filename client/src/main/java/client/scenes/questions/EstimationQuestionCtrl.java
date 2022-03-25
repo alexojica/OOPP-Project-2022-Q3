@@ -12,11 +12,10 @@ import commons.Activity;
 import commons.Question;
 import commons.WebsocketMessage;
 import constants.ResponseCodes;
+import emotes.Emotes;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.text.Text;
 
 import static constants.QuestionTypes.ESTIMATION_QUESTION;
@@ -27,6 +26,7 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
     private final ClientUtils client;
     private final MainCtrl mainCtrl;
     private final ClientData clientData;
+    private final Emotes emotes;
     private final Game game;
 
     private Double progress;
@@ -56,6 +56,9 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
     private Long correctAnswer;
 
     @FXML
+    private MenuButton emotesMenu;
+    
+    @FXML
     private Label messageTxt1;
     @FXML
     private Label messageTxt2;
@@ -64,19 +67,20 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
 
     @Inject
     public EstimationQuestionCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ClientData clientData,
-                                  JokerUtils jokerUtils, Game game) {
+                                  JokerUtils jokerUtils, Emotes emotes, Game game) {
         super(jokerUtils);
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.client = client;
         this.clientData = clientData;
         this.game = game;
+        this.emotes = emotes;
     }
 
     public void load() {
 
+        setUpEmoteMenu();
         Question question = clientData.getClientQuestion();
-
         resetUI(question);
     }
 
@@ -251,16 +255,19 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
     }
 
     /**
-     * Button that sends a websocketmessage containing a questiontype corresponding to the current question,
-     * a string containing the playername and an emote and another string containing the player's lobbyToken.
-     * This button is a test to see whether the labels are changed properly. It will be removed when
-     * branch 75 containing the actual emotes is merged.
+     * Sets up the emoteMenu menubutton by first clearing anything that might be left in it from previous calls.
+     * This is done to prevent errors from occurring. Then all the emotes from the list in the EmotesImpl class are
+     * added and set such they trigger the sendEmote method when clicked. There's also some padding added to make it
+     * easier to click the buttons.
      */
-    public void testSend() {
-        server.send("/app/updateMessages",
-                new WebsocketMessage(ESTIMATION_QUESTION, clientData.getClientPlayer().getName()
-                        + ": " + new String(Character.toChars(0x1F35D)),
-                        clientData.getClientLobby().getToken()));
+    public void setUpEmoteMenu(){
+        emotesMenu.getItems().clear();
+        emotesMenu.getItems().addAll(emotes.getEmotesList());
+        for(MenuItem m : emotesMenu.getItems()){
+            m.setStyle("-fx-padding: 0 25 0 25");
+            m.setOnAction(a -> {
+                emotes.sendEmote(m.getText());
+            });
+        }
     }
-
 }
