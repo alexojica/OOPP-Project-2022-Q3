@@ -46,6 +46,8 @@ public class ClientUtilsImpl implements ClientUtils {
 
     AtomicReference<Double> progress;
 
+    private boolean isSubscribed;
+
     public Object getCurrentSceneCtrl() {
         return currentSceneCtrl;
     }
@@ -70,8 +72,8 @@ public class ClientUtilsImpl implements ClientUtils {
 
         registerQuestionCommunication();
         registerLobbyCommunication();
-
     }
+
 
     public void registerLobbyCommunication()
     {
@@ -93,6 +95,7 @@ public class ClientUtilsImpl implements ClientUtils {
                 }
             });
         }
+        isSubscribed = true;
     }
 
     public void registerQuestionCommunication()
@@ -107,6 +110,7 @@ public class ClientUtilsImpl implements ClientUtils {
                 }
             });
         }
+        isSubscribed = true;
     }
 
     @Override
@@ -243,12 +247,16 @@ public class ClientUtilsImpl implements ClientUtils {
     }
 
     public void unsubscribeFromMessages(){
-        nextQuestionSubscription.unsubscribe();
-        updateLobbySubscription.unsubscribe();
+        if(isSubscribed) {
+            nextQuestionSubscription.unsubscribe();
+            updateLobbySubscription.unsubscribe();
 
-        //I have to set to null
-        nextQuestionSubscription = null;
-        updateLobbySubscription = null;
+            //I have to set to null
+            nextQuestionSubscription = null;
+            updateLobbySubscription = null;
+
+            isSubscribed = false;
+        }
     }
 
 
