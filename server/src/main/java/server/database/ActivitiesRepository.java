@@ -1,14 +1,12 @@
 package server.database;
 
+import commons.Activity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import javax.transaction.Transactional;
-
 import java.util.List;
 import java.util.Optional;
-
-import commons.Activity;
 
 /**
  * Repository of Activities can be created, contains all the methods from crud repository.
