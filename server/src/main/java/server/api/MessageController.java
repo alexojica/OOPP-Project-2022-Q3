@@ -10,9 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/message")
 public class MessageController {
 
+    /**
+     * @param message received message that is to be redirected to all players subscribed to this endpoint
+     * @return new websocketmessage to all players subscribed to this endpoint
+     */
     @MessageMapping("/updateMessages")
     @SendTo("/topic/playerMessages")
     public WebsocketMessage updateMessages(WebsocketMessage message){
-        return new WebsocketMessage(message.getQuestionType(), message.getMessage());
+        return new WebsocketMessage(message.getQuestionType(), message.getMessage(), message.getLobbyToken());
     }
 }

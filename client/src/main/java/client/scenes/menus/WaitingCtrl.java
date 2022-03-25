@@ -107,8 +107,9 @@ public class WaitingCtrl implements Initializable{
         });
 
         //might need to be moved to clientutils
+        //registers the player for any messages communicated through this endpoint
         server.registerForMessages("/topic/playerMessages", a -> {
-            client.updateMessages(a.getQuestionType(), a.getMessage());
+            client.updateMessages(a.getQuestionType(), a.getMessage(), a.getLobbyToken());
         });
 
         server.send("/app/requestUpdate",
@@ -117,7 +118,7 @@ public class WaitingCtrl implements Initializable{
 
     /**
      * Method that shows active players in a given lobby
-     * The lobby field from CliendData should have been filled/updated prior to calling this method
+     * The lobby field from ClientData should have been filled/updated prior to calling this method
      */
     public void showActivePlayers()
     {

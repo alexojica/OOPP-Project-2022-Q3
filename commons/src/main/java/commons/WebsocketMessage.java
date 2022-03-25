@@ -93,9 +93,17 @@ public class WebsocketMessage {
         this.lobbyToken = lobbyToken;
     }
 
-    public WebsocketMessage(QuestionTypes questionType, String message){
+    /**
+     * Constructor for sending messages, such as emotes or disconnect notifications,
+     * to players.
+     * @param questionType
+     * @param message
+     * @param lobbyToken
+     */
+    public WebsocketMessage(QuestionTypes questionType, String message, String lobbyToken){
         this.message = message;
         this.questionType = questionType;
+        this.lobbyToken = lobbyToken;
     }
 
     public WebsocketMessage(){
