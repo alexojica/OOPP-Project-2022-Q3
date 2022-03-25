@@ -51,11 +51,10 @@
             <Font size="18.0" />
          </font>
       </Text>
-      <Button layoutX="1192.0" layoutY="97.0" mnemonicParsing="false" onAction="#testSend" text="Test send" />
       <Label fx:id="messageTxt3" layoutX="13.0" layoutY="188.0" />
       <Label fx:id="messageTxt2" layoutX="13.0" layoutY="257.0" />
       <Label fx:id="messageTxt1" layoutX="13.0" layoutY="325.0" />
-      <MenuButton fx:id="emotes" layoutX="1189.0" layoutY="146.0" mnemonicParsing="false" text="emotes">
+      <MenuButton fx:id="emotesMenu" layoutX="1172.0" layoutY="40.0" mnemonicParsing="false" text="emotes">
         <items>
         </items>
       </MenuButton>

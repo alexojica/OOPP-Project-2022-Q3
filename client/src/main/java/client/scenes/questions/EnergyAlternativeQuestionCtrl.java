@@ -11,12 +11,10 @@ import commons.Activity;
 import commons.Question;
 import commons.WebsocketMessage;
 import constants.ResponseCodes;
+import emotes.Emotes;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.text.Text;
 
 import javax.inject.Inject;
@@ -33,6 +31,7 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
     private final ClientUtils client;
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private final Emotes emotes;
     private final Game game;
 
     @FXML
@@ -59,6 +58,9 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
     private int correctAnswer;
 
     @FXML
+    private MenuButton emotesMenu;
+
+    @FXML
     private Label messageTxt1;
     @FXML
     private Label messageTxt2;
@@ -67,20 +69,21 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
 
     @Inject
     public EnergyAlternativeQuestionCtrl(ClientData clientData, ClientUtils  client, ServerUtils server,
-                                         JokerUtils jokerUtils, Game game, MainCtrl mainCtrl) {
+                                         JokerUtils jokerUtils, Emotes emotes, Game game, MainCtrl mainCtrl) {
         super(jokerUtils);
         this.clientData = clientData;
         this.client = client;
         this.server = server;
         this.game = game;
         this.mainCtrl = mainCtrl;
+        this.emotes = emotes;
         doublePoints = false;
     }
 
     public void load() {
 
+        setUpEmoteMenu();
         Question question = clientData.getClientQuestion();
-
         resetUI(question);
 
     }
@@ -306,16 +309,16 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
         }
     }
 
-    /**
-     * Button that sends a websocketmessage containing a questiontype corresponding to the current question,
-     * a string containing the playername and an emote and another string containing the player's lobbyToken.
-     * This button is a test to see whether the labels are changed properly. It will be removed when
-     * branch 75 containing the actual emotes is merged.
-     */
-    public void sendTest() {
-        server.send("/app/updateMessages",
-                new WebsocketMessage(ENERGY_ALTERNATIVE_QUESTION, clientData.getClientPlayer().getName()
-                        + ": " + new String(Character.toChars(0x1F35D)),
-                        clientData.getClientLobby().getToken()));
+    public void setUpEmoteMenu(){
+        if(!emotesMenu.getItems().isEmpty()){
+            return;
+        }
+        emotesMenu.getItems().addAll(emotes.getEmotesList());
+        for(MenuItem m : emotesMenu.getItems()){
+            m.setStyle("-fx-padding: 0 25 0 25");
+            m.setOnAction(a -> {
+                emotes.sendEmote(m.getText());
+            });
+        }
     }
 }
