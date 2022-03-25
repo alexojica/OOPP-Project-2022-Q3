@@ -10,12 +10,14 @@ import client.utils.ServerUtils;
 import commons.Activity;
 import commons.Question;
 import commons.WebsocketMessage;
+import constants.JokerType;
 import constants.ResponseCodes;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 import javax.inject.Inject;
@@ -23,14 +25,17 @@ import java.util.List;
 import java.util.Random;
 
 import static constants.QuestionTypes.MULTIPLE_CHOICE_QUESTION;
+import static javafx.scene.paint.Color.rgb;
 
-public class GameMCQCtrl extends JokerPowerUps {
+public class GameMCQCtrl implements JokerPowerUps {
 
     private final ServerUtils server;
     private final ClientUtils client;
     private final MainCtrl mainCtrl;
     private final ClientData clientData;
     private final Game game;
+    protected boolean doublePoints = false;
+    private JokerUtils jokerUtils;
 
     @FXML
     private ProgressBar pb;
@@ -52,13 +57,19 @@ public class GameMCQCtrl extends JokerPowerUps {
     private RadioButton answer2;
     @FXML
     private RadioButton answer3;
+    @FXML
+    private Circle joker1;
+    @FXML
+    private Circle joker2;
+    @FXML
+    private Circle joker3;
 
     private int correctAnswer;
 
     @Inject
     public GameMCQCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ClientData clientData,
                        JokerUtils jokerUtils, Game game) {
-        super(jokerUtils);
+        this.jokerUtils = jokerUtils;
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.client = client;
@@ -83,10 +94,25 @@ public class GameMCQCtrl extends JokerPowerUps {
     {
         scoreTxt.setText("Score:" + clientData.getClientScore());
         nQuestionsTxt.setText(clientData.getQuestionCounter() + "/20");
+        doublePoints = false;
+        joker3.setDisable(clientData.getUsedJokers().contains(JokerType.HALF_TIME_FOR_ALL_LOBBY));
+        joker1.setDisable(clientData.getUsedJokers().contains(JokerType.DOUBLE_POINTS));
+        joker2.setDisable(clientData.getUsedJokers().contains(JokerType.ELIMINATE_ANSWERS));
+
+        if(!clientData.getUsedJokers().contains(JokerType.DOUBLE_POINTS))
+            joker1.setFill(rgb(30,144,255));
+        if(!clientData.getUsedJokers().contains(JokerType.ELIMINATE_ANSWERS))
+            joker2.setFill(rgb(30,144,255));
+        if(!clientData.getUsedJokers().contains(JokerType.HALF_TIME_FOR_ALL_LOBBY))
+            joker3.setFill(rgb(30,144,255));
 
         answer1.setToggleGroup(radioGroup);
         answer2.setToggleGroup(radioGroup);
         answer3.setToggleGroup(radioGroup);
+
+        answer1.setDisable(false);
+        answer2.setDisable(false);
+        answer3.setDisable(false);
 
         answer1.setStyle(" -fx-background-color: transparent; ");
         answer2.setStyle(" -fx-background-color: transparent; ");
@@ -129,6 +155,12 @@ public class GameMCQCtrl extends JokerPowerUps {
         a.setText(list.get(0).getTitle());
         b.setText(list.get(1).getTitle());
         c.setText(list.get(2).getTitle());
+    }
+
+    public void disableAnswers(){
+        answer1.setDisable(true);
+        answer2.setDisable(true);
+        answer3.setDisable(true);
     }
 
     public void nextQuestion(){
@@ -222,23 +254,28 @@ public class GameMCQCtrl extends JokerPowerUps {
      * b) if the answer is the correct one, disable the answer after that (which will b a wrong one)
      */
     public void eliminateRandomWrongAnswer(){
-        int indexToRemove = new Random().nextInt(3);
-        if(indexToRemove == correctAnswer){
-            indexToRemove++;
-        }
-        switch (indexToRemove) {
-            case 0:
-                answer1.setStyle(" -fx-background-color: red; ");
-                System.out.println("Disabled first answer");
-                break;
-            case 1:
-                answer2.setStyle(" -fx-background-color: red; ");
-                System.out.println("Disabled second answer");
-                break;
-            case 2:
-                answer3.setStyle(" -fx-background-color: red; ");
-                System.out.println("Disabled third answer");
-                break;
+        if(!clientData.getUsedJokers().contains(JokerType.ELIMINATE_ANSWERS)) {
+            clientData.addJoker(JokerType.ELIMINATE_ANSWERS);
+            joker2.setFill(rgb(235,235,228));
+            joker2.setDisable(true);
+            int indexToRemove = new Random().nextInt(3);
+            if (indexToRemove == correctAnswer) {
+                indexToRemove++;
+            }
+            switch (indexToRemove) {
+                case 0:
+                    answer1.setStyle(" -fx-background-color: red; ");
+                    System.out.println("Disabled first answer");
+                    break;
+                case 1:
+                    answer2.setStyle(" -fx-background-color: red; ");
+                    System.out.println("Disabled second answer");
+                    break;
+                case 2:
+                    answer3.setStyle(" -fx-background-color: red; ");
+                    System.out.println("Disabled third answer");
+                    break;
+            }
         }
     }
 
@@ -256,4 +293,25 @@ public class GameMCQCtrl extends JokerPowerUps {
         return answer3;
     }
 
+    @Override
+    public void doublePoints() {
+        if(!clientData.getUsedJokers().contains(JokerType.DOUBLE_POINTS)) {
+            doublePoints = true;
+            joker1.setDisable(true);
+            joker1.setFill(rgb(235,235,228));
+            clientData.addJoker(JokerType.DOUBLE_POINTS);
+        }
+    }
+
+    @Override
+    public void halfTimeForOthers() {
+        if(!clientData.getUsedJokers().contains(JokerType.HALF_TIME_FOR_ALL_LOBBY)) {
+            joker3.setDisable(true);
+            joker3.setFill(rgb(235,235,228));
+            clientData.addJoker(JokerType.HALF_TIME_FOR_ALL_LOBBY);
+            System.out.println("Time was halved");
+            jokerUtils.setLobbyJoker(JokerType.HALF_TIME_FOR_ALL_LOBBY);
+            jokerUtils.sendJoker();
+        }
+    }
 }

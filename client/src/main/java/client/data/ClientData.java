@@ -3,6 +3,9 @@ package client.data;
 import commons.Lobby;
 import commons.Player;
 import commons.Question;
+import constants.JokerType;
+
+import java.util.HashSet;
 
 public interface ClientData {
 
@@ -35,4 +38,10 @@ public interface ClientData {
     void setLobby(Lobby lobby);
 
     Lobby getClientLobby();
+
+    HashSet<JokerType> getUsedJokers();
+
+    void addJoker(JokerType joker);
+
+    void resetJokers();
 }

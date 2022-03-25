@@ -11,22 +11,26 @@ import com.google.inject.Inject;
 import commons.Activity;
 import commons.Question;
 import commons.WebsocketMessage;
+import constants.JokerType;
 import constants.ResponseCodes;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
 import static constants.QuestionTypes.ESTIMATION_QUESTION;
 
-public class EstimationQuestionCtrl extends JokerPowerUps{
+public class EstimationQuestionCtrl implements JokerPowerUps{
 
     private final ServerUtils server;
     private final ClientUtils client;
     private final MainCtrl mainCtrl;
     private final ClientData clientData;
     private final Game game;
+    protected boolean doublePoints = false;
+    private JokerUtils jokerUtils;
 
     private Double progress;
 
@@ -51,13 +55,16 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
     @FXML
     private Text answerPopUp;
 
+    @FXML
+    private Button submit;
+
     private Long submittedAnswer;
     private Long correctAnswer;
 
     @Inject
     public EstimationQuestionCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ClientData clientData,
                                   JokerUtils jokerUtils, Game game) {
-        super(jokerUtils);
+        this.jokerUtils = jokerUtils;
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.client = client;
@@ -76,6 +83,9 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
     {
         scoreTxt.setText("Score:" + clientData.getClientScore());
         nQuestionsTxt.setText(clientData.getQuestionCounter() + "/20");
+
+        submit.setDisable(false);
+
 
         Activity polledActivity = server.getActivityByID(question.getFoundActivities().get(0)).get();
         correctAnswer = polledActivity.getEnergyConsumption();
@@ -199,4 +209,19 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
         game.leaveLobby();
     }
 
+    public void disableSubmitButton(){
+        submit.setDisable(true);
+    }
+
+    @Override
+    public void doublePoints() {
+        doublePoints = true;
+    }
+
+    @Override
+    public void halfTimeForOthers() {
+        System.out.println("Time was halved");
+        jokerUtils.setLobbyJoker(JokerType.HALF_TIME_FOR_ALL_LOBBY);
+        jokerUtils.sendJoker();
+    }
 }
