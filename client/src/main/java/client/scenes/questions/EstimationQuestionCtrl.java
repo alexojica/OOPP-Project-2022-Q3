@@ -18,9 +18,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 import static constants.QuestionTypes.ESTIMATION_QUESTION;
+import static javafx.scene.paint.Color.rgb;
 
 public class EstimationQuestionCtrl implements JokerPowerUps{
 
@@ -58,6 +60,12 @@ public class EstimationQuestionCtrl implements JokerPowerUps{
     @FXML
     private Button submit;
 
+    @FXML
+    private Circle joker1;
+
+    @FXML
+    private Circle joker3;
+
     private Long submittedAnswer;
     private Long correctAnswer;
 
@@ -84,7 +92,21 @@ public class EstimationQuestionCtrl implements JokerPowerUps{
         scoreTxt.setText("Score:" + clientData.getClientScore());
         nQuestionsTxt.setText(clientData.getQuestionCounter() + "/20");
 
+        doublePoints = false;
+        joker3.setDisable(clientData.getUsedJokers().contains(JokerType.HALF_TIME_FOR_ALL_LOBBY));
+        joker1.setDisable(clientData.getUsedJokers().contains(JokerType.DOUBLE_POINTS));
+
         submit.setDisable(false);
+
+        if(!clientData.getUsedJokers().contains(JokerType.DOUBLE_POINTS))
+            joker1.setFill(rgb(30,144,255));
+        else
+            joker1.setFill(rgb(235,235,228));
+
+        if(!clientData.getUsedJokers().contains(JokerType.HALF_TIME_FOR_ALL_LOBBY))
+            joker3.setFill(rgb(30,144,255));
+        else
+            joker3.setFill(rgb(235,235,228));
 
 
         Activity polledActivity = server.getActivityByID(question.getFoundActivities().get(0)).get();
@@ -215,13 +237,23 @@ public class EstimationQuestionCtrl implements JokerPowerUps{
 
     @Override
     public void doublePoints() {
-        doublePoints = true;
+        if(!clientData.getUsedJokers().contains(JokerType.DOUBLE_POINTS)) {
+            doublePoints = true;
+            joker1.setDisable(true);
+            joker1.setFill(rgb(235,235,228));
+            clientData.addJoker(JokerType.DOUBLE_POINTS);
+        }
     }
 
     @Override
     public void halfTimeForOthers() {
-        System.out.println("Time was halved");
-        jokerUtils.setLobbyJoker(JokerType.HALF_TIME_FOR_ALL_LOBBY);
-        jokerUtils.sendJoker();
+        if(!clientData.getUsedJokers().contains(JokerType.HALF_TIME_FOR_ALL_LOBBY)) {
+            joker3.setDisable(true);
+            joker3.setFill(rgb(235,235,228));
+            clientData.addJoker(JokerType.HALF_TIME_FOR_ALL_LOBBY);
+            System.out.println("Time was halved");
+            jokerUtils.setLobbyJoker(JokerType.HALF_TIME_FOR_ALL_LOBBY);
+            jokerUtils.sendJoker();
+        }
     }
 }

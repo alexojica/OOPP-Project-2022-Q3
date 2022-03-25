@@ -5,6 +5,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
@@ -49,5 +50,9 @@
             <Font size="18.0" />
          </font>
       </Text>
+      <Circle fx:id="joker1" fill="DODGERBLUE" layoutX="494.0" layoutY="628.0" onMouseClicked="#doublePoints" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="joker3" fill="DODGERBLUE" layoutX="754.0" layoutY="628.0" onMouseClicked="#halfTimeForOthers" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
+      <Text layoutX="449.0" layoutY="668.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" Double Points💰" />
+      <Text layoutX="705.0" layoutY="668.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Half time of others⏰" />
    </children>
 </AnchorPane>
