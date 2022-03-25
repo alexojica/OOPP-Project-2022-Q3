@@ -244,12 +244,10 @@ public class QuestionProvider {
 
     /**
      * Clears all questions which have been assined to a certain lobby
-     * @param lobby
+     * @param lobbyId
      */
-    public void clearAllQuestionsFromLobby(String lobby){
-        HashSet<Question> set = lobbyToQuestionsUsed.get(lastLobby);
-        if(set != null){
-            set.clear();
-        }
+    public void clearAllQuestionsFromLobby(String lobbyId){
+        lobbyToQuestionsUsed.remove(lobbyId);
+        System.out.println("DELETED ALL QUESTIONS OF LOBBY " + lobbyId);
     }
 }

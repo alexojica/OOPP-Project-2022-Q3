@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import server.database.LobbyRepository;
 import commons.Lobby;
+import server.gameLogic.QuestionProvider;
 
 import static constants.ConnectionStatusCodes.*;
 
@@ -29,6 +30,9 @@ public class LobbyController {
 
     @Autowired
     private SimpMessagingTemplate template;
+
+    @Autowired
+    private QuestionProvider questionProvider;
 
     public LobbyController(LobbyRepository repository){
         this.repository = repository;
@@ -160,6 +164,7 @@ public class LobbyController {
         {
             Lobby lobbyToTerminate = found.get();
             lobbyToTerminate.setIsStarted(false);
+            questionProvider.clearAllQuestionsFromLobby(lobbyToTerminate.getToken());
             repository.save(lobbyToTerminate);
         }
         return new WebsocketMessage(ResponseCodes.END_GAME, message.getLobbyToken());
