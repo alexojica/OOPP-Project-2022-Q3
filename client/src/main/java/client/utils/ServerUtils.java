@@ -214,7 +214,8 @@ public class ServerUtils {
 
             @Override
             public void handleFrame(StompHeaders headers, Object payload) {
-                System.out.println("Message " + ((WebsocketMessage) payload).getCode() + " for lobby " + ((WebsocketMessage) payload).getLobbyToken());
+                System.out.println("Message " + ((WebsocketMessage) payload).getCode() +
+                        " for lobby " + ((WebsocketMessage) payload).getLobbyToken());
                 consumer.accept((WebsocketMessage) payload);
             }
 
