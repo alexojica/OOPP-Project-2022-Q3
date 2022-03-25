@@ -201,27 +201,40 @@ public class ClientUtilsImpl implements ClientUtils {
 
     }
 
-    //runlater done in order to avoid an illegalstateexception
-    public void updateMessages(QuestionTypes q, String text){
+
+    /**
+     * Receives a websocketmessage and updates the communication labels with the given string in the given questiontype.
+     * Only updates the labels if the lobbytoken corresponds to the one from the person who sent the method.
+     * Turning this action into a Runnable is done in order to prevent an IllegalStateException.
+     * @param q QuestionType received from the websocketmessage
+     * @param text String received from the websocketmessage
+     * @param lobbyToken token that corresponds to the lobby from the person who sent the message
+     */
+    public void updateMessages(QuestionTypes q, String text, String lobbyToken){
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                if(q.equals(MULTIPLE_CHOICE_QUESTION)){
-                    gameMCQCtrl.setMessageTxt3(gameMCQCtrl.getMessageTxt2().getText());
-                    gameMCQCtrl.setMessageTxt2(gameMCQCtrl.getMessageTxt1().getText());
-                    gameMCQCtrl.setMessageTxt1(text);
+                if(!lobbyToken.equals(clientData.getClientLobby().getToken())){
+                    return;
                 }
-                if(q.equals(ENERGY_ALTERNATIVE_QUESTION)){
-                    energyAlternativeQuestionCtrl.setMessageTxt3(
-                            energyAlternativeQuestionCtrl.getMessageTxt2().getText());
-                    energyAlternativeQuestionCtrl.setMessageTxt2(
-                            energyAlternativeQuestionCtrl.getMessageTxt1().getText());
-                    energyAlternativeQuestionCtrl.setMessageTxt1(text);
-                }
-                if(q.equals(ESTIMATION_QUESTION)){
-                    estimationQuestionCtrl.setMessageTxt3(estimationQuestionCtrl.getMessageTxt2().getText());
-                    estimationQuestionCtrl.setMessageTxt2(estimationQuestionCtrl.getMessageTxt1().getText());
-                    estimationQuestionCtrl.setMessageTxt1(text);
+                switch(q){
+                    case MULTIPLE_CHOICE_QUESTION:
+                        gameMCQCtrl.setMessageTxt3(gameMCQCtrl.getMessageTxt2().getText());
+                        gameMCQCtrl.setMessageTxt2(gameMCQCtrl.getMessageTxt1().getText());
+                        gameMCQCtrl.setMessageTxt1(text);
+                        break;
+                    case ENERGY_ALTERNATIVE_QUESTION:
+                        energyAlternativeQuestionCtrl.setMessageTxt3(
+                                energyAlternativeQuestionCtrl.getMessageTxt2().getText());
+                        energyAlternativeQuestionCtrl.setMessageTxt2(
+                                energyAlternativeQuestionCtrl.getMessageTxt1().getText());
+                        energyAlternativeQuestionCtrl.setMessageTxt1(text);
+                        break;
+                    case ESTIMATION_QUESTION:
+                        estimationQuestionCtrl.setMessageTxt3(estimationQuestionCtrl.getMessageTxt2().getText());
+                        estimationQuestionCtrl.setMessageTxt2(estimationQuestionCtrl.getMessageTxt1().getText());
+                        estimationQuestionCtrl.setMessageTxt1(text);
+                        break;
                 }
             }
         });

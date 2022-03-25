@@ -21,5 +21,5 @@ public interface ClientUtils {
 
     double getCoefficient();
 
-    void updateMessages(QuestionTypes q, String str);
+    void updateMessages(QuestionTypes q, String str, String lobbyToken);
 }
