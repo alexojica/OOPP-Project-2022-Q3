@@ -98,6 +98,7 @@ public class WaitingCtrl implements Initializable{
         server.registerForMessages("/topic/lobbyStart", a -> {
             if(a.getCode() == ResponseCodes.START_GAME && a.getLobbyToken().equals(clientData.getClientLobby().token)) {
                 System.out.println("ishost:" + clientData.getIsHost());
+                clientData.setLobby(server.getLobbyByToken(a.getNewToken()));
                 if(clientData.getIsHost())
                     server.send("/app/nextQuestion",
                             new WebsocketMessage(ResponseCodes.NEXT_QUESTION,
