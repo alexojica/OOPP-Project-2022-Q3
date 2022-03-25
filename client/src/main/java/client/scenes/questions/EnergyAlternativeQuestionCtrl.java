@@ -310,9 +310,7 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
     }
 
     public void setUpEmoteMenu(){
-        if(!emotesMenu.getItems().isEmpty()){
-            return;
-        }
+        emotesMenu.getItems().clear();
         emotesMenu.getItems().addAll(emotes.getEmotesList());
         for(MenuItem m : emotesMenu.getItems()){
             m.setStyle("-fx-padding: 0 25 0 25");

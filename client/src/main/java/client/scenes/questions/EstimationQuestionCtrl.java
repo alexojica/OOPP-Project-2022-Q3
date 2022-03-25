@@ -254,11 +254,9 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
         }
     }
 
-    //only needs to be set once, as it is saved throughout the game
+    //cleared in order to avoid errors when the scene is loaded again later in the game
     public void setUpEmoteMenu(){
-        if(!emotesMenu.getItems().isEmpty()){
-            return;
-        }
+        emotesMenu.getItems().clear();
         emotesMenu.getItems().addAll(emotes.getEmotesList());
         for(MenuItem m : emotesMenu.getItems()){
             m.setStyle("-fx-padding: 0 25 0 25");
