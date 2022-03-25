@@ -3,14 +3,20 @@ package server.gameLogic;
 import commons.Activity;
 import commons.Question;
 import constants.QuestionTypes;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import server.database.ActivitiesRepository;
 import server.database.QuestionRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Service
 public class QuestionProvider {
+    @Autowired
     private ActivitiesRepository activitiesRepository;
+
+    @Autowired
     private QuestionRepository questionRepository;
 
     private long pointer;
@@ -21,9 +27,7 @@ public class QuestionProvider {
 
     private HashMap<String, HashSet<Question>> lobbyToQuestionsUsed;
 
-    public QuestionProvider(ActivitiesRepository activitiesRepository, QuestionRepository questionRepository) {
-        this.activitiesRepository = activitiesRepository;
-        this.questionRepository = questionRepository;
+    public QuestionProvider() {
         random = new Random();
         lobbyToQuestionsUsed = new HashMap<>();
     }
@@ -37,14 +41,19 @@ public class QuestionProvider {
         this.lastLobby = lastLobby;
         this.difficulty = difficulty;
         Optional<Question> foundQuestion;
-        foundQuestion = questionRepository.findById(pointer);
-
+        foundQuestion = questionRepository.findByIdAndLastLobbyToken(pointer, lastLobby);
+        System.out.println("[LOBBY] " + lastLobby + " has used: ");
+        if(lobbyToQuestionsUsed.containsKey(lastLobby)) {
+            for (Question q : lobbyToQuestionsUsed.get(lastLobby)) {
+                System.out.println(q.id);
+            }
+        }
         updatePointer();
 
         if (foundQuestion.isEmpty()) {
             return createNewQuestion();
         } else {
-            return returnFirstUnusedQustion(foundQuestion);
+            return getUnusedQuestionOrNewQuestion(foundQuestion);
         }
     }
 
@@ -54,23 +63,24 @@ public class QuestionProvider {
      * @param foundQuestion
      * @return
      */
-    public Question returnFirstUnusedQustion(Optional<Question> foundQuestion){
+    public Question getUnusedQuestionOrNewQuestion(Optional<Question> foundQuestion){
         Question nextQuestion = useQuestionAfter(foundQuestion.get());
-        while(questionAlreadyUsed(lastLobby, nextQuestion)){
-            nextQuestion = useQuestionAfter(nextQuestion);
-            if(nextQuestion == null){
-                System.out.println("New question created");
-                return createNewQuestion();
-            }
+        if(nextQuestion.equals(foundQuestion.get()) || questionAlreadyUsed(nextQuestion)){
+            nextQuestion = createNewQuestion();
+            System.out.println("------------------");
+            System.out.println("DUPLICATE FOUND");
+            System.out.println("[NEW QUESTION CREATED]");
+            System.out.println("------------------");
         }
+
         return nextQuestion;
     }
 
     /**
      * Check using the lobbyToQuestionsUsed hash map whether the next question has already been used in the lobby
      */
-    public boolean questionAlreadyUsed(String lobby, Question question){
-        HashSet<Question> questionsUsed = lobbyToQuestionsUsed.get(lobby);
+    public boolean questionAlreadyUsed(Question question){
+        HashSet<Question> questionsUsed = lobbyToQuestionsUsed.get(lastLobby);
         if(questionsUsed != null){
             return questionsUsed.contains(question);
         }
@@ -80,13 +90,14 @@ public class QuestionProvider {
     /**
      * Update the set containing all questions used in a given lobby
      */
-    public void updateSetOfQuestions(String lastLobby, Question question){
+    public void updateSetOfQuestions(Question question){
         HashSet<Question> set = lobbyToQuestionsUsed.get(lastLobby);
         if(set == null){
             set = new HashSet<>();
-        }else{
-            set.add(question);
         }
+        set.add(question);
+        System.out.println("Attempted to update questiojns....");
+        lobbyToQuestionsUsed.put(lastLobby, set);
     }
 
 
@@ -131,7 +142,7 @@ public class QuestionProvider {
 
         Set<Long> activitySet = new HashSet<>(activitiesIDS);
         Question question = new Question(pointer, questionType, newPointer, activitySet, lastLobby);
-        updateSetOfQuestions(lastLobby, question);
+        updateSetOfQuestions(question);
         questionRepository.save(question);
         System.out.println(question);
         return question;

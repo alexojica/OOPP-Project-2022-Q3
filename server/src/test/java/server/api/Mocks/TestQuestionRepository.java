@@ -32,6 +32,11 @@ public class TestQuestionRepository implements QuestionRepository {
     }
 
     @Override
+    public Optional<Question> findByIdAndLastLobbyToken(Long pointer, String lastLobby) {
+        return Optional.empty();
+    }
+
+    @Override
     public long count() {
         return questions.size();
     }
