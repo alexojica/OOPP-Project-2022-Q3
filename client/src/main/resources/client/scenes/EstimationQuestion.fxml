@@ -7,13 +7,14 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.questions.EstimationQuestionCtrl">
    <children>
       <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true" />
-      <Button layoutX="589.0" layoutY="557.0" mnemonicParsing="false" onAction="#submit" text="Submit" />
+      <Button fx:id="submit" layoutX="589.0" layoutY="557.0" mnemonicParsing="false" onAction="#submit" text="Submit" />
       <TextField fx:id="answer" layoutX="395.0" layoutY="440.0" prefHeight="74.0" prefWidth="441.0" promptText="Fill in your guess here!" />
       <Button focusTraversable="false" layoutX="27.0" layoutY="650.0" mnemonicParsing="false" onAction="#leaveGame" prefHeight="43.0" prefWidth="110.0" text="Leave Game">
          <font>
@@ -58,5 +59,9 @@
         <items>
         </items>
       </MenuButton>
+      <Circle fx:id="joker1" fill="DODGERBLUE" layoutX="494.0" layoutY="628.0" onMouseClicked="#doublePoints" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="joker3" fill="DODGERBLUE" layoutX="754.0" layoutY="628.0" onMouseClicked="#halfTimeForOthers" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
+      <Text layoutX="449.0" layoutY="668.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" Double Points💰" />
+      <Text layoutX="705.0" layoutY="668.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Half time of others⏰" />
    </children>
 </AnchorPane>

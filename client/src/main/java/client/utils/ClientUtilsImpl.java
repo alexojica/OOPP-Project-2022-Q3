@@ -55,6 +55,9 @@ public class ClientUtilsImpl implements ClientUtils {
     }
 
 
+    AtomicReference<Double> progress;
+    AtomicReference<Double> timeLeft;
+
     @Inject
     public ClientUtilsImpl(ClientData clientData, ServerUtils server, MainCtrl mainCtrl, GameMCQCtrl gameMCQCtrl,
                            EnergyAlternativeQuestionCtrl energyAlternativeQuestionCtrl,
@@ -124,18 +127,19 @@ public class ClientUtilsImpl implements ClientUtils {
         AtomicBoolean ok = new AtomicBoolean(false);
         progress = new AtomicReference<>((double) 1);
         pb.setProgress(progress.get());
+        timeLeft = new AtomicReference<Double>(1D);
 
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 Platform.runLater(() -> {
-                    progress.updateAndGet(v -> (double) (v - 0.01));
+                    progress.updateAndGet(v -> (v - 0.01D));
+                    timeLeft.updateAndGet(v -> (v - 0.01D));
                     pb.setProgress(progress.get());
                     r.set((int) Math.floor(255 - progress.get() * 255));
                     g.set((int) Math.floor(progress.get() * 255));
                     pb.setStyle("-fx-accent: rgb(" + r + "," + g + ", " + 0 + ");");
-//                    System.out.println(pb.getProgress());
                     if(!updateCoefficient.get()){
                         if(currentSceneCtrl instanceof GameMCQCtrl){
                             if(((GameMCQCtrl) currentSceneCtrl).getAnswer1().isSelected()){
@@ -166,7 +170,20 @@ public class ClientUtilsImpl implements ClientUtils {
                             }
                         }
                     }
-                    if(pb.getProgress() <= 0)
+                    if(progress.get() <= 0){
+                        switch (questionType){
+                            case MULTIPLE_CHOICE_QUESTION:
+                                ((GameMCQCtrl) me).disableAnswers();
+                                break;
+                            case ESTIMATION_QUESTION:
+                                ((EstimationQuestionCtrl) me).disableSubmitButton();
+                                break;
+                            case ENERGY_ALTERNATIVE_QUESTION:
+                                ((EnergyAlternativeQuestionCtrl) me).disableAnswers();
+                                break;
+                        }
+                    }
+                    if(timeLeft.get() <= 0)
                     {
                         timer.cancel();
 
@@ -193,7 +210,8 @@ public class ClientUtilsImpl implements ClientUtils {
     }
 
     public void halfTime(){
-        progress = new AtomicReference<>(progress.get() / 2);
+        System.out.println("halftime");
+        progress.set(progress.get() / 2);
     }
 
     @Override

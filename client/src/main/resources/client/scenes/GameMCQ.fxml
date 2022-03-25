@@ -10,6 +10,11 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
 <?import javafx.scene.control.MenuButton?>
 <AnchorPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: e6e6e6;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.questions.GameMCQCtrl">
@@ -58,9 +63,9 @@
          </font>
       </Text>
       <ProgressBar fx:id="pb" layoutX="500.0" layoutY="84.0" prefHeight="20.0" prefWidth="320.0" progress="0.0" />
-      <Circle fill="DODGERBLUE" layoutX="537.0" layoutY="630.0" onMouseClicked="#doublePoints" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fill="DODGERBLUE" layoutX="667.0" layoutY="630.0" onMouseClicked="#eliminateRandomWrongAnswer" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fill="DODGERBLUE" layoutX="797.0" layoutY="630.0" onMouseClicked="#halfTimeForOthers" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="joker1" fill="DODGERBLUE" layoutX="537.0" layoutY="630.0" onMouseClicked="#doublePoints" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="joker2" fill="DODGERBLUE" layoutX="667.0" layoutY="630.0" onMouseClicked="#eliminateRandomWrongAnswer" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="joker3" fill="DODGERBLUE" layoutX="797.0" layoutY="630.0" onMouseClicked="#halfTimeForOthers" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
       <Text layoutX="492.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" Double Points💰" />
       <Text layoutX="609.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Eliminate an answer❌" />
       <Text layoutX="748.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Half time of others⏰" />

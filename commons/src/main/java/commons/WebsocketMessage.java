@@ -25,6 +25,8 @@ public class WebsocketMessage {
 
     private String newToken;
 
+    private String senderName;
+
     public JokerType getJokerType() {
         return jokerType;
     }
@@ -45,6 +47,9 @@ public class WebsocketMessage {
         return question;
     }
 
+    public String getSenderName() {
+        return senderName;
+    }
     public String getNewToken() {
         return newToken;
     }
@@ -73,14 +78,15 @@ public class WebsocketMessage {
         this.lobbyToken = token;
     }
 
+    public WebsocketMessage(JokerType jokerType, String lobbyToken, String senderName) {
     /**
      * Constructor used for sending messages when a joker is used.
      * @param jokerType
      * @param lobbyToken
      */
-    public WebsocketMessage(JokerType jokerType, String lobbyToken) {
         this.jokerType = jokerType;
         this.lobbyToken = lobbyToken;
+        this.senderName = senderName;
     }
 
 

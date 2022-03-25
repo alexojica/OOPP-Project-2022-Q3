@@ -86,6 +86,7 @@ public class WaitingCtrl implements Initializable{
      * Method that sets up how the scene should look like when switched to
      */
     public void load(){
+        clientData.resetJokers();
         clientData.setQuestionCounter(0);
         tip.setText("Theres only one correct answer per question, get the most right to win.");
         lobbyCode.setText(lobbyCode.getText() + 59864);

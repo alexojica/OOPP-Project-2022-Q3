@@ -11,16 +11,21 @@ import com.google.inject.Inject;
 import commons.Activity;
 import commons.Question;
 import commons.WebsocketMessage;
+import constants.JokerType;
 import constants.ResponseCodes;
 import emotes.Emotes;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TextField;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 import static constants.QuestionTypes.ESTIMATION_QUESTION;
+import static javafx.scene.paint.Color.rgb;
 
-public class EstimationQuestionCtrl extends JokerPowerUps{
+public class EstimationQuestionCtrl implements JokerPowerUps{
 
     private final ServerUtils server;
     private final ClientUtils client;
@@ -28,6 +33,8 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
     private final ClientData clientData;
     private final Emotes emotes;
     private final Game game;
+    protected boolean doublePoints = false;
+    private JokerUtils jokerUtils;
 
     private Double progress;
 
@@ -52,6 +59,15 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
     @FXML
     private Text answerPopUp;
 
+    @FXML
+    private Button submit;
+
+    @FXML
+    private Circle joker1;
+
+    @FXML
+    private Circle joker3;
+
     private Long submittedAnswer;
     private Long correctAnswer;
 
@@ -68,7 +84,7 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
     @Inject
     public EstimationQuestionCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ClientData clientData,
                                   JokerUtils jokerUtils, Emotes emotes, Game game) {
-        super(jokerUtils);
+        this.jokerUtils = jokerUtils;
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.client = client;
@@ -89,6 +105,23 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
     {
         scoreTxt.setText("Score:" + clientData.getClientScore());
         nQuestionsTxt.setText(clientData.getQuestionCounter() + "/20");
+
+        doublePoints = false;
+        joker3.setDisable(clientData.getUsedJokers().contains(JokerType.HALF_TIME_FOR_ALL_LOBBY));
+        joker1.setDisable(clientData.getUsedJokers().contains(JokerType.DOUBLE_POINTS));
+
+        submit.setDisable(false);
+
+        if(!clientData.getUsedJokers().contains(JokerType.DOUBLE_POINTS))
+            joker1.setFill(rgb(30,144,255));
+        else
+            joker1.setFill(rgb(235,235,228));
+
+        if(!clientData.getUsedJokers().contains(JokerType.HALF_TIME_FOR_ALL_LOBBY))
+            joker3.setFill(rgb(30,144,255));
+        else
+            joker3.setFill(rgb(235,235,228));
+
 
         Activity polledActivity = server.getActivityByID(question.getFoundActivities().get(0)).get();
         correctAnswer = polledActivity.getEnergyConsumption();
@@ -212,6 +245,31 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
         game.leaveLobby();
     }
 
+    public void disableSubmitButton(){
+        submit.setDisable(true);
+    }
+
+    @Override
+    public void doublePoints() {
+        if(!clientData.getUsedJokers().contains(JokerType.DOUBLE_POINTS)) {
+            doublePoints = true;
+            joker1.setDisable(true);
+            joker1.setFill(rgb(235,235,228));
+            clientData.addJoker(JokerType.DOUBLE_POINTS);
+        }
+    }
+
+    @Override
+    public void halfTimeForOthers() {
+        if(!clientData.getUsedJokers().contains(JokerType.HALF_TIME_FOR_ALL_LOBBY)) {
+            joker3.setDisable(true);
+            joker3.setFill(rgb(235,235,228));
+            clientData.addJoker(JokerType.HALF_TIME_FOR_ALL_LOBBY);
+            System.out.println("Time was halved");
+            jokerUtils.setLobbyJoker(JokerType.HALF_TIME_FOR_ALL_LOBBY);
+            jokerUtils.sendJoker();
+        }
+    }
     /**
      * Returns the label corresponding to the position in the method name.
      * @return label corresponding to the position
