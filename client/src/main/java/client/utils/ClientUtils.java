@@ -28,4 +28,6 @@ public interface ClientUtils {
     void setCurrentSceneCtrl(Object currentSceneCtrl);
 
     double getCoefficient();
+
+    void updateMessages(QuestionTypes q, String str, String lobbyToken);
 }

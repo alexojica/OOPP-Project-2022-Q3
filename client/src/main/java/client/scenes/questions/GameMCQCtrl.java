@@ -13,6 +13,7 @@ import commons.WebsocketMessage;
 import constants.ResponseCodes;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
@@ -54,6 +55,13 @@ public class GameMCQCtrl extends JokerPowerUps {
     private RadioButton answer3;
 
     private int correctAnswer;
+
+    @FXML
+    private Label messageTxt1;
+    @FXML
+    private Label messageTxt2;
+    @FXML
+    private Label messageTxt3;
 
     @Inject
     public GameMCQCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ClientData clientData,
@@ -254,4 +262,60 @@ public class GameMCQCtrl extends JokerPowerUps {
         return answer3;
     }
 
+
+    /**
+     * Returns the label corresponding to the position in the method name.
+     * @return label corresponding to the position
+     */
+    public Label getMessageTxt1() {
+        return messageTxt1;
+    }
+
+    public Label getMessageTxt2() {
+        return messageTxt2;
+    }
+
+    public Label getMessageTxt3() {
+        return messageTxt3;
+    }
+
+    /**
+     * Sets the label text to the given string and when said string is not empty,
+     * a background colour is also added to make the message stand out more.
+     * @param message message to be displayed in the label corresponding to the method name
+     */
+    //empty string check might be used later in order to make messages disappear after X time
+    public void setMessageTxt1(String message) {
+        messageTxt1.setText(message);
+        if(!(message.equals(""))){
+            messageTxt1.setStyle("-fx-background-color: darkgray; -fx-padding: 10px");
+        }
+    }
+
+    public void setMessageTxt2(String message) {
+        messageTxt2.setText(message);
+        if(!(message.equals(""))){
+            messageTxt2.setStyle("-fx-background-color: darkgray; -fx-padding: 10px");
+        }
+    }
+
+    public void setMessageTxt3(String message) {
+        messageTxt3.setText(message);
+        if(!(message.equals(""))){
+            messageTxt3.setStyle("-fx-background-color: darkgray; -fx-padding: 10px");
+        }
+    }
+
+    /**
+     * Button that sends a websocketmessage containing a questiontype corresponding to the current question,
+     * a string containing the playername and an emote and another string containing the player's lobbyToken.
+     * This button is a test to see whether the labels are changed properly. It will be removed when
+     * branch 75 containing the actual emotes is merged.
+     */
+    public void testSend() {
+        server.send("/app/updateMessages",
+                new WebsocketMessage(MULTIPLE_CHOICE_QUESTION, clientData.getClientPlayer().getName()
+                        + ": " + new String(Character.toChars(0x1F35D)),
+                        clientData.getClientLobby().getToken()));
+    }
 }
