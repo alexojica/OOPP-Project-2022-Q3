@@ -37,6 +37,7 @@ public class GameOverCtrl {
     private final MainCtrl mainCtrl;
     private final ClientData clientData;
     private final Game game;
+    private Thread thread;
 
     private ObservableList<Player> currentTop10;
     private Avatar builder;
@@ -65,13 +66,44 @@ public class GameOverCtrl {
     }
 
     public void leaveGame() {
-        server.send("/app/leaveLobby", new WebsocketMessage(ResponseCodes.LEAVE_LOBBY,
-                clientData.getClientLobby().getToken(), clientData.getClientPlayer(), clientData.getIsHost()));
-        System.out.println("Left the lobby");
+        thread.interrupt();
         mainCtrl.showGameModeSelection();
+        //even though the remove player from lobby is called twice,
+        // it won't cause any changes if the player was already removed from the lobby
+        //this has to happen if the player decides to leave before the 2 seconds
+        //until calling the remove method are up
+        removePlayerFromLobby();
     }
 
     public void load() {
+        thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    //give time for all clients to poll the server to update their leaderboard
+                    loadLeaderboard();
+                    //then remove the player
+                    //without this sleepthe client that connects last will be
+                    // missing information on the final table
+                    Thread.sleep(2000);
+                    removePlayerFromLobby();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
+    }
+
+    private void removePlayerFromLobby()
+    {
+        server.send("/app/leaveLobby", new WebsocketMessage(ResponseCodes.LEAVE_LOBBY,
+                clientData.getClientLobby().getToken(), clientData.getClientPlayer(), clientData.getIsHost()));
+        System.out.println("Left the lobby");
+    }
+
+    private void loadLeaderboard()
+    {
         currentTop10 = FXCollections.observableList(server.getTopByLobbyToken(clientData.getClientLobby().getToken()));
         builder = EightBitAvatar.newMaleAvatarBuilder().build();
 

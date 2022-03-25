@@ -133,6 +133,7 @@ public class GameImpl implements Game{
     {
         System.out.println("game initiated");
         clientData.setClientScore(0);
+        clientData.setQuestionCounter(0);
         //add delay until game starts
         Thread thread = new Thread(new Runnable() {
             @Override

@@ -73,7 +73,7 @@ public class ClientUtilsImpl implements ClientUtils {
                     clientData.setLobby(server.getLobbyByToken(a.getLobbyToken()));
                     if (a.getCode() == ResponseCodes.UPDATE_HOST) {
                         if (a.getPlayer().equals(clientData.getClientPlayer())) {
-                            System.out.println("New host is: " + clientData.getClientLobby());
+                            System.out.println("New host is: " + clientData.getClientPlayer());
                             clientData.setAsHost(true);
                         }
                     }

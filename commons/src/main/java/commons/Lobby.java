@@ -88,8 +88,10 @@ public class Lobby {
             if(playersInLobby.get(i).getId() == player.getId())
                 toRemove = i;
         }
-        if(toRemove != -1)
+        if(toRemove != -1) {
             playersInLobby.remove(toRemove);
+            System.out.println(player.getName() + " left the lobby: " + this.getToken());
+        }
         //playersInLobby.remove(player);
     }
 
