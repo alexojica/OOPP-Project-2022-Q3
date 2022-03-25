@@ -19,11 +19,16 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static constants.QuestionTypes.*;
+
 public class ClientUtilsImpl implements ClientUtils {
 
     private ServerUtils server;
 
     private MainCtrl mainCtrl;
+    private GameMCQCtrl gameMCQCtrl;
+    private EnergyAlternativeQuestionCtrl energyAlternativeQuestionCtrl;
+    private EstimationQuestionCtrl estimationQuestionCtrl;
 
     private ClientData clientData;
 
@@ -31,24 +36,21 @@ public class ClientUtilsImpl implements ClientUtils {
 
     private double coefficient;
 
-    public Object getCurrentSceneCtrl() {
-        return currentSceneCtrl;
-    }
-
-    public void setCurrentSceneCtrl(Object currentSceneCtrl) {
-        this.currentSceneCtrl = currentSceneCtrl;
-    }
-
     private Object currentSceneCtrl;
 
     AtomicReference<Double> progress;
 
     @Inject
-    public ClientUtilsImpl(ClientData clientData, ServerUtils server, MainCtrl mainCtrl, Game game) {
+    public ClientUtilsImpl(ClientData clientData, ServerUtils server, MainCtrl mainCtrl, GameMCQCtrl gameMCQCtrl,
+                           EnergyAlternativeQuestionCtrl energyAlternativeQuestionCtrl,
+                           EstimationQuestionCtrl estimationQuestionCtrl, Game game) {
         this.clientData = clientData;
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.game = game;
+        this.gameMCQCtrl = gameMCQCtrl;
+        this.energyAlternativeQuestionCtrl = energyAlternativeQuestionCtrl;
+        this.estimationQuestionCtrl = estimationQuestionCtrl;
         System.out.println("Instance of client utils");
 
         server.registerForMessages("/topic/nextQuestion", a -> {
@@ -133,7 +135,7 @@ public class ClientUtilsImpl implements ClientUtils {
                     {
                         timer.cancel();
                         if(!ok.get()) {
-                            if(questionType == QuestionTypes.MULTIPLE_CHOICE_QUESTION){
+                            if(questionType == MULTIPLE_CHOICE_QUESTION){
                                 ((GameMCQCtrl) me).nextQuestion();
                             }else if(questionType == QuestionTypes.ESTIMATION_QUESTION){
                                 ((EstimationQuestionCtrl) me).nextQuestion();
@@ -199,8 +201,55 @@ public class ClientUtilsImpl implements ClientUtils {
 
     }
 
+
+    /**
+     * Receives a websocketmessage and updates the communication labels with the given string in the given questiontype.
+     * Only updates the labels if the lobbytoken corresponds to the one from the person who sent the method.
+     * Turning this action into a Runnable is done in order to prevent an IllegalStateException.
+     * @param q QuestionType received from the websocketmessage
+     * @param text String received from the websocketmessage
+     * @param lobbyToken token that corresponds to the lobby from the person who sent the message
+     */
+    public void updateMessages(QuestionTypes q, String text, String lobbyToken){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                if(!lobbyToken.equals(clientData.getClientLobby().getToken())){
+                    return;
+                }
+                switch(q){
+                    case MULTIPLE_CHOICE_QUESTION:
+                        gameMCQCtrl.setMessageTxt3(gameMCQCtrl.getMessageTxt2().getText());
+                        gameMCQCtrl.setMessageTxt2(gameMCQCtrl.getMessageTxt1().getText());
+                        gameMCQCtrl.setMessageTxt1(text);
+                        break;
+                    case ENERGY_ALTERNATIVE_QUESTION:
+                        energyAlternativeQuestionCtrl.setMessageTxt3(
+                                energyAlternativeQuestionCtrl.getMessageTxt2().getText());
+                        energyAlternativeQuestionCtrl.setMessageTxt2(
+                                energyAlternativeQuestionCtrl.getMessageTxt1().getText());
+                        energyAlternativeQuestionCtrl.setMessageTxt1(text);
+                        break;
+                    case ESTIMATION_QUESTION:
+                        estimationQuestionCtrl.setMessageTxt3(estimationQuestionCtrl.getMessageTxt2().getText());
+                        estimationQuestionCtrl.setMessageTxt2(estimationQuestionCtrl.getMessageTxt1().getText());
+                        estimationQuestionCtrl.setMessageTxt1(text);
+                        break;
+                }
+            }
+        });
+    }
+
     public double getCoefficient() {
         return coefficient;
+    }
+
+    public Object getCurrentSceneCtrl() {
+        return currentSceneCtrl;
+    }
+
+    public void setCurrentSceneCtrl(Object currentSceneCtrl) {
+        this.currentSceneCtrl = currentSceneCtrl;
     }
 
 }
