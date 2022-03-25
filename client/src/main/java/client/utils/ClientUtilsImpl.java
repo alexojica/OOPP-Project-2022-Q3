@@ -55,7 +55,6 @@ public class ClientUtilsImpl implements ClientUtils {
     }
 
 
-    AtomicReference<Double> progress;
     AtomicReference<Double> timeLeft;
 
     @Inject

@@ -16,9 +16,7 @@ import constants.ResponseCodes;
 import emotes.Emotes;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 

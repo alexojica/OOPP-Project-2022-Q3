@@ -15,9 +15,7 @@ import constants.ResponseCodes;
 import emotes.Emotes;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
@@ -81,9 +79,8 @@ public class EnergyAlternativeQuestionCtrl implements JokerPowerUps {
 
     @Inject
     public EnergyAlternativeQuestionCtrl(ClientData clientData, ClientUtils  client, ServerUtils server,
-                                         JokerUtils jokerUtils, Game game, MainCtrl mainCtrl) {
-        this.jokerUtils = jokerUtils;
                                          JokerUtils jokerUtils, Emotes emotes, Game game, MainCtrl mainCtrl) {
+        this.jokerUtils = jokerUtils;
         this.clientData = clientData;
         this.client = client;
         this.server = server;

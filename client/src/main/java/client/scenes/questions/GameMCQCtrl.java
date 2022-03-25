@@ -15,9 +15,7 @@ import constants.ResponseCodes;
 import emotes.Emotes;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
@@ -80,8 +78,8 @@ public class GameMCQCtrl implements JokerPowerUps {
 
     @Inject
     public GameMCQCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ClientData clientData,
-        this.jokerUtils = jokerUtils;
                        JokerUtils jokerUtils, Emotes emotes, Game game) {
+        this.jokerUtils = jokerUtils;
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.client = client;
