@@ -214,7 +214,7 @@ public class ServerUtils {
 
             @Override
             public void handleFrame(StompHeaders headers, Object payload) {
-                System.out.println("receiving message");
+                System.out.println("receiving " + ((WebsocketMessage) payload).getCode());
                 consumer.accept((WebsocketMessage) payload);
             }
 
