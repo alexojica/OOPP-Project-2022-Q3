@@ -26,10 +26,19 @@ public class EmotesImpl implements Emotes{
         this.clientData = clientData;
     }
 
+    /**
+     * @return returns this class' menuItems list which is basically the list of emotes that are usable
+     */
     public List<MenuItem> getEmotesList() {
         return menuItems;
     }
 
+    /**
+     * Takes a string and sends this string to the /app/updateMessages endpoint, from where it is sent to the
+     * updateMessages method in clientUtils.
+     * @param emote the emote to be send to other players
+     * !note that this can also be used to send other things through the communication labels!
+     */
     public void sendEmote(String emote) {
         server.send("/app/updateMessages", new WebsocketMessage(
                 clientData.getClientPlayer().getName() + ": " + emote,

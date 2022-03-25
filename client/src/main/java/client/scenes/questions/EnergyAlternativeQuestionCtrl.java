@@ -309,6 +309,12 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
         }
     }
 
+    /**
+     * Sets up the emoteMenu menubutton by first clearing anything that might be left in it from previous calls.
+     * This is done to prevent errors from occurring. Then all the emotes from the list in the EmotesImpl class are
+     * added and set such they trigger the sendEmote method when clicked. There's also some padding added to make it
+     * easier to click the buttons.
+     */
     public void setUpEmoteMenu(){
         emotesMenu.getItems().clear();
         emotesMenu.getItems().addAll(emotes.getEmotesList());
