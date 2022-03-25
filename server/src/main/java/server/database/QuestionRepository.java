@@ -15,9 +15,9 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
      * The pointer from the old question is taken as a parameter
      * which gives the id of the next question
      * @param pointer
+     * @param lastLobby
      * @return the new question with the id equal to the old question's pointer
      */
-    Optional<Question> findById(Long pointer);
-
+    Optional<Question> findByIdAndLastLobbyToken(Long pointer, String lastLobby);
     long count();
 }

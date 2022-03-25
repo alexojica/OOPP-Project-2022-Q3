@@ -19,7 +19,7 @@ class QuestionProviderTest {
         questionRepository = new TestQuestionRepository();
         new LoadActivities().saveIntoDatabase(testActivitiesRepository);
         System.out.println(testActivitiesRepository.findAll().size());
-        questionProvider = new QuestionProvider(testActivitiesRepository, questionRepository);
+        questionProvider = new QuestionProvider();
     }
 
     @Test
