@@ -294,12 +294,4 @@ public class ClientUtilsImpl implements ClientUtils {
         return coefficient;
     }
 
-    public Object getCurrentSceneCtrl() {
-        return currentSceneCtrl;
-    }
-
-    public void setCurrentSceneCtrl(Object currentSceneCtrl) {
-        this.currentSceneCtrl = currentSceneCtrl;
-    }
-
 }
