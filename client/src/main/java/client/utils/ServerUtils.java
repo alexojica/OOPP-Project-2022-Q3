@@ -204,9 +204,9 @@ public class ServerUtils {
     }
 
 
-    public void registerForMessages(String dest, Consumer<WebsocketMessage> consumer){
+    public StompSession.Subscription registerForMessages(String dest, Consumer<WebsocketMessage> consumer){
         System.out.println("registered for " + dest);
-        session.subscribe(dest, new StompFrameHandler() {
+        StompSession.Subscription subscription = session.subscribe(dest, new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
                 return WebsocketMessage.class;
@@ -218,9 +218,10 @@ public class ServerUtils {
                         " for lobby " + ((WebsocketMessage) payload).getLobbyToken());
                 consumer.accept((WebsocketMessage) payload);
             }
-
         });
+        return subscription;
     }
+
 
     public Lobby addMeToLobby(String token, Player player){
         ClientBuilder.newClient(new ClientConfig()) //

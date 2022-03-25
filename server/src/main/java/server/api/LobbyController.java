@@ -46,7 +46,11 @@ public class LobbyController {
     @PostMapping("/addLobby")
     @ResponseBody
     public Lobby addLobby(@RequestBody Lobby newLobby){
-        repository.save(newLobby);
+        String token = newLobby.getToken();
+        if(repository.findByToken(token).isEmpty()) {
+            repository.save(newLobby);
+            System.out.println("Lobby created: " + newLobby.getToken());
+        }
         return newLobby;
     }
 
@@ -97,9 +101,9 @@ public class LobbyController {
         if(found.isPresent())
         {
             Lobby activeLobby = found.get();
-            if(activeLobby.getStarted())
+            if(activeLobby.getIsStarted())
                 return ConnectionStatusCodes.YOU_ARE_NOT_HOST;
-            activeLobby.setStarted(true);
+            activeLobby.setIsStarted(true);
             repository.save(activeLobby);
 
             System.out.println("game started");
@@ -143,13 +147,59 @@ public class LobbyController {
             return new WebsocketMessage(ResponseCodes.START_GAME, message.getLobbyToken(), lobby.getToken());
     }
 
+    /**
+     * Websocket mapping that processes the game start message from the player
+     * and redirects it to all clients subscribed to /topic/lobbyEnd
+     * @param message received from the client containing the Response code and lobby token.
+     */
+    @MessageMapping("/lobbyEnd")
+    @SendTo("/topic/updateLobby")
+    public WebsocketMessage endGame(WebsocketMessage message){
+        Optional<Lobby> found = getLobbyByToken(message.getLobbyToken());
+        if(found.isPresent())
+        {
+            Lobby lobbyToTerminate = found.get();
+            lobbyToTerminate.setIsStarted(false);
+            repository.save(lobbyToTerminate);
+        }
+        return new WebsocketMessage(ResponseCodes.END_GAME, message.getLobbyToken());
+    }
+
+    /**
+     * Websocket mapping that processes the update request message from the player
+     * and redirects it to all clients subscribed to /topic/updateLobby
+     * @param message received from the client containing the Response code, lobby token and player
+     * @return
+     */
     @MessageMapping("/leaveLobby")
     @SendTo("/topic/updateLobby")
     public WebsocketMessage leaveLobby(WebsocketMessage message){
         Optional<Lobby> found = getLobbyByToken(message.getLobbyToken());
         if(found.isPresent()){
-            found.get().removePlayerByName(message.getPlayer().getName());
-            repository.save(found.get());
+            Player playerToRemove = message.getPlayer();
+            Lobby currentLobby = found.get();
+            currentLobby.removePlayerFromLobby(playerToRemove);
+
+            //check if the removed player was the host
+            //if yes, assign a new host
+            //if the lobby is now empty, terminate it
+
+            if(message.getIsPlayerHost())
+            {
+                if(currentLobby.getPlayersInLobby().size() == 0)
+                {
+                    endGame(message);
+                }
+                else
+                {
+                    repository.save(currentLobby);
+                    //first remaining player in the lobby is assigned as the new host
+                    return new WebsocketMessage(ResponseCodes.UPDATE_HOST,
+                            message.getLobbyToken(), currentLobby.getPlayersInLobby().get(0));
+                }
+            }
+
+            repository.save(currentLobby);
         }
 
         return new WebsocketMessage(ResponseCodes.LEAVE_LOBBY, message.getLobbyToken());
@@ -160,9 +210,9 @@ public class LobbyController {
     public WebsocketMessage updateScore(WebsocketMessage message){
         Optional<Lobby> found = getLobbyByToken(message.getLobbyToken());
         if(found.isPresent()){
-            for(Player p : found.get().playersInLobby){
-                if(p.name.equals(message.getPlayer().name))
-                    p.score = message.getPlayer().score;
+            for(Player p : found.get().getPlayersInLobby()){
+                if(p.getName().equals(message.getPlayer().getName()))
+                    p.setScore(message.getPlayer().getScore());
             }
 
             repository.save(found.get());

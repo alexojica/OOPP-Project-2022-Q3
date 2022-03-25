@@ -19,7 +19,6 @@ import javafx.scene.text.Text;
 
 import javax.inject.Inject;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -81,11 +80,11 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
     }
 
     public void load() {
-
-        setUpEmoteMenu();
-        Question question = clientData.getClientQuestion();
-        resetUI(question);
-
+        if(client.isInLobby()) {
+            setUpEmoteMenu();
+            Question question = clientData.getClientQuestion();
+            resetUI(question);
+        }
     }
 
     public void leaveGame(){
@@ -111,7 +110,7 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
         answer2.setStyle(" -fx-background-color: transparent; ");
         answer3.setStyle(" -fx-background-color: transparent; ");
 
-        Optional<Activity> act = server.getActivityByID(question.getFoundActivities().stream().findFirst().get());
+        Optional<Activity> act = server.getActivityByID(question.getFoundActivities().get(0));
         String textMethod = question.getText();
         if(act.isPresent()) {
             textMethod += " " + act.get().getTitle();
@@ -145,7 +144,7 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
 
     public void randomizeFields(RadioButton a, RadioButton b, RadioButton c, Question question)
     {
-        List<Activity> list = server.getActivitiesFromIDs(new ArrayList(question.getFoundActivities()));
+        List<Activity> list = server.getActivitiesFromIDs(question.getFoundActivities());
         a.setText(list.get(1).getTitle());
         b.setText(list.get(2).getTitle());
         c.setText(list.get(3).getTitle());
@@ -161,7 +160,7 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
 
                     Thread.sleep(2000);
 
-                    if(clientData.getQuestionCounter() == 3){
+                    if(clientData.getQuestionCounter() == game.getQuestionsToDisplayLeaderboard()){
                         Platform.runLater(() -> mainCtrl.showTempLeaderboard());
                         Thread.sleep(5000);
                     }

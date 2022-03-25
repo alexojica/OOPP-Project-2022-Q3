@@ -15,6 +15,14 @@ public interface ClientUtils {
 
     void prepareQuestion();
 
+    void killTimer();
+
+    void unsubscribeFromMessages();
+
+    void registerLobbyCommunication();
+
+    void registerQuestionCommunication();
+
     Object getCurrentSceneCtrl();
 
     void setCurrentSceneCtrl(Object currentSceneCtrl);

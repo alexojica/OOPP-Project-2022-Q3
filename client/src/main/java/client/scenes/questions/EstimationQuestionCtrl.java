@@ -78,10 +78,11 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
     }
 
     public void load() {
-
-        setUpEmoteMenu();
-        Question question = clientData.getClientQuestion();
-        resetUI(question);
+        if(client.isInLobby()) {
+            setUpEmoteMenu();
+            Question question = clientData.getClientQuestion();
+            resetUI(question);
+        }
     }
 
     public void resetUI(Question question)
@@ -114,7 +115,7 @@ public class EstimationQuestionCtrl extends JokerPowerUps{
 
                     Thread.sleep(2000);
 
-                    if(clientData.getQuestionCounter() == 3){
+                    if(clientData.getQuestionCounter() == game.getQuestionsToDisplayLeaderboard()){
                         Platform.runLater(() -> mainCtrl.showTempLeaderboard());
                         Thread.sleep(5000);
                     }

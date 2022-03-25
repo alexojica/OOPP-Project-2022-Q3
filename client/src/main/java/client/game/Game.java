@@ -12,4 +12,10 @@ public interface Game {
     void initiateMultiplayerGame();
 
     void startMultiplayerGame();
+
+    void endGame();
+
+    Integer getQuestionsToEndGame();
+
+    Integer getQuestionsToDisplayLeaderboard();
 }

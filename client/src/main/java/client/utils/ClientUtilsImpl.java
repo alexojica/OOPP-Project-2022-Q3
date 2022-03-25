@@ -9,8 +9,10 @@ import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
 import commons.Question;
 import constants.QuestionTypes;
+import constants.ResponseCodes;
 import javafx.application.Platform;
 import javafx.scene.control.ProgressBar;
+import org.springframework.messaging.simp.stomp.StompSession;
 
 import javax.inject.Inject;
 import java.util.Timer;
@@ -36,9 +38,22 @@ public class ClientUtilsImpl implements ClientUtils {
 
     private double coefficient;
 
+    private Timer timer;
+
     private Object currentSceneCtrl;
 
+    private StompSession.Subscription nextQuestionSubscription, updateLobbySubscription;
+
     AtomicReference<Double> progress;
+
+    public Object getCurrentSceneCtrl() {
+        return currentSceneCtrl;
+    }
+
+    public void setCurrentSceneCtrl(Object currentSceneCtrl) {
+        this.currentSceneCtrl = currentSceneCtrl;
+    }
+
 
     @Inject
     public ClientUtilsImpl(ClientData clientData, ServerUtils server, MainCtrl mainCtrl, GameMCQCtrl gameMCQCtrl,
@@ -53,27 +68,45 @@ public class ClientUtilsImpl implements ClientUtils {
         this.estimationQuestionCtrl = estimationQuestionCtrl;
         System.out.println("Instance of client utils");
 
-        server.registerForMessages("/topic/nextQuestion", a -> {
-            if(a.getLobbyToken().equals(clientData.getClientLobby().token)) {
+        registerQuestionCommunication();
+        registerLobbyCommunication();
+
+    }
+
+    public void registerLobbyCommunication()
+    {
+        if(updateLobbySubscription == null) {
+            updateLobbySubscription = server.registerForMessages("/topic/updateLobby", a -> {
+                System.out.println(a.getCode());
+                if (a.getLobbyToken().equals(clientData.getClientLobby().getToken())) {
+
+                    clientData.setLobby(server.getLobbyByToken(a.getLobbyToken()));
+                    if (a.getCode() == ResponseCodes.UPDATE_HOST) {
+                        if (a.getPlayer().equals(clientData.getClientPlayer())) {
+                            System.out.println("New host is: " + clientData.getClientPlayer());
+                            clientData.setAsHost(true);
+                        }
+                    }
+
+                    if (currentSceneCtrl.getClass() == WaitingCtrl.class)
+                        ((WaitingCtrl) currentSceneCtrl).refresh();
+                }
+            });
+        }
+    }
+
+    public void registerQuestionCommunication()
+    {
+        if(nextQuestionSubscription == null) {
+            nextQuestionSubscription = server.registerForMessages("/topic/nextQuestion", a -> {
                 System.out.println("next question received " + clientData.getQuestionCounter());
                 clientData.setQuestion(a.getQuestion());
                 clientData.setPointer(a.getQuestion().getPointer());
-                if (currentSceneCtrl instanceof WaitingCtrl) {
-                    System.out.println("still in lobby");
+                if (currentSceneCtrl.getClass() == WaitingCtrl.class) {
                     game.initiateMultiplayerGame();
                 }
-            }
-        });
-
-        server.registerForMessages("/topic/updateLobby", a -> {
-            if(a.getLobbyToken().equals(clientData.getClientLobby().getToken())){
-                System.out.println("Before: " + clientData.getClientLobby());
-                clientData.setLobby(server.getLobbyByToken(a.getLobbyToken()));
-                System.out.println("After: " + clientData.getClientLobby());
-                if(currentSceneCtrl.getClass() == WaitingCtrl.class)
-                    ((WaitingCtrl) currentSceneCtrl).refresh();
-            }
-        });
+            });
+        }
     }
 
     @Override
@@ -88,11 +121,11 @@ public class ClientUtilsImpl implements ClientUtils {
         AtomicInteger r= new AtomicInteger();
         AtomicInteger g= new AtomicInteger();
         AtomicBoolean updateCoefficient = new AtomicBoolean(false);
-        Timer timer = new Timer();
         AtomicBoolean ok = new AtomicBoolean(false);
         progress = new AtomicReference<>((double) 1);
         pb.setProgress(progress.get());
 
+        timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -136,6 +169,7 @@ public class ClientUtilsImpl implements ClientUtils {
                     if(pb.getProgress() <= 0)
                     {
                         timer.cancel();
+
                         if(!ok.get()) {
                             if(questionType == MULTIPLE_CHOICE_QUESTION){
                                 ((GameMCQCtrl) me).nextQuestion();
@@ -151,6 +185,11 @@ public class ClientUtilsImpl implements ClientUtils {
                 });
             }
         },0,200);
+    }
+
+    public void killTimer()
+    {
+        timer.cancel();
     }
 
     public void halfTime(){
@@ -169,38 +208,47 @@ public class ClientUtilsImpl implements ClientUtils {
     }
 
     @Override
-    public void getQuestion(){
+    public void getQuestion() {
 
-        clientData.incrementQuestionCounter();
-
-        System.out.println("[POINTER] " + clientData.getClientPointer() +
-                ", [TOKEN] " + clientData.getClientLobby().getToken());
-
-        System.out.println("[TYPE] " + clientData.getClientQuestion().getType());
-
-        switch(clientData.getClientQuestion().getType())
-        {
-            case MULTIPLE_CHOICE_QUESTION:
-                System.out.println("should appear scene");
-                mainCtrl.showGameMCQ();
-                break;
-
-            case ESTIMATION_QUESTION:
-                System.out.println("should appear scene");
-                mainCtrl.showGameEstimation();
-                break;
-
-            case ENERGY_ALTERNATIVE_QUESTION:
-                mainCtrl.showEnergyAlternative();
-                break;
-            default: break;
+        if (clientData.getQuestionCounter() >= game.getQuestionsToEndGame()){
+            game.endGame();
         }
+        else {
+            clientData.incrementQuestionCounter();
 
-        if(clientData.getQuestionCounter() > 20){
+            System.out.println("[POINTER] " + clientData.getClientPointer() +
+                    ", [TOKEN] " + clientData.getClientLobby().getToken());
 
-            mainCtrl.showGameOver();
+            System.out.println("[TYPE] " + clientData.getClientQuestion().getType());
+
+            switch (clientData.getClientQuestion().getType()) {
+                case MULTIPLE_CHOICE_QUESTION:
+                    System.out.println("should appear scene");
+                    mainCtrl.showGameMCQ();
+                    break;
+
+                case ESTIMATION_QUESTION:
+                    System.out.println("should appear scene");
+                    mainCtrl.showGameEstimation();
+                    break;
+
+                case ENERGY_ALTERNATIVE_QUESTION:
+                    System.out.println("should appear scene");
+                    mainCtrl.showEnergyAlternative();
+                    break;
+                default:
+                    break;
+            }
         }
+    }
 
+    public void unsubscribeFromMessages(){
+        nextQuestionSubscription.unsubscribe();
+        updateLobbySubscription.unsubscribe();
+
+        //I have to set to null
+        nextQuestionSubscription = null;
+        updateLobbySubscription = null;
     }
 
 
@@ -233,14 +281,6 @@ public class ClientUtilsImpl implements ClientUtils {
 
     public double getCoefficient() {
         return coefficient;
-    }
-
-    public Object getCurrentSceneCtrl() {
-        return currentSceneCtrl;
-    }
-
-    public void setCurrentSceneCtrl(Object currentSceneCtrl) {
-        this.currentSceneCtrl = currentSceneCtrl;
     }
 
 }

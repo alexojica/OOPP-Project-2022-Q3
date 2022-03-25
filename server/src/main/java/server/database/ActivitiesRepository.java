@@ -35,4 +35,6 @@ public interface ActivitiesRepository extends JpaRepository<Activity, Long> {
      */
     @Query("select a from Activity a where a.energyConsumption >= ?1 and a.energyConsumption <= ?2")
     public Optional<List<Activity>> findActivitiesInRange(long small, long big);
+
+    public Optional<Activity> findById(Long id);
 }

@@ -21,6 +21,8 @@ public class WebsocketMessage {
 
     private JokerType jokerType;
 
+    private Boolean isPlayerHost;
+
     private String newToken;
 
     public JokerType getJokerType() {
@@ -48,6 +50,9 @@ public class WebsocketMessage {
     }
     public String getMessage() {
         return message;
+    }
+    public Boolean getIsPlayerHost() {
+        return isPlayerHost;
     }
 
     public ResponseCodes getCode() {
@@ -136,6 +141,13 @@ public class WebsocketMessage {
         this.code = code;
         this.player = player;
         this.lobbyToken = lobbyToken;
+    }
+
+    public WebsocketMessage(ResponseCodes code, String lobbyToken, Player player, Boolean isPlayerHost){
+        this.code = code;
+        this.player = player;
+        this.lobbyToken = lobbyToken;
+        this.isPlayerHost = isPlayerHost;
     }
 
     /**

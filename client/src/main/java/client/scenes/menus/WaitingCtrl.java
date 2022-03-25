@@ -97,6 +97,7 @@ public class WaitingCtrl implements Initializable{
         }
         server.registerForMessages("/topic/lobbyStart", a -> {
             if(a.getCode() == ResponseCodes.START_GAME && a.getLobbyToken().equals(clientData.getClientLobby().token)) {
+                killTimer();
                 System.out.println("ishost:" + clientData.getIsHost());
                 clientData.setLobby(server.getLobbyByToken(a.getNewToken()));
                 if(clientData.getIsHost())
@@ -198,6 +199,14 @@ public class WaitingCtrl implements Initializable{
                 refresh();
             }
         }, 0, 250);
+    }
+
+    /**
+     * Method to be called on scene change to stop the running of unnecessary timers
+     */
+    public void killTimer()
+    {
+        timer.cancel();
     }
 
 
