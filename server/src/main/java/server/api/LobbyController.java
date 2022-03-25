@@ -8,6 +8,7 @@ import commons.Player;
 import commons.WebsocketMessage;
 import constants.ConnectionStatusCodes;
 import constants.ResponseCodes;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -139,7 +140,11 @@ public class LobbyController {
     @MessageMapping("/lobbyStart")
     @SendTo("/topic/lobbyStart")
     public WebsocketMessage startGame(WebsocketMessage message){
-            return new WebsocketMessage(ResponseCodes.START_GAME, message.getLobbyToken());
+        Lobby lobby = repository.findByToken(message.getLobbyToken()).get();
+        lobby.setToken(RandomStringUtils.randomAlphabetic(5));
+        repository.save(lobby);
+        repository.save(new Lobby(message.getLobbyToken()));
+            return new WebsocketMessage(ResponseCodes.START_GAME, message.getLobbyToken(), lobby.getToken());
     }
 
     /**

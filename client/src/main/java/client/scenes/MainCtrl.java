@@ -149,6 +149,7 @@ public class MainCtrl extends Application {
     }
 
     public void showEnergyAlternative(){
+        client.setCurrentSceneCtrl(energyAlternativeQuestionCtrl);
         primaryStage.setTitle("GameScreen");
         primaryStage.setScene(energyAlternative);
         energyAlternativeQuestionCtrl.load();

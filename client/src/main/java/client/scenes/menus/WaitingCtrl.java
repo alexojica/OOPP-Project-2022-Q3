@@ -99,6 +99,7 @@ public class WaitingCtrl implements Initializable{
             if(a.getCode() == ResponseCodes.START_GAME && a.getLobbyToken().equals(clientData.getClientLobby().token)) {
                 killTimer();
                 System.out.println("ishost:" + clientData.getIsHost());
+                clientData.setLobby(server.getLobbyByToken(a.getNewToken()));
                 if(clientData.getIsHost())
                     server.send("/app/nextQuestion",
                             new WebsocketMessage(ResponseCodes.NEXT_QUESTION,

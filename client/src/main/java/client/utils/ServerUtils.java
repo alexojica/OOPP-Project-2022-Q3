@@ -214,7 +214,8 @@ public class ServerUtils {
 
             @Override
             public void handleFrame(StompHeaders headers, Object payload) {
-                System.out.println("receiving message");
+                System.out.println("Message " + ((WebsocketMessage) payload).getCode() +
+                        " for lobby " + ((WebsocketMessage) payload).getLobbyToken());
                 consumer.accept((WebsocketMessage) payload);
             }
         });
@@ -233,6 +234,7 @@ public class ServerUtils {
     }
 
     public void send(String dest, Object o){
+        System.out.println("Sending " + ((WebsocketMessage) o).getCode() + " to " + dest);
         session.send(dest, o);
     }
 }
