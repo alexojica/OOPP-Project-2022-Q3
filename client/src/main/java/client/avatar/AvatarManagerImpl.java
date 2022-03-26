@@ -97,6 +97,7 @@ public class AvatarManagerImpl implements AvatarManager {
 
     public void setAvatarOnClient(){
         renameFile();
+        updateAvatar();
         clientData.getClientPlayer().setAvatar(avatarPath.toString());
         clientData.getClientPlayer().setAvatarCode(baseAvatarName + seed + name.getText());
     }

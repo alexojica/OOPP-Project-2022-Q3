@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class QuestionRepositoryTest {
 
     @Test
-    void findById() {
+    void findByIdAndLastLobbyToken() {
     }
 
     @Test
