@@ -178,7 +178,6 @@ public class ServerUtils {
     }
 
 
-
     private StompSession session = connect("ws://localhost:8080/websocket");
 
     private StompSession connect(String url){
