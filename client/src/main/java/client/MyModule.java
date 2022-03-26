@@ -19,6 +19,8 @@ import client.avatar.AvatarManager;
 import client.avatar.AvatarManagerImpl;
 import client.data.ClientData;
 import client.data.ClientDataImpl;
+import client.emotes.Emotes;
+import client.emotes.EmotesImpl;
 import client.game.Game;
 import client.game.GameImpl;
 import client.scenes.GameOverCtrl;
@@ -38,8 +40,6 @@ import client.joker.JokerUtils;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
-import emotes.Emotes;
-import emotes.EmotesImpl;
 
 public class MyModule implements Module {
 

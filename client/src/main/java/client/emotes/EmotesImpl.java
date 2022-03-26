@@ -1,4 +1,4 @@
-package emotes;
+package client.emotes;
 
 import client.data.ClientData;
 import client.utils.ServerUtils;
@@ -8,7 +8,7 @@ import javafx.scene.control.MenuItem;
 import javax.inject.Inject;
 import java.util.List;
 
-public class EmotesImpl implements Emotes{
+public class EmotesImpl implements Emotes {
 
     private ServerUtils server;
     private ClientData clientData;

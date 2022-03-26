@@ -1,6 +1,8 @@
 package client.game;
 
 import client.data.ClientData;
+import client.emotes.Emotes;
+import client.emotes.EmotesImpl;
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
@@ -20,17 +22,19 @@ public class GameImpl implements Game{
     private final ClientUtils client;
     private final ClientData clientData;
     private final MainCtrl mainCtrl;
+    private  final Emotes emotes;
 
     private final String COMMON_CODE = "COMMON";
     private final Integer questionsToEndGame = 20;
     private final Integer questionsToDisplayLeaderboard = 10;
 
     @Inject
-    public GameImpl(ServerUtils server, ClientUtils client, ClientData clientData, MainCtrl mainCtrl) {
+    public GameImpl(ServerUtils server, ClientUtils client, ClientData clientData, MainCtrl mainCtrl, Emotes emotes) {
         this.server = server;
         this.client = client;
         this.clientData = clientData;
         this.mainCtrl = mainCtrl;
+        this.emotes = emotes;
     }
 
     /**
@@ -184,6 +188,8 @@ public class GameImpl implements Game{
         //no more server polling for this client
         client.unsubscribeFromMessages();
 
+        client.resetMessages();
+
         System.out.println("Left the lobby");
 
         clientData.setAsHost(false);
@@ -200,6 +206,7 @@ public class GameImpl implements Game{
                 clientData.getClientLobby().getToken()));
         client.unsubscribeFromMessages();
         client.killTimer();
+        client.resetMessages();
         //uses the current lobby to load images, scores and names for the players
         mainCtrl.showGameOver();
     }
