@@ -2,7 +2,6 @@ package client.game;
 
 import client.data.ClientData;
 import client.emotes.Emotes;
-import client.emotes.EmotesImpl;
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
