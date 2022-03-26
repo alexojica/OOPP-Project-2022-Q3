@@ -3,8 +3,15 @@ package commons;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class LeaderboardEntryTest {
+
+    @Test
+    void testConstructor(){
+        LeaderboardEntry leaderboardEntry = new LeaderboardEntry(100, "alex", "somecode");
+        assertNotNull(leaderboardEntry);
+    }
 
     @Test
     void getScore() {

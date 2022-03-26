@@ -10,11 +10,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class LobbyTest {
 
     private static Lobby lobby;
+    private static Lobby lobby1;
     private static Lobby lobby2;
 
     @BeforeEach
     private void createLobby(){
         lobby = new Lobby("arda");
+        lobby1 = new Lobby("someToken", 1);
         lobby2 = new Lobby();
     }
 
@@ -22,7 +24,7 @@ public class LobbyTest {
     Tests the main constructor
      */
     @Test
-    void testConstructorNotNull(){
+    void testConstructor(){
         assertNotNull(lobby);
     }
 

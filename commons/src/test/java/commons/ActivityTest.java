@@ -1,10 +1,13 @@
 package commons;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ActivityTest {
 
@@ -22,6 +25,13 @@ class ActivityTest {
 //    void getId() {
 //        assertEquals(act1.getId(), "id1");
 //    }
+
+    @Test
+    void testConstructor(){
+        assertNotNull(act1);
+        assertNotNull(act2);
+        assertNotNull(act3);
+    }
 
     @Test
     void getImagePath() {
@@ -48,5 +58,12 @@ class ActivityTest {
         assertEquals(act1, act3);
         assertNotEquals(act1, act2);
         assertNotEquals(null, act1);
+    }
+
+    @Test
+    public void setEnergyConsumption() {
+        Activity activity = act1;
+        activity.setEnergyConsumption(15L);
+        assertEquals(15L, activity.getEnergyConsumption());
     }
 }
