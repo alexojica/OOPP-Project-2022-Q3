@@ -22,6 +22,7 @@ import javafx.scene.text.Text;
 import javax.inject.Inject;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
@@ -199,7 +200,7 @@ public class EnergyAlternativeQuestionCtrl implements JokerPowerUps {
 
                     Thread.sleep(2000);
 
-                    if(clientData.getQuestionCounter() == game.getQuestionsToDisplayLeaderboard()){
+                    if(Objects.equals(clientData.getQuestionCounter(), game.getQuestionsToDisplayLeaderboard())){
                         Platform.runLater(() -> mainCtrl.showTempLeaderboard());
                         Thread.sleep(5000);
                     }

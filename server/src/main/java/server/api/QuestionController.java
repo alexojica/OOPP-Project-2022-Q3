@@ -31,6 +31,7 @@ public class QuestionController {
     public WebsocketMessage nextQuestion(WebsocketMessage message){
         Question generatedQuestion = questionProvider.getQuestion(message.getPointer(),
                 message.getLobbyToken(), 30);
+        System.out.println("Activities generated were " + generatedQuestion.getFoundActivities());
         return new WebsocketMessage(message.getCode(),
                 message.getLobbyToken(), generatedQuestion);
     }

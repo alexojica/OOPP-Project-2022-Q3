@@ -6,10 +6,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
@@ -55,9 +52,8 @@ public class Question {
                 break;
             default: this.text = "This question has no type.";
         }
-        this.text = text;
         this.pointer = pointer;
-        this.foundActivities = new HashSet<>();
+        this.foundActivities = new LinkedHashSet<>();
         for(Long l : foundActivities)
         {
             this.foundActivities.add(new LongWrapper(l));
@@ -100,7 +96,7 @@ public class Question {
         return (new ArrayList<>(foundActivities.stream().map(LongWrapper::getId).collect(Collectors.toList())));
     }
 
-    public void setFoundActivities(Set<LongWrapper> foundActivities) {
+    public void setFoundActivities(LinkedHashSet<LongWrapper> foundActivities) {
         this.foundActivities = foundActivities;
     }
 

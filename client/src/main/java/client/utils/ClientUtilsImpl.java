@@ -81,8 +81,9 @@ public class ClientUtilsImpl implements ClientUtils {
     {
         if(updateLobbySubscription == null) {
             updateLobbySubscription = server.registerForMessages("/topic/updateLobby", a -> {
-                System.out.println(a.getCode());
                 if (a.getLobbyToken().equals(clientData.getClientLobby().getToken())) {
+
+                    System.out.println(a.getCode());
 
                     clientData.setLobby(server.getLobbyByToken(a.getLobbyToken()));
                     if (a.getCode() == ResponseCodes.UPDATE_HOST) {
@@ -104,11 +105,16 @@ public class ClientUtilsImpl implements ClientUtils {
     {
         if(nextQuestionSubscription == null) {
             nextQuestionSubscription = server.registerForMessages("/topic/nextQuestion", a -> {
-                System.out.println("next question received " + clientData.getQuestionCounter());
-                clientData.setQuestion(a.getQuestion());
-                clientData.setPointer(a.getQuestion().getPointer());
-                if (currentSceneCtrl.getClass() == WaitingCtrl.class) {
-                    game.initiateMultiplayerGame();
+                if(a.getLobbyToken().equals(clientData.getClientLobby().getToken())) {
+
+                    System.out.println("next question received " + clientData.getQuestionCounter());
+                    clientData.setQuestion(a.getQuestion());
+
+                    System.out.println("Activities got are: " + a.getQuestion().getFoundActivities());
+                    clientData.setPointer(a.getQuestion().getPointer());
+                    if (currentSceneCtrl.getClass() == WaitingCtrl.class) {
+                        game.initiateMultiplayerGame();
+                    }
                 }
             });
         }
@@ -209,6 +215,7 @@ public class ClientUtilsImpl implements ClientUtils {
 
     public void killTimer()
     {
+        if(timer == null) return;
         timer.cancel();
     }
 

@@ -124,6 +124,7 @@ public class EstimationQuestionCtrl implements JokerPowerUps{
         Activity polledActivity = server.getActivityByID(question.getFoundActivities().get(0)).get();
         correctAnswer = polledActivity.getEnergyConsumption();
 
+        answerPopUp.setText("");
         answerPopUp.setStyle(" -fx-background-color: transparent; ");
         submittedAnswer = null;
 
