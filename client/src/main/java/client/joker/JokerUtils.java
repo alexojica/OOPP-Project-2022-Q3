@@ -21,7 +21,6 @@ import javax.inject.Inject;
  */
 public class JokerUtils {
 
-    private JokerType clientJoker;
     private JokerType lobbyJoker;
 
     private ClientData clientData;
@@ -112,18 +111,6 @@ public class JokerUtils {
             client.halfTime();
     }
 
-    /**
-     * Getters and setters for jokers
-     */
-    public JokerType getClientJoker(){
-        return clientJoker;
-    }
-    public JokerType getLobbyJoker(){
-        return lobbyJoker;
-    }
-    public void setClientJoker(JokerType clientJoker) {
-        this.clientJoker = clientJoker;
-    }
     public void setLobbyJoker(JokerType lobbyJoker) {
         this.lobbyJoker = lobbyJoker;
     }
