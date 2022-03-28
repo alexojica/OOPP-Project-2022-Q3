@@ -68,10 +68,15 @@ public class MainCtrl extends Application {
     private UsernamePopUpCtrl usernamePopUpCtrl;
     private Scene usernamePopUp;
 
+    private KickPopUpCtrl kickPopUpCtrl;
+    private Scene kickedPopUp;
+
     private EnergyAlternativeQuestionCtrl energyAlternativeQuestionCtrl;
     private Scene energyAlternative;
 
     private Stage incorrectUsernamePopUp;
+
+    private Stage kickPopUp;
 
     @Inject
     private ClientUtils client;
@@ -86,7 +91,8 @@ public class MainCtrl extends Application {
                            Pair<EnergyAlternativeQuestionCtrl, Parent> energyAlternative,
                            Pair<GameOverCtrl, Parent> gameOver, Pair<WaitingCtrl, Parent> waiting,
                            Pair<TempLeaderboardCtrl, Parent> tempLeaderboard,
-                           Pair<UsernamePopUpCtrl, Parent> usernamePopUp) {
+                           Pair<UsernamePopUpCtrl, Parent> usernamePopUp,
+                           Pair<KickPopUpCtrl, Parent> kickedPopUp) {
         this.primaryStage = primaryStage;
 
 
@@ -119,6 +125,9 @@ public class MainCtrl extends Application {
 
         this.usernamePopUpCtrl = usernamePopUp.getKey();
         this.usernamePopUp = new Scene(usernamePopUp.getValue());
+
+        this.kickPopUpCtrl = kickedPopUp.getKey();
+        this.kickedPopUp = new Scene(kickedPopUp.getValue());
 
         this.energyAlternativeQuestionCtrl = energyAlternative.getKey();
         this.energyAlternative = new Scene(energyAlternative.getValue());
@@ -200,6 +209,18 @@ public class MainCtrl extends Application {
         primaryStage.setTitle("TempLeaderboard");
         primaryStage.setScene(tempLeaderboard);
         tempLeaderboardCtrl.load();
+    }
+
+    public void showKickPopUp(){
+        kickPopUp = new Stage();
+        kickPopUp.setScene(kickedPopUp);
+        kickPopUp.setTitle("Kicked");
+        kickPopUp.initModality(Modality.APPLICATION_MODAL);
+        kickPopUp.showAndWait();
+    }
+
+    public void closeKickPopUp(){
+        kickPopUp.close();
     }
 
     public void showPopUp(String lobbyType){

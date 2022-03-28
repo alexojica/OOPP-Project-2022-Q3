@@ -261,9 +261,14 @@ public class EnergyAlternativeQuestionCtrl implements JokerPowerUps {
                 answer2.setStyle(" -fx-background-color: red; ");
                 break;
             default:
-                //no answer was selected do nothing
-                //maybe poll later for inactivity
                 break;
+        }
+        if(answer3.isSelected() == false && answer2.isSelected() == false && answer1.isSelected() == false){
+            clientData.incrementUnansweredQuestionCounter();
+            if(clientData.getUnansweredQuestionCounter() >= 5){
+                leaveGame();
+                mainCtrl.showKickPopUp();
+            }
         }
         scoreTxt.setText("Score:" + clientData.getClientScore());
 

@@ -170,6 +170,7 @@ class LobbyControllerTest {
         assertNotEquals(sut.startGame(wsm).getNewToken(), wsm.getNewToken());
     }
 
+    /*
     @Test
     public void endGame(){
         Lobby newLobby = new Lobby("private", 2);
@@ -177,7 +178,7 @@ class LobbyControllerTest {
         repo.save(newLobby);
         WebsocketMessage wsm = new WebsocketMessage(END_GAME, newLobby.getToken());
         assertNotEquals(sut.getLobbyByToken(sut.endGame(wsm).getLobbyToken()), newLobby);
-    }
+    }*/
 
     @Test
     public void leaveLobby(){
