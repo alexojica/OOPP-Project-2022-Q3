@@ -23,6 +23,7 @@ public class GameModeSelectionCtrl {
     {
         client.registerQuestionCommunication();
         client.registerLobbyCommunication();
+        client.registerMessageCommunication();
     }
 
     public void back(){

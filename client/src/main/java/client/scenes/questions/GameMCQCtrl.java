@@ -1,6 +1,7 @@
 package client.scenes.questions;
 
 import client.data.ClientData;
+import client.emotes.Emotes;
 import client.game.Game;
 import client.joker.JokerPowerUps;
 import client.joker.JokerUtils;
@@ -12,7 +13,6 @@ import commons.Question;
 import commons.WebsocketMessage;
 import constants.JokerType;
 import constants.ResponseCodes;
-import emotes.Emotes;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -272,7 +272,7 @@ public class GameMCQCtrl implements JokerPowerUps {
             if (indexToRemove == correctAnswer) {
                 indexToRemove++;
             }
-            switch (indexToRemove) {
+            switch (indexToRemove % 3) {
                 case 0:
                     answer1.setStyle(" -fx-background-color: red; ");
                     System.out.println("Disabled first answer");
@@ -323,6 +323,7 @@ public class GameMCQCtrl implements JokerPowerUps {
     /**
      * Sets the label text to the given string and when said string is not empty,
      * a background colour is also added to make the message stand out more.
+     * This background colour is removed however when the string is empty in order to reset.
      * @param message message to be displayed in the label corresponding to the method name
      */
     //empty string check might be used later in order to make messages disappear after X time
@@ -331,6 +332,9 @@ public class GameMCQCtrl implements JokerPowerUps {
         if(!(message.equals(""))){
             messageTxt1.setStyle("-fx-background-color: darkgray; -fx-padding: 10px");
         }
+        else{
+            messageTxt1.setStyle("-fx-background-color: none; -fx-padding: none");
+        }
     }
 
     public void setMessageTxt2(String message) {
@@ -338,12 +342,18 @@ public class GameMCQCtrl implements JokerPowerUps {
         if(!(message.equals(""))){
             messageTxt2.setStyle("-fx-background-color: darkgray; -fx-padding: 10px");
         }
+        else{
+            messageTxt2.setStyle("-fx-background-color: none; -fx-padding: none");
+        }
     }
 
     public void setMessageTxt3(String message) {
         messageTxt3.setText(message);
         if(!(message.equals(""))){
             messageTxt3.setStyle("-fx-background-color: darkgray; -fx-padding: 10px");
+        }
+        else{
+            messageTxt3.setStyle("-fx-background-color: none; -fx-padding: none");
         }
     }
 

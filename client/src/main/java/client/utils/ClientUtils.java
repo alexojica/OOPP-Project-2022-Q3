@@ -23,6 +23,8 @@ public interface ClientUtils {
 
     void registerQuestionCommunication();
 
+    void registerMessageCommunication();
+
     Object getCurrentSceneCtrl();
 
     void setCurrentSceneCtrl(Object currentSceneCtrl);
@@ -30,4 +32,6 @@ public interface ClientUtils {
     double getCoefficient();
 
     void updateMessages(String str, String lobbyToken);
+
+    void resetMessages();
 }
