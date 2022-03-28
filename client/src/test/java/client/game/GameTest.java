@@ -1,6 +1,7 @@
 package client.game;
 
 import client.data.ClientData;
+import client.emotes.Emotes;
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
@@ -23,6 +24,7 @@ class GameTest {
     private ClientData clientData;
     private MainCtrl mainCtrl;
     private Game game;
+    private Emotes emotes;
 
     @BeforeEach
     void setUp() {
@@ -33,7 +35,7 @@ class GameTest {
         defineMethodsForServer();
         defineMethodsForClientData();
 
-        game = new GameImpl(server, client, clientData, mainCtrl);
+        game = new GameImpl(server, client, clientData, mainCtrl, emotes);
     }
 
     /**
