@@ -21,6 +21,7 @@ public class ClientDataImpl implements ClientData {
     private Question clientQuestion;
     private Integer clientScore;
     private Integer questionCounter;
+    private Integer unansweredQuestionCounter = 0;
     private Boolean isHost = false; //remembers who the host of the lobby is
     private HashSet<JokerType> usedJokers = new HashSet<>();
 
@@ -95,4 +96,16 @@ public class ClientDataImpl implements ClientData {
         usedJokers = new HashSet<>();
     }
 
+    public Integer getUnansweredQuestionCounter() {
+        return unansweredQuestionCounter;
+    }
+
+    public void setUnansweredQuestionCounter(Integer unansweredQuestionCounter) {
+        this.unansweredQuestionCounter = unansweredQuestionCounter;
+    }
+
+    public void incrementUnansweredQuestionCounter()
+    {
+        unansweredQuestionCounter++;
+    }
 }
