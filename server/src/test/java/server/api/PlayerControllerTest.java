@@ -35,9 +35,15 @@ class PlayerControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    private TestPlayerRepository repo;
+
+    private PlayerController sut;
+
     @BeforeEach
     private void setup(){
         playerController = new PlayerController(new TestPlayerRepository());
+        repo = new TestPlayerRepository();
+        sut = new PlayerController(repo);
     }
 
     @Test
@@ -144,4 +150,14 @@ class PlayerControllerTest {
         mockMvc.perform(get("/api/player/get"))
                 .andExpect(status().isNotFound());
     }
+
+
+    @Test
+    public void updateScore() throws Exception{
+        Player player1 = new Player("arda");
+        player1.setScore(150);
+        assertEquals(sut.updateScore(player1).getScore(), 150);
+        assertThrows(WrongParameterException.class, () -> playerController.updateScore(null));
+    }
+
 }

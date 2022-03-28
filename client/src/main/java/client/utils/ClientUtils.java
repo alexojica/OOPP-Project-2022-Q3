@@ -15,9 +15,23 @@ public interface ClientUtils {
 
     void prepareQuestion();
 
+    void killTimer();
+
+    void unsubscribeFromMessages();
+
+    void registerLobbyCommunication();
+
+    void registerQuestionCommunication();
+
+    void registerMessageCommunication();
+
     Object getCurrentSceneCtrl();
 
     void setCurrentSceneCtrl(Object currentSceneCtrl);
 
     double getCoefficient();
+
+    void updateMessages(String str, String lobbyToken);
+
+    void resetMessages();
 }

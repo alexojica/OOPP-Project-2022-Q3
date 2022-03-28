@@ -178,7 +178,6 @@ public class ServerUtils {
     }
 
 
-
     private StompSession session = connect("ws://localhost:8080/websocket");
 
     private StompSession connect(String url){
@@ -204,9 +203,9 @@ public class ServerUtils {
     }
 
 
-    public void registerForMessages(String dest, Consumer<WebsocketMessage> consumer){
+    public StompSession.Subscription registerForMessages(String dest, Consumer<WebsocketMessage> consumer){
         System.out.println("registered for " + dest);
-        session.subscribe(dest, new StompFrameHandler() {
+        StompSession.Subscription subscription = session.subscribe(dest, new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
                 return WebsocketMessage.class;
@@ -214,12 +213,14 @@ public class ServerUtils {
 
             @Override
             public void handleFrame(StompHeaders headers, Object payload) {
-                System.out.println("receiving message");
+                System.out.println("Message " + ((WebsocketMessage) payload).getCode() +
+                        " for lobby " + ((WebsocketMessage) payload).getLobbyToken());
                 consumer.accept((WebsocketMessage) payload);
             }
-
         });
+        return subscription;
     }
+
 
     public Lobby addMeToLobby(String token, Player player){
         ClientBuilder.newClient(new ClientConfig()) //
@@ -232,6 +233,7 @@ public class ServerUtils {
     }
 
     public void send(String dest, Object o){
+        System.out.println("Sending " + ((WebsocketMessage) o).getCode() + " to " + dest);
         session.send(dest, o);
     }
 }

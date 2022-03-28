@@ -42,7 +42,6 @@ public class AvatarSupplier{
                 //g2.setColor(Color.RED);
                 //g2.drawRect(x * 128, y * 128, 128, 128);
             }
-            System.out.println("");
         }
 
         g2.dispose();

@@ -86,6 +86,7 @@ public class WaitingCtrl implements Initializable{
      * Method that sets up how the scene should look like when switched to
      */
     public void load(){
+        clientData.resetJokers();
         clientData.setQuestionCounter(0);
         tip.setText("Theres only one correct answer per question, get the most right to win.");
         lobbyCode.setText(lobbyCode.getText() + 59864);
@@ -97,7 +98,9 @@ public class WaitingCtrl implements Initializable{
         }
         server.registerForMessages("/topic/lobbyStart", a -> {
             if(a.getCode() == ResponseCodes.START_GAME && a.getLobbyToken().equals(clientData.getClientLobby().token)) {
+                killTimer();
                 System.out.println("ishost:" + clientData.getIsHost());
+                clientData.setLobby(server.getLobbyByToken(a.getNewToken()));
                 if(clientData.getIsHost())
                     server.send("/app/nextQuestion",
                             new WebsocketMessage(ResponseCodes.NEXT_QUESTION,
@@ -112,7 +115,7 @@ public class WaitingCtrl implements Initializable{
 
     /**
      * Method that shows active players in a given lobby
-     * The lobby field from CliendData should have been filled/updated prior to calling this method
+     * The lobby field from ClientData should have been filled/updated prior to calling this method
      */
     public void showActivePlayers()
     {
@@ -191,6 +194,14 @@ public class WaitingCtrl implements Initializable{
                 refresh();
             }
         }, 0, 250);
+    }
+
+    /**
+     * Method to be called on scene change to stop the running of unnecessary timers
+     */
+    public void killTimer()
+    {
+        timer.cancel();
     }
 
 

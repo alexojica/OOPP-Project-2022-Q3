@@ -21,7 +21,6 @@ import javax.inject.Inject;
  */
 public class JokerUtils {
 
-    private JokerType clientJoker;
     private JokerType lobbyJoker;
 
     private ClientData clientData;
@@ -44,7 +43,8 @@ public class JokerUtils {
         server.registerForMessages("/topic/updateJoker", msg -> {
             if(msg.getLobbyToken().equals(clientData.getClientLobby().token)){
                 lobbyJoker = msg.getJokerType();
-                handleJokerCases();
+                System.out.println("received joker " + lobbyJoker);
+                handleJokerCases(msg.getSenderName());
             }
         });
     }
@@ -54,12 +54,13 @@ public class JokerUtils {
      * all other players of the lobby
      */
     public void sendJoker(){
+        System.out.println("sending joker");
         server.send("/app/updateJoker", new WebsocketMessage(
-                lobbyJoker, clientData.getClientLobby().getToken()
+                lobbyJoker, clientData.getClientLobby().getToken(), clientData.getClientPlayer().getName()
         ));
     }
 
-    private void handleJokerCases(){
+    private void handleJokerCases(String senderName){
         switch(lobbyJoker){
             case DOUBLE_POINTS:
                 doublePointsForClient();
@@ -68,7 +69,7 @@ public class JokerUtils {
                 eliminateAnAnswerForClient();
                 break;
             case HALF_TIME_FOR_ALL_LOBBY:
-                halfTime();
+                halfTime(senderName);
                 break;
         }
     }
@@ -104,22 +105,12 @@ public class JokerUtils {
     /**
      * Half the time remaining as requested by another player in the lobby
      */
-    public void halfTime(){
-        client.halfTime();
+    public void halfTime(String senderName){
+        System.out.println("checking sendername");
+        if(!senderName.equals(clientData.getClientPlayer().getName()))
+            client.halfTime();
     }
 
-    /**
-     * Getters and setters for jokers
-     */
-    public JokerType getClientJoker(){
-        return clientJoker;
-    }
-    public JokerType getLobbyJoker(){
-        return lobbyJoker;
-    }
-    public void setClientJoker(JokerType clientJoker) {
-        this.clientJoker = clientJoker;
-    }
     public void setLobbyJoker(JokerType lobbyJoker) {
         this.lobbyJoker = lobbyJoker;
     }

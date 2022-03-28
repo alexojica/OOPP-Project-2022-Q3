@@ -16,6 +16,7 @@
 package client;
 
 import client.scenes.GameOverCtrl;
+import client.scenes.KickPopUpCtrl;
 import client.scenes.MainCtrl;
 import client.scenes.UsernamePopUpCtrl;
 import client.scenes.leaderboards.LeaderboardCtrl;
@@ -45,6 +46,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
 
+        // Make pairs of controllers and parent nodes of their respective scenes (which are created in MainCtrl)
         var home = FXML.load(HomeCtrl.class, "client", "scenes", "Home.fxml");
         var gameModeSelection = FXML.load(GameModeSelectionCtrl.class, "client", "scenes", "GameModeSelection.fxml");
         var leaderboard = FXML.load(LeaderboardCtrl.class, "client", "scenes", "Leaderboard.fxml");
@@ -57,10 +59,27 @@ public class Main extends Application {
         var gameOver = FXML.load(GameOverCtrl.class, "client", "scenes", "GameOver.fxml");
         var multiPlayerMenu = FXML.load(MultiplayerMenuCtrl.class, "client", "scenes", "MultiplayerMenu.fxml");
         var usernamePopUp = FXML.load(UsernamePopUpCtrl.class, "client", "scenes", "UsernamePopUp.fxml");
+        var kickedPopUp = FXML.load(KickPopUpCtrl.class, "client", "scenes", "KickedPopUp.fxml");
+
+
+        // Stylesheets are loaded using reflection
+        home.getValue().getStylesheets()
+                .add(getClass().getResource("scenes/stylesheets/Home.css").toExternalForm());
+        gameModeSelection.getValue().getStylesheets()
+                .add(getClass().getResource("scenes/stylesheets/GameModeSelection.css").toExternalForm());
+        leaderboard.getValue().getStylesheets()
+                .add(getClass().getResource("scenes/stylesheets/Leaderboard.css").toExternalForm());
+        multiPlayerMenu.getValue().getStylesheets()
+                .add(getClass().getResource("scenes/stylesheets/MultiplayerMenu.css").toExternalForm());
+        tempLeaderboard.getValue().getStylesheets()
+                .add(getClass().getResource("scenes/stylesheets/TempLeaderboard.css").toExternalForm());
+        waiting.getValue().getStylesheets()
+                .add(getClass().getResource("scenes/stylesheets/Waiting.css").toExternalForm());
+
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, home, leaderboard, gameModeSelection, multiPlayerMenu,
                             estimationQuestion, gameMCQ, alternativeQuestion, gameOver,
-                waiting, tempLeaderboard, usernamePopUp);
+                waiting, tempLeaderboard, usernamePopUp, kickedPopUp);
     }
 }

@@ -6,5 +6,6 @@ public enum ResponseCodes {
     LOBBY_UPDATED,
     NEXT_QUESTION,
     LEAVE_LOBBY,
-    SCORE_UPDATED
+    SCORE_UPDATED,
+    UPDATE_HOST
 }

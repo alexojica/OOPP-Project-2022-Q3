@@ -19,6 +19,8 @@ import client.avatar.AvatarManager;
 import client.avatar.AvatarManagerImpl;
 import client.data.ClientData;
 import client.data.ClientDataImpl;
+import client.emotes.Emotes;
+import client.emotes.EmotesImpl;
 import client.game.Game;
 import client.game.GameImpl;
 import client.scenes.GameOverCtrl;
@@ -62,5 +64,6 @@ public class MyModule implements Module {
         binder.bind(ClientData.class).to(ClientDataImpl.class).in(Scopes.SINGLETON);
         binder.bind(Game.class).to(GameImpl.class).in(Scopes.SINGLETON);
         binder.bind(AvatarManager.class).to(AvatarManagerImpl.class).in(Scopes.SINGLETON);
+        binder.bind(Emotes.class).to(EmotesImpl.class).in(Scopes.SINGLETON);
     }
 }

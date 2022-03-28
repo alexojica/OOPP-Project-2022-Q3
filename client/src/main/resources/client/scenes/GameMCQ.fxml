@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.image.ImageView?>
@@ -9,7 +10,13 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
+<?import javafx.scene.control.MenuButton?>
 <AnchorPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: e6e6e6;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.questions.GameMCQCtrl">
    <children>
       <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true" />
@@ -56,18 +63,23 @@
          </font>
       </Text>
       <ProgressBar fx:id="pb" layoutX="500.0" layoutY="84.0" prefHeight="20.0" prefWidth="320.0" progress="0.0" />
-      <Circle fill="DODGERBLUE" layoutX="1220.0" layoutY="42.0" radius="18.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fill="DODGERBLUE" layoutX="537.0" layoutY="630.0" onMouseClicked="#doublePoints" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fill="DODGERBLUE" layoutX="667.0" layoutY="630.0" onMouseClicked="#eliminateRandomWrongAnswer" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fill="DODGERBLUE" layoutX="797.0" layoutY="630.0" onMouseClicked="#halfTimeForOthers" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="joker1" fill="DODGERBLUE" layoutX="537.0" layoutY="630.0" onMouseClicked="#doublePoints" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="joker2" fill="DODGERBLUE" layoutX="667.0" layoutY="630.0" onMouseClicked="#eliminateRandomWrongAnswer" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="joker3" fill="DODGERBLUE" layoutX="797.0" layoutY="630.0" onMouseClicked="#halfTimeForOthers" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
       <Text layoutX="492.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" Double Points💰" />
       <Text layoutX="609.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Eliminate an answer❌" />
       <Text layoutX="748.0" layoutY="670.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Half time of others⏰" />
-      <Text layoutX="1200.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Emotes" />
       <Text layoutX="464.0" layoutY="103.0" strokeType="OUTSIDE" strokeWidth="0.0" text="⏰" wrappingWidth="33.0">
          <font>
             <Font size="23.0" />
          </font>
       </Text>
+      <Label fx:id="messageTxt1" layoutX="14.0" layoutY="282.0" />
+      <Label fx:id="messageTxt2" layoutX="14.0" layoutY="229.0" />
+      <Label fx:id="messageTxt3" layoutX="14.0" layoutY="179.0" />
+      <MenuButton fx:id="emotesMenu" layoutX="1172.0" layoutY="40.0" mnemonicParsing="false" text="emotes">
+         <items>
+         </items>
+      </MenuButton>
    </children>
 </AnchorPane>

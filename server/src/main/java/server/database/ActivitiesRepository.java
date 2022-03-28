@@ -1,14 +1,12 @@
 package server.database;
 
+import commons.Activity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import javax.transaction.Transactional;
-
 import java.util.List;
 import java.util.Optional;
-
-import commons.Activity;
 
 /**
  * Repository of Activities can be created, contains all the methods from crud repository.
@@ -35,4 +33,6 @@ public interface ActivitiesRepository extends JpaRepository<Activity, Long> {
      */
     @Query("select a from Activity a where a.energyConsumption >= ?1 and a.energyConsumption <= ?2")
     public Optional<List<Activity>> findActivitiesInRange(long small, long big);
+
+    public Optional<Activity> findById(Long id);
 }

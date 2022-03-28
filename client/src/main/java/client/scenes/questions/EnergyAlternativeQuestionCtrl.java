@@ -1,6 +1,7 @@
 package client.scenes.questions;
 
 import client.data.ClientData;
+import client.emotes.Emotes;
 import client.game.Game;
 import client.joker.JokerPowerUps;
 import client.joker.JokerUtils;
@@ -10,28 +11,30 @@ import client.utils.ServerUtils;
 import commons.Activity;
 import commons.Question;
 import commons.WebsocketMessage;
+import constants.JokerType;
 import constants.ResponseCodes;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 import javax.inject.Inject;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
 import static constants.QuestionTypes.ENERGY_ALTERNATIVE_QUESTION;
+import static javafx.scene.paint.Color.rgb;
 
-public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
+public class EnergyAlternativeQuestionCtrl implements JokerPowerUps {
     private final ClientData clientData;
     private final ClientUtils client;
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private final Emotes emotes;
     private final Game game;
 
     @FXML
@@ -54,27 +57,45 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
     private RadioButton answer2;
     @FXML
     private RadioButton answer3;
+    @FXML
+    private Circle joker1;
+    @FXML
+    private Circle joker2;
+    @FXML
+    private Circle joker3;
 
     private int correctAnswer;
+    protected boolean doublePoints = false;
+    private JokerUtils jokerUtils;
+
+    @FXML
+    private MenuButton emotesMenu;
+
+    @FXML
+    private Label messageTxt1;
+    @FXML
+    private Label messageTxt2;
+    @FXML
+    private Label messageTxt3;
 
     @Inject
     public EnergyAlternativeQuestionCtrl(ClientData clientData, ClientUtils  client, ServerUtils server,
-                                         JokerUtils jokerUtils, Game game, MainCtrl mainCtrl) {
-        super(jokerUtils);
+                                         JokerUtils jokerUtils, Emotes emotes, Game game, MainCtrl mainCtrl) {
+        this.jokerUtils = jokerUtils;
         this.clientData = clientData;
         this.client = client;
         this.server = server;
         this.game = game;
         this.mainCtrl = mainCtrl;
-        doublePoints = false;
+        this.emotes = emotes;
     }
 
     public void load() {
-
-        Question question = clientData.getClientQuestion();
-
-        resetUI(question);
-
+        if(client.isInLobby()) {
+            setUpEmoteMenu();
+            Question question = clientData.getClientQuestion();
+            resetUI(question);
+        }
     }
 
     public void leaveGame(){
@@ -91,16 +112,39 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
     private void resetUI(Question question) {
         scoreTxt.setText("Score:" + clientData.getClientScore());
         nQuestionsTxt.setText(clientData.getQuestionCounter() + "/20");
+        doublePoints = false;
+        joker3.setDisable(clientData.getUsedJokers().contains(JokerType.HALF_TIME_FOR_ALL_LOBBY));
+        joker1.setDisable(clientData.getUsedJokers().contains(JokerType.DOUBLE_POINTS));
+        joker2.setDisable(clientData.getUsedJokers().contains(JokerType.ELIMINATE_ANSWERS));
 
         answer1.setToggleGroup(radioGroup);
         answer2.setToggleGroup(radioGroup);
         answer3.setToggleGroup(radioGroup);
 
+        answer1.setDisable(false);
+        answer2.setDisable(false);
+        answer3.setDisable(false);
+        if(!clientData.getUsedJokers().contains(JokerType.DOUBLE_POINTS))
+            joker1.setFill(rgb(30,144,255));
+        else
+            joker1.setFill(rgb(235,235,228));
+
+        if(!clientData.getUsedJokers().contains(JokerType.ELIMINATE_ANSWERS))
+            joker2.setFill(rgb(30,144,255));
+        else
+            joker2.setFill(rgb(235,235,228));
+
+        if(!clientData.getUsedJokers().contains(JokerType.HALF_TIME_FOR_ALL_LOBBY))
+            joker3.setFill(rgb(30,144,255));
+        else
+            joker3.setFill(rgb(235,235,228));
+
+
         answer1.setStyle(" -fx-background-color: transparent; ");
         answer2.setStyle(" -fx-background-color: transparent; ");
         answer3.setStyle(" -fx-background-color: transparent; ");
 
-        Optional<Activity> act = server.getActivityByID(question.getFoundActivities().stream().findFirst().get());
+        Optional<Activity> act = server.getActivityByID(question.getFoundActivities().get(0));
         String textMethod = question.getText();
         if(act.isPresent()) {
             textMethod += " " + act.get().getTitle();
@@ -132,9 +176,15 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
         }
     }
 
+    public void disableAnswers(){
+        answer1.setDisable(true);
+        answer2.setDisable(true);
+        answer3.setDisable(true);
+    }
+
     public void randomizeFields(RadioButton a, RadioButton b, RadioButton c, Question question)
     {
-        List<Activity> list = server.getActivitiesFromIDs(new ArrayList(question.getFoundActivities()));
+        List<Activity> list = server.getActivitiesFromIDs(question.getFoundActivities());
         a.setText(list.get(1).getTitle());
         b.setText(list.get(2).getTitle());
         c.setText(list.get(3).getTitle());
@@ -150,7 +200,7 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
 
                     Thread.sleep(2000);
 
-                    if(clientData.getQuestionCounter() == 3){
+                    if(Objects.equals(clientData.getQuestionCounter(), game.getQuestionsToDisplayLeaderboard())){
                         Platform.runLater(() -> mainCtrl.showTempLeaderboard());
                         Thread.sleep(5000);
                     }
@@ -211,9 +261,14 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
                 answer2.setStyle(" -fx-background-color: red; ");
                 break;
             default:
-                //no answer was selected do nothing
-                //maybe poll later for inactivity
                 break;
+        }
+        if(answer3.isSelected() == false && answer2.isSelected() == false && answer1.isSelected() == false){
+            clientData.incrementUnansweredQuestionCounter();
+            if(clientData.getUnansweredQuestionCounter() >= 5){
+                leaveGame();
+                mainCtrl.showKickPopUp();
+            }
         }
         scoreTxt.setText("Score:" + clientData.getClientScore());
 
@@ -223,23 +278,28 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
     }
 
     public void eliminateRandomWrongAnswer() {
-        int indexToRemove = new Random().nextInt(3);
-        if (indexToRemove == correctAnswer) {
-            indexToRemove++;
-        }
-        switch (indexToRemove) {
-            case 0:
-                answer1.setStyle(" -fx-background-color: red; ");
-                System.out.println("Disabled first answer");
-                break;
-            case 1:
-                answer2.setStyle(" -fx-background-color: red; ");
-                System.out.println("Disabled second answer");
-                break;
-            case 2:
-                answer3.setStyle(" -fx-background-color: red; ");
-                System.out.println("Disabled third answer");
-                break;
+        if(!clientData.getUsedJokers().contains(JokerType.ELIMINATE_ANSWERS)) {
+            joker2.setDisable(true);
+            clientData.addJoker(JokerType.ELIMINATE_ANSWERS);
+            joker2.setFill(rgb(235,235,228));
+            int indexToRemove = new Random().nextInt(3);
+            if (indexToRemove == correctAnswer) {
+                indexToRemove++;
+            }
+            switch (indexToRemove % 3) {
+                case 0:
+                    answer1.setStyle(" -fx-background-color: red; ");
+                    System.out.println("Disabled first answer");
+                    break;
+                case 1:
+                    answer2.setStyle(" -fx-background-color: red; ");
+                    System.out.println("Disabled second answer");
+                    break;
+                case 2:
+                    answer3.setStyle(" -fx-background-color: red; ");
+                    System.out.println("Disabled third answer");
+                    break;
+            }
         }
     }
 
@@ -253,5 +313,97 @@ public class EnergyAlternativeQuestionCtrl extends JokerPowerUps {
 
     public RadioButton getAnswer3() {
         return answer3;
+    }
+
+    /**
+     * Returns the label corresponding to the position in the method name.
+     * @return label corresponding to the position
+     */
+    public Label getMessageTxt1() {
+        return messageTxt1;
+    }
+
+    public Label getMessageTxt2() {
+        return messageTxt2;
+    }
+
+    public Label getMessageTxt3() {
+        return messageTxt3;
+    }
+
+    /**
+     * Sets the label text to the given string and when said string is not empty,
+     * a background colour is also added to make the message stand out more.
+     * This background colour is removed however when the string is empty in order to reset.
+     * @param message message to be displayed in the label corresponding to the method name
+     */
+    //empty string check might be used later in order to make messages disappear after X time
+    public void setMessageTxt1(String message) {
+        messageTxt1.setText(message);
+        if(!(message.equals(""))){
+            messageTxt1.setStyle("-fx-background-color: darkgray; -fx-padding: 10px");
+        }
+        else{
+            messageTxt1.setStyle("-fx-background-color: none; -fx-padding: none");
+        }
+    }
+
+    public void setMessageTxt2(String message) {
+        messageTxt2.setText(message);
+        if(!(message.equals(""))){
+            messageTxt2.setStyle("-fx-background-color: darkgray; -fx-padding: 10px");
+        }
+        else{
+            messageTxt2.setStyle("-fx-background-color: none; -fx-padding: none");
+        }
+    }
+
+    public void setMessageTxt3(String message) {
+        messageTxt3.setText(message);
+        if(!(message.equals(""))){
+            messageTxt3.setStyle("-fx-background-color: darkgray; -fx-padding: 10px");
+        }
+        else{
+            messageTxt3.setStyle("-fx-background-color: none; -fx-padding: none");
+        }
+    }
+
+    /**
+     * Sets up the emoteMenu menubutton by first clearing anything that might be left in it from previous calls.
+     * This is done to prevent errors from occurring. Then all the emotes from the list in the EmotesImpl class are
+     * added and set such they trigger the sendEmote method when clicked. There's also some padding added to make it
+     * easier to click the buttons.
+     */
+    public void setUpEmoteMenu(){
+        emotesMenu.getItems().clear();
+        emotesMenu.getItems().addAll(emotes.getEmotesList());
+        for(MenuItem m : emotesMenu.getItems()){
+            m.setStyle("-fx-padding: 0 25 0 25");
+            m.setOnAction(a -> {
+                emotes.sendEmote(m.getText());
+            });
+        }
+    }
+
+    @Override
+    public void doublePoints() {
+        if(!clientData.getUsedJokers().contains(JokerType.DOUBLE_POINTS)) {
+            doublePoints = true;
+            joker1.setDisable(true);
+            joker1.setFill(rgb(235,235,228));
+            clientData.addJoker(JokerType.DOUBLE_POINTS);
+        }
+    }
+
+    @Override
+    public void halfTimeForOthers() {
+        if(!clientData.getUsedJokers().contains(JokerType.HALF_TIME_FOR_ALL_LOBBY)) {
+            joker3.setDisable(true);
+            joker3.setFill(rgb(235,235,228));
+            clientData.addJoker(JokerType.HALF_TIME_FOR_ALL_LOBBY);
+            System.out.println("Time was halved");
+            jokerUtils.setLobbyJoker(JokerType.HALF_TIME_FOR_ALL_LOBBY);
+            jokerUtils.sendJoker();
+        }
     }
 }
