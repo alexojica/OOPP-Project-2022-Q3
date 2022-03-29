@@ -71,7 +71,12 @@ public class GameImpl implements Game{
      * Method that starts a single-player game
      */
     public void startSingleplayer(){
-        Lobby mainLobby = new Lobby("SINGLE_PLAYER");
+
+        String lobbyCode = "SINGLE_PLAYER" +
+                            clientData.getClientPlayer().getAvatarCode() +
+                            (int) (Math.random() * 42);
+
+        Lobby mainLobby = new Lobby(lobbyCode);
         server.addLobby(mainLobby);
         clientData.setLobby(mainLobby);
         clientData.setPointer(clientData.getClientPlayer().getId());
