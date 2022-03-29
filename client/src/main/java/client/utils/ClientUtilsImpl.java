@@ -95,6 +95,18 @@ public class ClientUtilsImpl implements ClientUtils {
                         }
                     }
 
+                    if(a.getCode() == ResponseCodes.KICK_PLAYER)
+                    {
+                        if(a.getPlayer().equals(clientData.getClientPlayer())){
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    game.leaveLobby();
+                                }
+                            });
+                        }
+                    }
+
                     if (currentSceneCtrl.getClass() == WaitingCtrl.class)
                         ((WaitingCtrl) currentSceneCtrl).refresh();
                 }

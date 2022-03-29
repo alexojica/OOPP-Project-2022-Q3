@@ -26,8 +26,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
 import javax.inject.Inject;
@@ -48,6 +50,7 @@ public class WaitingCtrl implements Initializable{
     private final Game game;
 
     private final MainCtrl mainCtrl;
+
     private ObservableList<Player> playerData;
 
     @FXML
@@ -64,10 +67,25 @@ public class WaitingCtrl implements Initializable{
     @FXML
     private Text lobbyCode;
 
+    // ----- admin panel controls
+    @FXML
+    private Pane parentPane;
+    @FXML
+    private TextField noOfPlayersSetting;
+    @FXML
+    private TextField noOfQuestionsSetting;
+    @FXML
+    private TextField difficultySetting;
+    @FXML
+    private Text playerToBeKicked;
+
+    // ----- end of admin panel controls
+
     private List<Player> activePlayers;
 
     private Timer timer;
     private Avatar builder;
+    private  Player selectedPlayer;
 
     private JokerUtils jokerUtils;
 
@@ -128,7 +146,37 @@ public class WaitingCtrl implements Initializable{
         {
             tip.setText("Share this lobby code to play with your friends! \n" + token);
         }
-        lobbyCode.setText(lobbyCode.getText() + " " + token);
+        lobbyCode.setText("Lobby code: " + token);
+
+        //enable admin UI
+        if(clientData.getClientLobby().getHostId() != null && clientData.getClientPlayer().getId() == clientData.getClientLobby().getHostId())
+        {
+            //only the host is allowed to have access to these set of buttons (privileges)
+            enableAdminPanel(true);
+        }
+        else
+        {
+            //maybe he was an ex-host
+            enableAdminPanel(false);
+        }
+    }
+
+    /**
+     * Method that updates the UI according to the user's privileges
+     * If he is the host, he gains access to numerous control panels,
+     * which he can use to tweak his/her preferences
+     */
+    private void enableAdminPanel(boolean status)
+    {
+        if(status)
+        {
+            //only admins
+            parentPane.setVisible(true);
+        }
+        else
+        {
+            parentPane.setVisible(false);
+        }
     }
 
     /**
@@ -205,6 +253,10 @@ public class WaitingCtrl implements Initializable{
         });
         avatarColumn.setCellValueFactory(cellData ->  new SimpleStringProperty(cellData.getValue().getAvatarCode()));
 
+        tableView.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e-> {
+            updateSelectedPlayer();
+        });
+
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -232,6 +284,12 @@ public class WaitingCtrl implements Initializable{
         {
             Lobby current = clientData.getClientLobby();
             clientData.setLobby(current);
+            if(current == null)
+            {
+                //the lobby/player has been killed
+                killTimer();
+                return;
+            }
             activePlayers = current.getPlayersInLobby();
             playerData = FXCollections.observableList(activePlayers);
             tableView.setItems(playerData);
@@ -244,5 +302,28 @@ public class WaitingCtrl implements Initializable{
 
     public void startGame(){
         game.startMultiplayerGame();
+    }
+
+    /**
+     * Method called on event handler,
+     * whenever a row from the table view is selected
+     * This method stores the information about the selected player
+     * TODO: highlight the row somehow
+     */
+    private void updateSelectedPlayer()
+    {
+        selectedPlayer = tableView.getSelectionModel().getSelectedItem();
+        playerToBeKicked.setText(selectedPlayer.getName());
+    }
+
+    /**
+     * Method that kicks a player from the lobby
+     * the player should be removed from the lobby,
+     * and his scene should change back to GameModeSelection Screen
+     */
+    public void kickPlayer()
+    {
+        server.send("/app/kickFromLobby", new WebsocketMessage(ResponseCodes.KICK_PLAYER,
+                clientData.getClientLobby().getToken(), selectedPlayer));
     }
 }

@@ -212,6 +212,25 @@ public class LobbyController {
         return new WebsocketMessage(ResponseCodes.LEAVE_LOBBY, message.getLobbyToken());
     }
 
+    @MessageMapping("/kickFromLobby")
+    @SendTo("/topic/updateLobby")
+    public WebsocketMessage kickFromLobby(WebsocketMessage message){
+        Optional<Lobby> found = getLobbyByToken(message.getLobbyToken());
+        if(found.isPresent()){
+            Player playerToRemove = message.getPlayer();
+            Lobby currentLobby = found.get();
+            currentLobby.removePlayerFromLobby(playerToRemove);
+
+            //removed the player from the repo as well
+            repository.save(currentLobby);
+
+            System.out.println("Player " + playerToRemove.getName()
+                    + " has been kicked from lobby: " + message.getLobbyToken());
+        }
+
+        return new WebsocketMessage(ResponseCodes.KICK_PLAYER, message.getLobbyToken(), message.getPlayer());
+    }
+
     @MessageMapping("/updateScore")
     @SendTo("/topic/updateLobby")
     public WebsocketMessage updateScore(WebsocketMessage message){
