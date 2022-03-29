@@ -3,8 +3,6 @@ package server.api;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.attribute.standard.Media;
-import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 

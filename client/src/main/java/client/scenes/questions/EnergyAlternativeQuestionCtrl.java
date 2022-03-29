@@ -22,8 +22,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 import javax.inject.Inject;
-
-import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
