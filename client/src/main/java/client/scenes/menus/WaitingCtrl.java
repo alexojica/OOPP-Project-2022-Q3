@@ -88,8 +88,9 @@ public class WaitingCtrl implements Initializable{
     public void load(){
         clientData.resetJokers();
         clientData.setQuestionCounter(0);
-        tip.setText("Theres only one correct answer per question, get the most right to win.");
-        lobbyCode.setText(lobbyCode.getText() + 59864);
+
+        resetUI();
+
         builder = EightBitAvatar.newMaleAvatarBuilder().build();
         showActivePlayers();
 
@@ -111,6 +112,23 @@ public class WaitingCtrl implements Initializable{
 
         server.send("/app/requestUpdate",
                 new WebsocketMessage(ResponseCodes.LOBBY_UPDATED, clientData.getClientLobby().getToken()));
+    }
+
+    /**
+     * Method used to update the UI according to specific
+     * lobbies/client info (i.e lobby codes, tips etc)
+     */
+    private void resetUI()
+    {
+        String token = clientData.getClientLobby().getToken();
+        if(token.equals("COMMON")) {
+            tip.setText("Theres only one correct answer per question, get the most right to win.");
+        }
+        else
+        {
+            tip.setText("Share this lobby code to play with your friends! \n" + token);
+        }
+        lobbyCode.setText(lobbyCode.getText() + " " + token);
     }
 
     /**

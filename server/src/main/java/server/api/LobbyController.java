@@ -145,9 +145,11 @@ public class LobbyController {
     @SendTo("/topic/lobbyStart")
     public WebsocketMessage startGame(WebsocketMessage message){
         Lobby lobby = repository.findByToken(message.getLobbyToken()).get();
-        lobby.setToken(RandomStringUtils.randomAlphabetic(5));
-        repository.save(lobby);
-        repository.save(new Lobby(message.getLobbyToken()));
+        if(lobby.getToken().equals("COMMON")) {
+            lobby.setToken(RandomStringUtils.randomAlphabetic(5));
+            repository.save(lobby);
+            repository.save(new Lobby(message.getLobbyToken()));
+        }
             return new WebsocketMessage(ResponseCodes.START_GAME, message.getLobbyToken(), lobby.getToken());
     }
 

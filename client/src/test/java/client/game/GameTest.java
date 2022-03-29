@@ -73,7 +73,7 @@ class GameTest {
 
     @Test
     void startSingleplayer() {
-        game.startSingleplayer();
+        game.startSinglePlayer();
         Lobby singlePlayerLobby = new Lobby("SINGLE_PLAYER");
         verify(server).addLobby(singlePlayerLobby);
         verify(clientData).setLobby(singlePlayerLobby);

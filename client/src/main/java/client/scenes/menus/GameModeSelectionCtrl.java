@@ -31,7 +31,7 @@ public class GameModeSelectionCtrl {
     }
 
     public void singleplayer(){
-        game.startSingleplayer();
+        game.startSinglePlayer();
     }
 
     public void multiplayer(){

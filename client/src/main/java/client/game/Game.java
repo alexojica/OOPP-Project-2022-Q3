@@ -3,7 +3,11 @@ package client.game;
 public interface Game {
     void instantiateCommonLobby();
 
-    void startSingleplayer();
+    void instantiatePrivateLobby();
+
+    boolean joinPrivateLobby(String token);
+
+    void startSinglePlayer();
 
     void joinPublicLobby();
 

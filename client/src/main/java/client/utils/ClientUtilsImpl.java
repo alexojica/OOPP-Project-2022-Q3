@@ -112,7 +112,6 @@ public class ClientUtilsImpl implements ClientUtils {
                     System.out.println("next question received " + clientData.getQuestionCounter());
                     clientData.setQuestion(a.getQuestion());
 
-                    System.out.println("Activities got are: " + a.getQuestion().getFoundActivities());
                     clientData.setPointer(a.getQuestion().getPointer());
                     if (currentSceneCtrl.getClass() == WaitingCtrl.class) {
                         game.initiateMultiplayerGame();
