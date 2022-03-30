@@ -34,6 +34,7 @@ import client.scenes.menus.WaitingCtrl;
 import client.scenes.questions.EnergyAlternativeQuestionCtrl;
 import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
+import client.scenes.questions.GuessConsumptionCtrl;
 import client.utils.ClientUtils;
 import client.utils.ClientUtilsImpl;
 import client.joker.JokerUtils;
@@ -58,6 +59,7 @@ public class MyModule implements Module {
         binder.bind(WaitingCtrl.class).in(Scopes.SINGLETON);
         binder.bind(EnergyAlternativeQuestionCtrl.class).in(Scopes.SINGLETON);
         binder.bind(JokerUtils.class).in(Scopes.SINGLETON);
+        binder.bind(GuessConsumptionCtrl.class).in(Scopes.SINGLETON);
 
         // Binding interfaces to concrete implementations
         binder.bind(ClientUtils.class).to(ClientUtilsImpl.class).in(Scopes.SINGLETON);
