@@ -23,6 +23,7 @@ import client.emotes.Emotes;
 import client.emotes.EmotesImpl;
 import client.game.Game;
 import client.game.GameImpl;
+import client.joker.JokerUtils;
 import client.scenes.GameOverCtrl;
 import client.scenes.MainCtrl;
 import client.scenes.leaderboards.LeaderboardCtrl;
@@ -36,12 +37,10 @@ import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
 import client.utils.ClientUtils;
 import client.utils.ClientUtilsImpl;
-import client.joker.JokerUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
-import org.apache.catalina.Server;
 
 public class MyModule implements Module {
 

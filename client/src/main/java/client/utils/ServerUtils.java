@@ -18,7 +18,6 @@ package client.utils;
 import commons.*;
 import constants.ConnectionStatusCodes;
 import exceptions.InvalidServerException;
-import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -33,7 +32,6 @@ import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
-import javax.inject.Inject;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.util.ArrayList;
