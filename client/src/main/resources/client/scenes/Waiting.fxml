@@ -60,8 +60,6 @@
       <Pane fx:id="parentPane" layoutX="1033.0" layoutY="200.0" prefHeight="321.0" prefWidth="200.0" style="-fx-background-color: #48d1cc;">
          <children>
             <Button layoutX="64.0" layoutY="60.0" mnemonicParsing="false" onAction="#kickPlayer" text="Kick player" textAlignment="CENTER" />
-            <Text layoutX="28.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="# max players:" textAlignment="CENTER" />
-            <TextField fx:id="noOfPlayersSetting" alignment="CENTER" layoutX="120.0" layoutY="124.0" prefHeight="25.0" prefWidth="52.0" promptText="10" />
             <Text layoutX="28.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="# questions:" textAlignment="CENTER" />
             <TextField fx:id="noOfQuestionsSetting" alignment="CENTER" layoutX="120.0" layoutY="188.0" prefHeight="25.0" prefWidth="52.0" promptText="20" />
             <Text layoutX="28.0" layoutY="275.0" strokeType="OUTSIDE" strokeWidth="0.0" text="difficulty:" textAlignment="CENTER" />

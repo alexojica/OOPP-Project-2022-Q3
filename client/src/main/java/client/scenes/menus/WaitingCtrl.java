@@ -72,8 +72,6 @@ public class WaitingCtrl implements Initializable{
     @FXML
     private Pane parentPane;
     @FXML
-    private TextField noOfPlayersSetting;
-    @FXML
     private TextField noOfQuestionsSetting;
     @FXML
     private TextField difficultySetting;
@@ -326,10 +324,6 @@ public class WaitingCtrl implements Initializable{
      */
     private void extractGameSettings()
     {
-        noOfPlayersSetting.textProperty().addListener(((observable, oldValue, newValue) -> {
-
-        }));
-
         noOfQuestionsSetting.textProperty().addListener(((observable, oldValue, newValue) -> {
             int newQuestionNumber = Integer.parseInt(newValue);
             server.send("/app/setNoOfQuestions",
@@ -362,7 +356,14 @@ public class WaitingCtrl implements Initializable{
      */
     public void kickPlayer()
     {
-        server.send("/app/kickFromLobby", new WebsocketMessage(ResponseCodes.KICK_PLAYER,
-                clientData.getClientLobby().getToken(), selectedPlayer));
+        if(clientData.getClientPlayer().equals(selectedPlayer))
+        {
+            //you cant kick yourself out easter-egg
+            tip.setText("Kicking yourself out might require some thorough mental-check appointments (self love and all that)");
+        }
+        else {
+            server.send("/app/kickFromLobby", new WebsocketMessage(ResponseCodes.KICK_PLAYER,
+                    clientData.getClientLobby().getToken(), selectedPlayer));
+        }
     }
 }
