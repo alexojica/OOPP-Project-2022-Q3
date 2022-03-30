@@ -25,6 +25,12 @@ public class HomeCtrl {
     private TextField name;
 
     @FXML
+    private TextField serverTextField;
+
+    @FXML
+    private TextField portTextField;
+
+    @FXML
     private ImageView avatarImage;
 
     @Inject

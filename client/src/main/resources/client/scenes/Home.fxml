@@ -12,8 +12,10 @@
         <ImageView fx:id="avatarImage" fitHeight="128.0" fitWidth="175.0" layoutX="560.0" layoutY="176.0" pickOnBounds="true" preserveRatio="true" />
         <Button focusTraversable="false" layoutX="773.0" layoutY="194.0" mnemonicParsing="false" onAction="#incrementSeed" prefHeight="92.0" prefWidth="25.0" text="&gt;" />
         <Button focusTraversable="false" layoutX="456.0" layoutY="194.0" mnemonicParsing="false" onAction="#decrementSeed" prefHeight="92.0" prefWidth="25.0" text="&lt;" />
-        <TextField fx:id="name" alignment="CENTER" layoutX="550.0" layoutY="360.0" promptText="Username" />
-        <Button focusTraversable="false" layoutX="577.0" layoutY="400.0" mnemonicParsing="false" onAction="#play" prefHeight="26.0" prefWidth="123.0" styleClass="button1" text="Play" />
+        <TextField fx:id="name" alignment="CENTER" layoutX="565.0" layoutY="334.0" prefHeight="54.0" prefWidth="166.0" promptText="Username" />
+        <Button focusTraversable="false" layoutX="586.0" layoutY="455.0" mnemonicParsing="false" onAction="#play" prefHeight="26.0" prefWidth="123.0" styleClass="button1" text="Play" />
         <Label layoutX="590.0" layoutY="86.4" styleClass="header-section" text="Quizzz" AnchorPane.topAnchor="86.4" />
+      <TextField fx:id="serverTextField" layoutX="511.0" layoutY="407.0" promptText="Server" />
+      <TextField fx:id="portTextField" layoutX="681.0" layoutY="407.0" prefHeight="26.0" prefWidth="66.0" promptText="Port" />
     </children>
 </AnchorPane>

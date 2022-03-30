@@ -23,6 +23,7 @@ import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.UriBuilder;
 import javafx.scene.image.Image;
 import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.ClientConfig;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
@@ -33,6 +34,7 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import java.lang.reflect.Type;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
