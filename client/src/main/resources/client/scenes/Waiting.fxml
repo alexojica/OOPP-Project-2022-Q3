@@ -56,7 +56,7 @@
          </children>
       </Pane>
       <Button focusTraversable="false" layoutX="65.0" layoutY="650.0" mnemonicParsing="false" onAction="#leaveLobby" prefHeight="39.0" prefWidth="100.0" text="Leave Lobby" />
-      <Button focusTraversable="false" layoutX="1040.0" layoutY="615.0" mnemonicParsing="false" onAction="#startGame" prefHeight="70.0" prefWidth="185.0" styleClass="button1" text="Start Game" />
+      <Button fx:id="startGameButton" focusTraversable="false" layoutX="1040.0" layoutY="615.0" mnemonicParsing="false" onAction="#startGame" prefHeight="70.0" prefWidth="185.0" styleClass="button1" text="Start Game" />
       <Pane fx:id="parentPane" layoutX="1033.0" layoutY="200.0" prefHeight="321.0" prefWidth="200.0" style="-fx-background-color: #48d1cc;">
          <children>
             <Button layoutX="64.0" layoutY="60.0" mnemonicParsing="false" onAction="#kickPlayer" text="Kick player" textAlignment="CENTER" />

@@ -23,10 +23,7 @@ import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -36,10 +33,7 @@ import org.springframework.messaging.simp.stomp.StompSession;
 import javax.inject.Inject;
 import java.net.URL;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -64,9 +58,10 @@ public class WaitingCtrl implements Initializable{
 
     @FXML
     private Text tip;
-
     @FXML
     private Text lobbyCode;
+    @FXML
+    private Button startGameButton;
 
     // ----- admin panel controls
     @FXML
@@ -190,6 +185,15 @@ public class WaitingCtrl implements Initializable{
         else
         {
             parentPane.setVisible(false);
+            if(!Objects.equals(clientData.getClientLobby().getToken(), "COMMON"))
+            {
+                //if in a private lobby, disable start game
+                startGameButton.setVisible(false);
+            }
+            else
+            {
+                startGameButton.setVisible(true);
+            }
         }
     }
 
