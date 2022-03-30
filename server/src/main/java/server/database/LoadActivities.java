@@ -21,6 +21,11 @@ public class LoadActivities {
         return new ApplicationRunner() {
             @Override
             public void run(ApplicationArguments args) throws Exception {
+                //if this returns something there should be activities in the db so we dont save
+                if(repository.findAll()!=null){
+                    System.out.println("Activities already in repo");
+                    return;
+                }
                 saveIntoDatabase(repository);
             }
         };
