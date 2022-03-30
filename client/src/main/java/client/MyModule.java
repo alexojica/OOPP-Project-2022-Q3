@@ -37,9 +37,11 @@ import client.scenes.questions.GameMCQCtrl;
 import client.utils.ClientUtils;
 import client.utils.ClientUtilsImpl;
 import client.joker.JokerUtils;
+import client.utils.ServerUtils;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
+import org.apache.catalina.Server;
 
 public class MyModule implements Module {
 
@@ -65,5 +67,6 @@ public class MyModule implements Module {
         binder.bind(Game.class).to(GameImpl.class).in(Scopes.SINGLETON);
         binder.bind(AvatarManager.class).to(AvatarManagerImpl.class).in(Scopes.SINGLETON);
         binder.bind(Emotes.class).to(EmotesImpl.class).in(Scopes.SINGLETON);
+        binder.bind(ServerUtils.class).in(Scopes.SINGLETON);
     }
 }

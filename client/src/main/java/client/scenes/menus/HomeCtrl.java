@@ -3,13 +3,16 @@ package client.scenes.menus;
 import client.avatar.AvatarManager;
 import client.data.ClientData;
 import client.scenes.MainCtrl;
+import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.Player;
+import exceptions.InvalidServerException;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 
 import javax.inject.Inject;
@@ -17,6 +20,7 @@ import javax.inject.Inject;
 public class HomeCtrl {
 
     private final ServerUtils server;
+    private final ClientUtils clientUtils;
     private final MainCtrl mainCtrl;
     private final ClientData clientData;
     private final AvatarManager avatarGenerator;
@@ -33,12 +37,17 @@ public class HomeCtrl {
     @FXML
     private ImageView avatarImage;
 
+    @FXML
+    private Text incorrectServerText;
+
     @Inject
-    public HomeCtrl(ServerUtils server, MainCtrl mainCtrl, ClientData clientData, AvatarManager avatarGenerator) {
+    public HomeCtrl(ServerUtils server, MainCtrl mainCtrl, ClientData clientData, AvatarManager avatarGenerator,
+                    ClientUtils clientUtils) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.clientData = clientData;
         this.avatarGenerator = avatarGenerator;
+        this.clientUtils = clientUtils;
     }
 
     /**
@@ -73,6 +82,16 @@ public class HomeCtrl {
      * b) Sets the avatar chosen from the user
      */
     public void play(){
+        String host = serverTextField.getText();
+        int port = Integer.parseInt(portTextField.getText());
+        try {
+            incorrectServerText.setText("");
+            server.setHostAndPort(host, port);
+        }catch(InvalidServerException e){
+            serverTextField.clear();
+            portTextField.clear();
+            incorrectServerText.setText("Can't find that server!");
+        }
         try
         {
             Player p = getPlayer();
