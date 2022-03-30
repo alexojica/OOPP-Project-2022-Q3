@@ -1,10 +1,5 @@
 package server.api;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.xml.bind.v2.model.core.TypeRef;
-import commons.Activity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,11 +8,6 @@ import commons.LeaderboardEntry;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-import java.io.*;
-import java.net.URI;
-import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
