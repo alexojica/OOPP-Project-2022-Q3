@@ -14,7 +14,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.questions.EstimationQuestionCtrl">
    <children>
-      <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fitHeight="720.0" fitWidth="1280.0" layoutY="-14.0" pickOnBounds="true" preserveRatio="true" />
       <Button fx:id="submit" layoutX="589.0" layoutY="557.0" mnemonicParsing="false" onAction="#submit" text="Submit" />
       <TextField fx:id="answer" layoutX="395.0" layoutY="440.0" prefHeight="74.0" prefWidth="441.0" promptText="Fill in your guess here!" />
       <Button focusTraversable="false" layoutX="27.0" layoutY="650.0" mnemonicParsing="false" onAction="#leaveGame" prefHeight="43.0" prefWidth="110.0" text="Leave Game">
@@ -38,7 +38,7 @@
          </font>
       </Text>
       <ProgressBar fx:id="pb" layoutX="472.0" layoutY="90.0" prefHeight="20.0" prefWidth="320.0" progress="0.0" />
-      <Text fx:id="activityText" layoutX="503.0" layoutY="182.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="226.91268208373484">
+      <Text fx:id="activityText" layoutX="472.0" layoutY="153.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="320.0">
          <font>
             <Font size="20.0" />
          </font>
@@ -48,7 +48,7 @@
             <Font size="23.0" />
          </font>
       </Text>
-      <Text fx:id="answerPopUp" layoutX="456.0" layoutY="408.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="286.2333984375">
+      <Text fx:id="answerPopUp" layoutX="472.0" layoutY="425.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="286.2333984375">
          <font>
             <Font size="18.0" />
          </font>
@@ -64,7 +64,7 @@
       <Circle fx:id="joker3" fill="DODGERBLUE" layoutX="754.0" layoutY="628.0" onMouseClicked="#halfTimeForOthers" radius="20.0" stroke="BLACK" strokeType="INSIDE" />
       <Text layoutX="449.0" layoutY="668.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" Double Points💰" />
       <Text layoutX="705.0" layoutY="668.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Half time of others⏰" />
-      <Pane layoutX="506.0" layoutY="248.0" prefHeight="170.0" prefWidth="220.0" style="-fx-background-color: ffffff;">
+      <Pane layoutX="506.0" layoutY="215.0" prefHeight="170.0" prefWidth="220.0" style="-fx-background-color: ffffff;">
          <children>
             <ImageView fx:id="bigImageView" fitHeight="160.0" fitWidth="210.0" layoutX="5.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" />
          </children>
