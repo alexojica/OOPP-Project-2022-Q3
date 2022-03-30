@@ -127,7 +127,8 @@ public class WaitingCtrl implements Initializable{
     {
         if(lobbyStartSubscription == null) {
             lobbyStartSubscription = server.registerForMessages("/topic/lobbyStart", a -> {
-                if (a.getCode() == ResponseCodes.START_GAME && a.getLobbyToken().equals(clientData.getClientLobby().token)) {
+                if (a.getCode() == ResponseCodes.START_GAME
+                                && a.getLobbyToken().equals(clientData.getClientLobby().token)) {
                     killTimer();
                     System.out.println("ishost:" + clientData.getIsHost());
                     clientData.setLobby(server.getLobbyByToken(a.getNewToken()));
@@ -160,7 +161,8 @@ public class WaitingCtrl implements Initializable{
         lobbyCode.setText("Lobby code: " + token);
 
         //enable admin UI
-        if(clientData.getClientLobby().getHostId() != null && clientData.getClientPlayer().getId() == clientData.getClientLobby().getHostId())
+        if(clientData.getClientLobby().getHostId() != null
+                && clientData.getClientPlayer().getId() == clientData.getClientLobby().getHostId())
         {
             //only the host is allowed to have access to these set of buttons (privileges)
             enableAdminPanel(true);
@@ -359,7 +361,8 @@ public class WaitingCtrl implements Initializable{
         if(clientData.getClientPlayer().equals(selectedPlayer))
         {
             //you cant kick yourself out easter-egg
-            tip.setText("Kicking yourself out might require some thorough mental-check appointments (self love and all that)");
+            tip.setText("Kicking yourself out might require " +
+                    "some thorough mental-check appointments (self love and all that)");
         }
         else {
             server.send("/app/kickFromLobby", new WebsocketMessage(ResponseCodes.KICK_PLAYER,

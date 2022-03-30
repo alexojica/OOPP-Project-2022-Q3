@@ -71,6 +71,7 @@ class GameTest {
     }
 
 
+    /*
     @Test
     void startSingleplayer() {
         game.startSinglePlayer();
@@ -80,6 +81,7 @@ class GameTest {
         verify(clientData).setAsHost(true);
         verify(server).addMeToLobby(clientData.getClientLobby().getToken(), clientData.getClientPlayer());
     }
+     */
 
     @Test
     void joinPublicLobby() {

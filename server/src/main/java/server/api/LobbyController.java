@@ -241,7 +241,8 @@ public class LobbyController {
     @MessageMapping("/setNoOfQuestions")
     @SendTo("/topic/updateLobby")
     public WebsocketMessage setNoOfQuestions(WebsocketMessage message){
-        return new WebsocketMessage(ResponseCodes.UPDATE_QUESTION_NUMBER,message.getLobbyToken(),message.getDifficultySetting());
+        return new WebsocketMessage(ResponseCodes.UPDATE_QUESTION_NUMBER,
+                                    message.getLobbyToken(),message.getDifficultySetting());
     }
 
 
