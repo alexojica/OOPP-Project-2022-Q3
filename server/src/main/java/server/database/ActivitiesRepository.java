@@ -4,6 +4,7 @@ import commons.Activity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import javax.persistence.Transient;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
