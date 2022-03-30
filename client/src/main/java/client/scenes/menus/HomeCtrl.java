@@ -76,22 +76,29 @@ public class HomeCtrl {
         }
     }
 
+    public void setServer(){
+        try {
+            String host = serverTextField.getText();
+            int port = Integer.parseInt(portTextField.getText());
+            incorrectServerText.setText("");
+            server.setHostAndPort(host, port);
+        }catch(NumberFormatException e){
+            portTextField.clear();
+            incorrectServerText.setText("Port must be a number!");
+        }catch(InvalidServerException e){
+            serverTextField.clear();
+            portTextField.clear();
+            incorrectServerText.setText("Can't find that server!");
+        }
+    }
+
     /**
      * Method that is called when the play button is pressed, it:
      * a) Adds the player to the server and
      * b) Sets the avatar chosen from the user
      */
     public void play(){
-        String host = serverTextField.getText();
-        int port = Integer.parseInt(portTextField.getText());
-        try {
-            incorrectServerText.setText("");
-            server.setHostAndPort(host, port);
-        }catch(InvalidServerException e){
-            serverTextField.clear();
-            portTextField.clear();
-            incorrectServerText.setText("Can't find that server!");
-        }
+        setServer();
         try
         {
             Player p = getPlayer();
