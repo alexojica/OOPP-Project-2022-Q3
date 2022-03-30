@@ -103,6 +103,8 @@ public class GameImpl implements Game{
         clientData.setPointer(clientData.getClientPlayer().getId());
         clientData.setClientScore(0);
         clientData.setQuestionCounter(0);
+        //default value
+        setQuestionsToEndGame(20);
         clientData.setAsHost(true);
         server.addMeToLobby(clientData.getClientLobby().getToken(),clientData.getClientPlayer());
 

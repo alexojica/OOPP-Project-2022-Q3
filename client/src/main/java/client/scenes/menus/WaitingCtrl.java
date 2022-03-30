@@ -152,6 +152,8 @@ public class WaitingCtrl implements Initializable{
         String token = clientData.getClientLobby().getToken();
         if(token.equals("COMMON")) {
             tip.setText("Theres only one correct answer per question, get the most right to win.");
+            //default value for normal game
+            game.setQuestionsToEndGame(20);
         }
         else
         {
@@ -317,8 +319,9 @@ public class WaitingCtrl implements Initializable{
     }
 
     /**
-     * Method that adds listeners to value changes
-     * in the admin panel (# players, # questions, difficultyLevel)
+     * Method that adds listeners to value changes, and connects it
+     * to websockets for all other client
+     * In the admin panel (# players, # questions, difficultyLevel)
      * Called only if admin (only in private lobbies)
      */
     private void extractGameSettings()
