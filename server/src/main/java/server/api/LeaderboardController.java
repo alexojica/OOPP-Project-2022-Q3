@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import server.database.LeaderboardRepository;
 import commons.LeaderboardEntry;
 
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -16,8 +15,6 @@ public class LeaderboardController {
 
     @Autowired
     private LeaderboardRepository repository;
-    @Autowired
-    private EntityManager manager;
 
     /**
      * Find the top 10 entries in the leaderboard according to the score
@@ -29,8 +26,7 @@ public class LeaderboardController {
     }
 
     /**
-     * Save the given leaderboard entry in the leaderboard repository and then
-     * write it to file such that it can be loaded next time
+     * Save the given leaderboard entry in the leaderboard repository
      * @param leaderboardEntry
      * @return the leaderboard entry object that was saved to the repository
      */
