@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Random;
 
 import static constants.QuestionTypes.GUESS_X;
-import static constants.QuestionTypes.MULTIPLE_CHOICE_QUESTION;
 import static javafx.scene.paint.Color.rgb;
 
 public class GuessConsumptionCtrl implements JokerPowerUps {
