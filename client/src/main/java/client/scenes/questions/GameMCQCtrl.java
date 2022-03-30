@@ -103,7 +103,7 @@ public class GameMCQCtrl implements JokerPowerUps {
     public void resetUI(Question question)
     {
         scoreTxt.setText("Score:" + clientData.getClientScore());
-        nQuestionsTxt.setText(clientData.getQuestionCounter() + "/20");
+        nQuestionsTxt.setText(clientData.getQuestionCounter() + "/" + game.getQuestionsToEndGame());
         doublePoints = false;
         joker3.setDisable(clientData.getUsedJokers().contains(JokerType.HALF_TIME_FOR_ALL_LOBBY));
         joker1.setDisable(clientData.getUsedJokers().contains(JokerType.DOUBLE_POINTS));

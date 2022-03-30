@@ -25,8 +25,8 @@ public class GameImpl implements Game{
     private  final Emotes emotes;
 
     private final String COMMON_CODE = "COMMON";
-    private final Integer questionsToEndGame = 20;
-    private final Integer questionsToDisplayLeaderboard = 10;
+    private Integer questionsToEndGame = 20;
+    private Integer questionsToDisplayLeaderboard = 10;
 
     @Inject
     public GameImpl(ServerUtils server, ClientUtils client, ClientData clientData, MainCtrl mainCtrl, Emotes emotes) {
@@ -205,7 +205,7 @@ public class GameImpl implements Game{
 
             //start the game for the other players as well
             server.send("/app/lobbyStart",
-                    new WebsocketMessage(ResponseCodes.START_GAME, clientData.getClientLobby().token));
+                    new WebsocketMessage(ResponseCodes.START_GAME, clientData.getClientLobby().getToken()));
         }
     }
 
@@ -244,6 +244,11 @@ public class GameImpl implements Game{
 
     public Integer getQuestionsToEndGame(){
         return questionsToEndGame;
+    }
+
+    public void setQuestionsToEndGame(Integer value)
+    {
+        questionsToEndGame = value;
     }
 
     public Integer getQuestionsToDisplayLeaderboard()

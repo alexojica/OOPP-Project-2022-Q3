@@ -8,5 +8,6 @@ public enum ResponseCodes {
     LEAVE_LOBBY,
     SCORE_UPDATED,
     UPDATE_HOST,
-    KICK_PLAYER
+    KICK_PLAYER,
+    UPDATE_QUESTION_NUMBER
 }

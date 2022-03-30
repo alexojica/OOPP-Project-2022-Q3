@@ -231,6 +231,26 @@ public class LobbyController {
         return new WebsocketMessage(ResponseCodes.KICK_PLAYER, message.getLobbyToken(), message.getPlayer());
     }
 
+    /**
+     * Websocket mapping that updates for each client the
+     * appropriate no of questions, imposed by the admin (for private lobbies)
+     * and redirects it to all clients subscribed to /topic/updateLobby
+     * @param message received from the client containing the Response code and lobby token.
+     * @return
+     */
+    @MessageMapping("/setNoOfQuestions")
+    @SendTo("/topic/updateLobby")
+    public WebsocketMessage setNoOfQuestions(WebsocketMessage message){
+        return new WebsocketMessage(ResponseCodes.UPDATE_QUESTION_NUMBER,message.getLobbyToken(),message.getDifficultySetting());
+    }
+
+
+    /**
+     * Websocket mapping that updates a player's score on the repo
+     * and redirects it to all clients subscribed to /topic/updateLobby
+     * @param message received from the client containing the Response code and lobby token.
+     * @return
+     */
     @MessageMapping("/updateScore")
     @SendTo("/topic/updateLobby")
     public WebsocketMessage updateScore(WebsocketMessage message){

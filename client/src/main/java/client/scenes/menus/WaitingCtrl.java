@@ -31,6 +31,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import org.springframework.messaging.simp.stomp.StompSession;
 
 import javax.inject.Inject;
 import java.net.URL;
@@ -87,6 +88,8 @@ public class WaitingCtrl implements Initializable{
     private Avatar builder;
     private  Player selectedPlayer;
 
+    private StompSession.Subscription lobbyStartSubscription;
+
     private JokerUtils jokerUtils;
 
     @Inject
@@ -115,21 +118,29 @@ public class WaitingCtrl implements Initializable{
         if(client.getClass().equals(ClientUtilsImpl.class)) {
             client.setCurrentSceneCtrl(this);
         }
-        server.registerForMessages("/topic/lobbyStart", a -> {
-            if(a.getCode() == ResponseCodes.START_GAME && a.getLobbyToken().equals(clientData.getClientLobby().token)) {
-                killTimer();
-                System.out.println("ishost:" + clientData.getIsHost());
-                clientData.setLobby(server.getLobbyByToken(a.getNewToken()));
-                if(clientData.getIsHost())
-                    server.send("/app/nextQuestion",
-                            new WebsocketMessage(ResponseCodes.NEXT_QUESTION,
-                                    clientData.getClientLobby().token, clientData.getClientPointer()));
-                jokerUtils.registerForJokerUpdates();
-            }
-        });
+
+        registerLobbyStartSubscription();
 
         server.send("/app/requestUpdate",
                 new WebsocketMessage(ResponseCodes.LOBBY_UPDATED, clientData.getClientLobby().getToken()));
+    }
+
+    public void registerLobbyStartSubscription()
+    {
+        if(lobbyStartSubscription == null) {
+            lobbyStartSubscription = server.registerForMessages("/topic/lobbyStart", a -> {
+                if (a.getCode() == ResponseCodes.START_GAME && a.getLobbyToken().equals(clientData.getClientLobby().token)) {
+                    killTimer();
+                    System.out.println("ishost:" + clientData.getIsHost());
+                    clientData.setLobby(server.getLobbyByToken(a.getNewToken()));
+                    if (clientData.getIsHost())
+                        server.send("/app/nextQuestion",
+                                new WebsocketMessage(ResponseCodes.NEXT_QUESTION,
+                                        clientData.getClientLobby().token, clientData.getClientPointer()));
+                    jokerUtils.registerForJokerUpdates();
+                }
+            });
+        }
     }
 
     /**
@@ -172,6 +183,7 @@ public class WaitingCtrl implements Initializable{
         {
             //only admins
             parentPane.setVisible(true);
+            extractGameSettings();
         }
         else
         {
@@ -302,6 +314,30 @@ public class WaitingCtrl implements Initializable{
 
     public void startGame(){
         game.startMultiplayerGame();
+    }
+
+    /**
+     * Method that adds listeners to value changes
+     * in the admin panel (# players, # questions, difficultyLevel)
+     * Called only if admin (only in private lobbies)
+     */
+    private void extractGameSettings()
+    {
+        noOfPlayersSetting.textProperty().addListener(((observable, oldValue, newValue) -> {
+
+        }));
+
+        noOfQuestionsSetting.textProperty().addListener(((observable, oldValue, newValue) -> {
+            int newQuestionNumber = Integer.parseInt(newValue);
+            server.send("/app/setNoOfQuestions",
+                    new WebsocketMessage(clientData.getClientLobby().getToken(), newQuestionNumber));
+        }));
+
+        difficultySetting.textProperty().addListener(((observable, oldValue, newValue) -> {
+            int newDifficulty = Integer.parseInt(newValue);
+            server.send("/app/setDifficulty",
+                    new WebsocketMessage(clientData.getClientLobby().getToken(), newDifficulty));
+        }));
     }
 
     /**
