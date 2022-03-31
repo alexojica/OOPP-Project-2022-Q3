@@ -181,9 +181,9 @@ public class MainCtrl extends Application {
 
     public void showGuessX(){
         client.setCurrentSceneCtrl(guessConsumptionCtrl);
+        guessConsumptionCtrl.load();
         primaryStage.setTitle("GameScreen");
         primaryStage.setScene(guessXScene);
-        guessConsumptionCtrl.load();
     }
 
     public void showHome(){
