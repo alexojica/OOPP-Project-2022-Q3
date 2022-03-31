@@ -5,6 +5,7 @@ import client.emotes.Emotes;
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
+import commons.LeaderboardEntry;
 import commons.Lobby;
 import commons.Player;
 import commons.WebsocketMessage;
@@ -243,6 +244,11 @@ public class GameImpl implements Game{
     public void endGame()
     {
         System.out.println("Game ended");
+        //if we've come to the end of a singleplayergame the player's avatarCode, score and name are stored in the repo
+        if(clientData.getGameType() == GameType.SINGLEPLAYER){
+            Player temp = clientData.getClientPlayer();
+            server.persistScore(new LeaderboardEntry(temp.getScore(), temp.getName(), temp.getAvatarCode()));
+        }
         server.send("/app/lobbyEnd", new WebsocketMessage(ResponseCodes.END_GAME,
                 clientData.getClientLobby().getToken()));
         client.unsubscribeFromMessages();

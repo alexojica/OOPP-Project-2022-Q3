@@ -8,8 +8,6 @@ import client.scenes.questions.EnergyAlternativeQuestionCtrl;
 import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
 import client.scenes.questions.GuessConsumptionCtrl;
-import commons.LeaderboardEntry;
-import commons.Player;
 import commons.Question;
 import constants.QuestionTypes;
 import constants.ResponseCodes;
@@ -284,8 +282,6 @@ public class ClientUtilsImpl implements ClientUtils {
     public void getQuestion() {
 
         if (clientData.getQuestionCounter() >= game.getQuestionsToEndGame()){
-            Player temp = clientData.getClientPlayer();
-            server.persistScore(new LeaderboardEntry(temp.getScore(), temp.getName(), temp.getAvatarCode()));
             game.endGame();
         }
         else {
