@@ -1,6 +1,5 @@
 package server.api;
 
-import commons.Lobby;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.*;
