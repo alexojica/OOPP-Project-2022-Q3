@@ -7,6 +7,9 @@ import client.scenes.menus.WaitingCtrl;
 import client.scenes.questions.EnergyAlternativeQuestionCtrl;
 import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
+import client.scenes.questions.GuessConsumptionCtrl;
+import commons.LeaderboardEntry;
+import commons.Player;
 import commons.Question;
 import constants.QuestionTypes;
 import constants.ResponseCodes;
@@ -71,11 +74,6 @@ public class ClientUtilsImpl implements ClientUtils {
         this.energyAlternativeQuestionCtrl = energyAlternativeQuestionCtrl;
         this.estimationQuestionCtrl = estimationQuestionCtrl;
         System.out.println("Instance of client utils");
-
-        //why are these here?
-        registerQuestionCommunication();
-        registerLobbyCommunication();
-        registerMessageCommunication();
     }
 
 
@@ -95,6 +93,23 @@ public class ClientUtilsImpl implements ClientUtils {
                         }
                     }
 
+                    if(a.getCode() == ResponseCodes.KICK_PLAYER)
+                    {
+                        if(a.getPlayer().equals(clientData.getClientPlayer())){
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    game.leaveLobby();
+                                }
+                            });
+                        }
+                    }
+
+                    if(a.getCode() == ResponseCodes.UPDATE_QUESTION_NUMBER)
+                    {
+                        game.setQuestionsToEndGame(a.getDifficultySetting());
+                    }
+
                     if (currentSceneCtrl.getClass() == WaitingCtrl.class)
                         ((WaitingCtrl) currentSceneCtrl).refresh();
                 }
@@ -112,7 +127,6 @@ public class ClientUtilsImpl implements ClientUtils {
                     System.out.println("next question received " + clientData.getQuestionCounter());
                     clientData.setQuestion(a.getQuestion());
 
-                    System.out.println("Activities got are: " + a.getQuestion().getFoundActivities());
                     clientData.setPointer(a.getQuestion().getPointer());
                     if (currentSceneCtrl.getClass() == WaitingCtrl.class) {
                         game.initiateMultiplayerGame();
@@ -153,13 +167,15 @@ public class ClientUtilsImpl implements ClientUtils {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                Platform.runLater(() -> {
+
                     progress.updateAndGet(v -> (v - 0.01D));
                     timeLeft.updateAndGet(v -> (v - 0.01D));
-                    pb.setProgress(progress.get());
-                    r.set((int) Math.floor(255 - progress.get() * 255));
-                    g.set((int) Math.floor(progress.get() * 255));
-                    pb.setStyle("-fx-accent: rgb(" + r + "," + g + ", " + 0 + ");");
+                    Platform.runLater(() -> {
+                        pb.setProgress(progress.get());
+                        r.set((int) Math.floor(255 - progress.get() * 255));
+                        g.set((int) Math.floor(progress.get() * 255));
+                        pb.setStyle("-fx-accent: rgb(" + r + "," + g + ", " + 0 + ");");
+                    });
                     if(!updateCoefficient.get()){
                         if(currentSceneCtrl instanceof GameMCQCtrl){
                             if(((GameMCQCtrl) currentSceneCtrl).getAnswer1().isSelected()){
@@ -189,6 +205,20 @@ public class ClientUtilsImpl implements ClientUtils {
                                 updateCoefficient.set(true);
                             }
                         }
+                        if(currentSceneCtrl instanceof GuessConsumptionCtrl){
+                            if(((GuessConsumptionCtrl) currentSceneCtrl).getAnswer1().isSelected()){
+                                coefficient = pb.getProgress();
+                                updateCoefficient.set(true);
+                            }
+                            if(((GuessConsumptionCtrl) currentSceneCtrl).getAnswer2().isSelected()){
+                                coefficient = pb.getProgress();
+                                updateCoefficient.set(true);
+                            }
+                            if(((GuessConsumptionCtrl) currentSceneCtrl).getAnswer3().isSelected()){
+                                coefficient = pb.getProgress();
+                                updateCoefficient.set(true);
+                            }
+                        }
                     }
                     if(progress.get() <= 0){
                         switch (questionType){
@@ -200,6 +230,9 @@ public class ClientUtilsImpl implements ClientUtils {
                                 break;
                             case ENERGY_ALTERNATIVE_QUESTION:
                                 ((EnergyAlternativeQuestionCtrl) me).disableAnswers();
+                                break;
+                            case GUESS_X:
+                                ( (GuessConsumptionCtrl) me).disableAnswers();
                                 break;
                         }
                     }
@@ -214,12 +247,13 @@ public class ClientUtilsImpl implements ClientUtils {
                                 ((EstimationQuestionCtrl) me).nextQuestion();
                             }else if(questionType == QuestionTypes.ENERGY_ALTERNATIVE_QUESTION){
                                 ((EnergyAlternativeQuestionCtrl) me).nextQuestion();
+                            }else if(questionType == GUESS_X){
+                                ((GuessConsumptionCtrl) me).nextQuestion();
                             }
                             //getQuestion(server,mainCtrl);
                             ok.set(true);
                         }
                     }
-                });
             }
         },0,200);
     }
@@ -250,6 +284,8 @@ public class ClientUtilsImpl implements ClientUtils {
     public void getQuestion() {
 
         if (clientData.getQuestionCounter() >= game.getQuestionsToEndGame()){
+            Player temp = clientData.getClientPlayer();
+            server.persistScore(new LeaderboardEntry(temp.getScore(), temp.getName(), temp.getAvatarCode()));
             game.endGame();
         }
         else {
@@ -274,6 +310,10 @@ public class ClientUtilsImpl implements ClientUtils {
                 case ENERGY_ALTERNATIVE_QUESTION:
                     System.out.println("should appear scene");
                     mainCtrl.showEnergyAlternative();
+                    break;
+                case GUESS_X:
+                    System.out.println("should appear scene");
+                    mainCtrl.showGuessX();
                     break;
                 default:
                     break;

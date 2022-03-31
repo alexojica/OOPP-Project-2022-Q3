@@ -28,6 +28,7 @@ import client.scenes.menus.WaitingCtrl;
 import client.scenes.questions.EnergyAlternativeQuestionCtrl;
 import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
+import client.scenes.questions.GuessConsumptionCtrl;
 import com.google.inject.Injector;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -55,12 +56,13 @@ public class Main extends Application {
         var estimationQuestion = FXML.load(EstimationQuestionCtrl.class, "client", "scenes", "EstimationQuestion.fxml");
         var alternativeQuestion = FXML.load(
                 EnergyAlternativeQuestionCtrl.class, "client", "scenes", "EnergyAlternativeQuestion.fxml");
+        var guessMultipleChoiceQuestion = FXML.load(
+                GuessConsumptionCtrl.class, "client", "scenes", "GuessConsumptionQuestion.fxml");
         var tempLeaderboard = FXML.load(TempLeaderboardCtrl.class, "client", "scenes", "TempLeaderboard.fxml");
         var gameOver = FXML.load(GameOverCtrl.class, "client", "scenes", "GameOver.fxml");
         var multiPlayerMenu = FXML.load(MultiplayerMenuCtrl.class, "client", "scenes", "MultiplayerMenu.fxml");
         var usernamePopUp = FXML.load(UsernamePopUpCtrl.class, "client", "scenes", "UsernamePopUp.fxml");
         var kickedPopUp = FXML.load(KickPopUpCtrl.class, "client", "scenes", "KickedPopUp.fxml");
-
 
         // Stylesheets are loaded using reflection
         home.getValue().getStylesheets()
@@ -79,7 +81,7 @@ public class Main extends Application {
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, home, leaderboard, gameModeSelection, multiPlayerMenu,
-                            estimationQuestion, gameMCQ, alternativeQuestion, gameOver,
+                            estimationQuestion, gameMCQ, alternativeQuestion, guessMultipleChoiceQuestion, gameOver,
                 waiting, tempLeaderboard, usernamePopUp, kickedPopUp);
     }
 }

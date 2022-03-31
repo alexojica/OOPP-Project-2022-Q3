@@ -50,4 +50,6 @@ public interface ClientData {
     void setUnansweredQuestionCounter(Integer unansweredQuestionCounter);
 
     void incrementUnansweredQuestionCounter();
+
+    void clearUnansweredQuestionCounter();
 }

@@ -162,6 +162,7 @@ class LobbyControllerTest {
         assertEquals(Optional.of(player1), sut.addMeToLobby("private", player1));
     }
 
+    /*
     @Test
     public void startGame(){
         Lobby newLobby = new Lobby("private", 2);
@@ -169,6 +170,8 @@ class LobbyControllerTest {
         WebsocketMessage wsm = new WebsocketMessage(START_GAME, newLobby.getToken(), newLobby.getToken());
         assertNotEquals(sut.startGame(wsm).getNewToken(), wsm.getNewToken());
     }
+
+     */
 
     /*
     @Test
