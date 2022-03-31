@@ -9,6 +9,7 @@ import commons.Lobby;
 import commons.Player;
 import commons.WebsocketMessage;
 import constants.ConnectionStatusCodes;
+import constants.GameType;
 import constants.ResponseCodes;
 import javafx.application.Platform;
 
@@ -78,6 +79,8 @@ public class GameImpl implements Game{
         clientData.setClientScore(0);
         clientData.setQuestionCounter(0);
         clientData.setAsHost(true);
+        clientData.setGameType(GameType.SINGLEPLAYER);
+        client.swapEmoteJokerUsability(true);
         server.addMeToLobby(clientData.getClientLobby().getToken(),clientData.getClientPlayer());
 
         //add delay until game starts
@@ -137,6 +140,8 @@ public class GameImpl implements Game{
         System.out.println("game initiated");
         clientData.setClientScore(0);
         clientData.setQuestionCounter(0);
+        clientData.setGameType(GameType.MULTIPLAYER);
+        client.swapEmoteJokerUsability(false);
         //add delay until game starts
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -194,6 +199,7 @@ public class GameImpl implements Game{
         clientData.setAsHost(false);
         //set client lobby to exited
         clientData.setLobby(null);
+        clientData.setGameType(null);
 
         mainCtrl.showGameModeSelection();
     }
@@ -206,6 +212,7 @@ public class GameImpl implements Game{
         client.unsubscribeFromMessages();
         client.killTimer();
         client.resetMessages();
+        clientData.setGameType(null);
         //uses the current lobby to load images, scores and names for the players
         mainCtrl.showGameOver();
     }

@@ -34,4 +34,6 @@ public interface ClientUtils {
     void updateMessages(String str, String lobbyToken);
 
     void resetMessages();
+
+    void swapEmoteJokerUsability(boolean bool);
 }

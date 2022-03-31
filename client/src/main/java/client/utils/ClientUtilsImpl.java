@@ -336,6 +336,31 @@ public class ClientUtilsImpl implements ClientUtils {
         energyAlternativeQuestionCtrl.setMessageTxt3("");
     }
 
+    /**
+     * Turns emotes and halfTime joker off when given true and turns them on when given false
+     * @param bool
+     */
+    public void swapEmoteJokerUsability(boolean bool){
+        //swaps usability of emotes
+        gameMCQCtrl.getEmotesMenu().setDisable(bool);
+        gameMCQCtrl.getEmotesMenu().setVisible(!bool);
+        estimationQuestionCtrl.getEmotesMenu().setDisable(bool);
+        estimationQuestionCtrl.getEmotesMenu().setVisible(!bool);
+        energyAlternativeQuestionCtrl.getEmotesMenu().setDisable(bool);
+        energyAlternativeQuestionCtrl.getEmotesMenu().setVisible(!bool);
+
+        //swaps usability of halftime joker
+        gameMCQCtrl.getHalfTimeJoker().setDisable(bool);
+        gameMCQCtrl.getHalfTimeJoker().setVisible(!bool);
+        gameMCQCtrl.getHalfTimeText().setVisible(!bool);
+        estimationQuestionCtrl.getHalfTimeJoker().setDisable(bool);
+        estimationQuestionCtrl.getHalfTimeJoker().setVisible(!bool);
+        estimationQuestionCtrl.getHalfTimeText().setVisible(!bool);
+        energyAlternativeQuestionCtrl.getHalfTimeJoker().setDisable(bool);
+        energyAlternativeQuestionCtrl.getHalfTimeJoker().setVisible(!bool);
+        energyAlternativeQuestionCtrl.getHalfTimeText().setVisible(!bool);
+    }
+
     public double getCoefficient() {
         return coefficient;
     }
