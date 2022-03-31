@@ -7,5 +7,7 @@ public enum ResponseCodes {
     NEXT_QUESTION,
     LEAVE_LOBBY,
     SCORE_UPDATED,
-    UPDATE_HOST
+    UPDATE_HOST,
+    KICK_PLAYER,
+    UPDATE_QUESTION_NUMBER
 }

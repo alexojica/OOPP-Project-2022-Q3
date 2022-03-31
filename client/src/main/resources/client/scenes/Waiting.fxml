@@ -3,11 +3,13 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+
 <?import client.utils.FormattedTableCellFactory?>
 
 <AnchorPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: e6e6e6;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.menus.WaitingCtrl">
@@ -15,7 +17,7 @@
       <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true" />
       <TableView fx:id="tableView" focusTraversable="false" layoutX="200.0" layoutY="175.0" prefHeight="400.0" prefWidth="292.0" styleClass="table">
         <columns>
-          <TableColumn fx:id="avatarColumn" prefWidth="120.0" text="Avatar" >
+          <TableColumn fx:id="avatarColumn" prefWidth="120.0" text="Avatar">
            <cellFactory>
               <FormattedTableCellFactory alignment="center">
               </FormattedTableCellFactory>
@@ -29,24 +31,24 @@
            </TableColumn>
         </columns>
       </TableView>
-      <Text layoutX="565.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Currently Waiting..." wrappingWidth="240" styleClass="header-section">
+      <Text layoutX="565.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="header-section" text="Currently Waiting..." wrappingWidth="240">
          <font>
             <Font size="19.0" />
          </font>
       </Text>
-      <Text fx:id="lobbyCode" layoutX="1100.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lobby Code:" wrappingWidth="144.68707275390625" styleClass="code">
+      <Text fx:id="lobbyCode" layoutX="1100.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="code" text="Lobby Code:" wrappingWidth="144.68707275390625">
          <font>
             <Font size="15.0" />
          </font>
       </Text>
-      <Pane layoutX="800.0" layoutY="275.0" prefHeight="145.0" prefWidth="248.0" style="-fx-background-color: fffac3;">
+      <Pane layoutX="681.0" layoutY="275.0" prefHeight="145.0" prefWidth="248.0" style="-fx-background-color: fffac3;">
          <children>
-            <Text layoutX="98.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tip" textAlignment="CENTER" wrappingWidth="40.3720703125" styleClass="Tip">
+            <Text layoutX="98.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Tip" text="Tip" textAlignment="CENTER" wrappingWidth="40.3720703125">
                <font>
                   <Font size="18.0" />
                </font>
             </Text>
-            <Text fx:id="tip" layoutX="25.0" layoutY="72.0" strokeType="OUTSIDE" strokeWidth="0.0" text="tip_text" wrappingWidth="200.33673095703125" styleClass="tipText">
+            <Text fx:id="tip" layoutX="25.0" layoutY="72.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tipText" text="tip_text" wrappingWidth="200.33673095703125">
                <font>
                   <Font size="14.0" />
                </font>
@@ -54,6 +56,20 @@
          </children>
       </Pane>
       <Button focusTraversable="false" layoutX="65.0" layoutY="650.0" mnemonicParsing="false" onAction="#leaveLobby" prefHeight="39.0" prefWidth="100.0" text="Leave Lobby" />
-      <Button focusTraversable="false" layoutX="1040.0" layoutY="615.0" mnemonicParsing="false" onAction="#startGame" prefHeight="70.0" prefWidth="185.0" text="Start Game" styleClass="button1"/>
+      <Button fx:id="startGameButton" focusTraversable="false" layoutX="1040.0" layoutY="615.0" mnemonicParsing="false" onAction="#startGame" prefHeight="70.0" prefWidth="185.0" styleClass="button1" text="Start Game" />
+      <Pane fx:id="parentPane" layoutX="1033.0" layoutY="200.0" prefHeight="321.0" prefWidth="200.0" style="-fx-background-color: #48d1cc;">
+         <children>
+            <Button layoutX="64.0" layoutY="60.0" mnemonicParsing="false" onAction="#kickPlayer" text="Kick player" textAlignment="CENTER" />
+            <Text layoutX="28.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="# questions:" textAlignment="CENTER" />
+            <TextField fx:id="noOfQuestionsSetting" alignment="CENTER" layoutX="120.0" layoutY="188.0" prefHeight="25.0" prefWidth="52.0" promptText="20" />
+            <Text layoutX="28.0" layoutY="275.0" strokeType="OUTSIDE" strokeWidth="0.0" text="difficulty:" textAlignment="CENTER" />
+            <TextField fx:id="difficultySetting" alignment="CENTER" layoutX="120.0" layoutY="258.0" prefHeight="25.0" prefWidth="52.0" promptText="40" />
+            <Text fx:id="playerToBeKicked" layoutX="50.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="100.0">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+         </children>
+      </Pane>
    </children>
 </AnchorPane>
