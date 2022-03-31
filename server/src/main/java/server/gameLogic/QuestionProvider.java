@@ -108,13 +108,15 @@ public class QuestionProvider {
     }
 
     public QuestionTypes getRandomQuestionType() {
-        switch (Math.abs(random.nextInt(3))) {
+        switch (Math.abs(random.nextInt(4))) {
             case 0:
                 return QuestionTypes.MULTIPLE_CHOICE_QUESTION;
             case 1:
                 return QuestionTypes.ESTIMATION_QUESTION;
             case 2:
                 return QuestionTypes.ENERGY_ALTERNATIVE_QUESTION;
+            case 3:
+                return QuestionTypes.GUESS_X;
             default:
                 return null;
         }
@@ -131,10 +133,13 @@ public class QuestionProvider {
                 activitiesIDS = getMultipleChoiceQuestionActivities(activityPivot);
                 break;
             case ESTIMATION_QUESTION:
-                activitiesIDS = getEstimationQuestionActivity(activityPivot);
+                activitiesIDS = getSingleActivity(activityPivot);
                 break;
             case ENERGY_ALTERNATIVE_QUESTION:
                 activitiesIDS = getAlternativeEnergyQuestionActivities(activityPivot);
+                break;
+            case GUESS_X:
+                activitiesIDS = getMultipleChoiceQuestionActivities(activityPivot);
                 break;
             default:
                 activitiesIDS = null;
@@ -236,7 +241,7 @@ public class QuestionProvider {
         return wrongActivities;
     }
 
-    public List<Long> getEstimationQuestionActivity(Activity activityPivot) {
+    public List<Long> getSingleActivity(Activity activityPivot) {
         List<Long> activities = new ArrayList<>();
         activities.add(activityPivot.getId());
         return activities;

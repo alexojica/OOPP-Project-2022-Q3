@@ -52,6 +52,8 @@ public interface ClientData {
 
     void incrementUnansweredQuestionCounter();
 
+    void clearUnansweredQuestionCounter();
+
     GameType getGameType();
 
     void setGameType(GameType gameType);
