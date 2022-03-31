@@ -21,3 +21,5 @@
     /leaderboard
         /persistScore
         /getTop10Scores
+    /images
+        /getImageByActivityId

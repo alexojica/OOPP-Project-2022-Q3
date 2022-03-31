@@ -16,6 +16,8 @@ import constants.ResponseCodes;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
@@ -75,6 +77,13 @@ public class GameMCQCtrl implements JokerPowerUps {
     private Label messageTxt2;
     @FXML
     private Label messageTxt3;
+
+    @FXML
+    private ImageView imageView1;
+    @FXML
+    private ImageView imageView2;
+    @FXML
+    private ImageView imageView3;
 
     @Inject
     public GameMCQCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ClientData clientData,
@@ -145,14 +154,17 @@ public class GameMCQCtrl implements JokerPowerUps {
             case 0:
                 //correct answer is first one
                 randomizeFields(answer1,answer2,answer3,question);
+                setImages(imageView1, imageView2, imageView3, question);
                 break;
             case 1:
                 //correct answer is second one
                 randomizeFields(answer2,answer1,answer3,question);
+                setImages(imageView2, imageView1, imageView3, question);
                 break;
             case 2:
                 //correct answer is third one
                 randomizeFields(answer3,answer1,answer2,question);
+                setImages(imageView3, imageView1, imageView2, question);
                 break;
             default:
                 break;
@@ -165,6 +177,19 @@ public class GameMCQCtrl implements JokerPowerUps {
         a.setText(list.get(0).getTitle());
         b.setText(list.get(1).getTitle());
         c.setText(list.get(2).getTitle());
+    }
+
+    private void setImages(ImageView a, ImageView b, ImageView c, Question question) {
+        List<Long> activitiesIds = question.getFoundActivities();
+
+        Image firstImage = server.getImageFromActivityId(activitiesIds.get(0));
+        a.setImage(firstImage);
+
+        Image secondImage = server.getImageFromActivityId(activitiesIds.get(1));
+        b.setImage(secondImage);
+
+        Image thirdImage = server.getImageFromActivityId(activitiesIds.get(2));
+        c.setImage(thirdImage);
     }
 
     public void disableAnswers(){
