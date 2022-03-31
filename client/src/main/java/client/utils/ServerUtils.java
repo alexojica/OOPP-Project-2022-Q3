@@ -80,6 +80,14 @@ public class ServerUtils {
                 .post(Entity.entity(activity1, APPLICATION_JSON), Activity.class);
     }
 
+    public Question addQuestion(Question question) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/question/add") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(question, APPLICATION_JSON), Question.class);
+    }
+
     public List<Lobby> getAllLobbies() {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/lobby/getAllLobbies") //
@@ -152,6 +160,23 @@ public class ServerUtils {
     public String deleteActivity(String activityID) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/activity/delete/" + activityID) //
+                //.queryParam("activityID", activityID)
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<String>() {});
+    }
+
+    public List<Question> getAllQuestions() {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/question/getAll")
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<List<Question>>() {});
+    }
+
+    public String deleteQuestion(Long id) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/question/delete/" + id) //
                 //.queryParam("activityID", activityID)
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //

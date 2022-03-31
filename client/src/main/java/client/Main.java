@@ -19,6 +19,7 @@ import client.scenes.GameOverCtrl;
 import client.scenes.KickPopUpCtrl;
 import client.scenes.MainCtrl;
 import client.scenes.UsernamePopUpCtrl;
+import client.scenes.admin.*;
 import client.scenes.leaderboards.LeaderboardCtrl;
 import client.scenes.leaderboards.TempLeaderboardCtrl;
 import client.scenes.menus.GameModeSelectionCtrl;
@@ -31,9 +32,6 @@ import client.scenes.questions.GameMCQCtrl;
 import com.google.inject.Injector;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import client.scenes.admin.EditActivitiesCtrl;
-import client.scenes.admin.ActivityAdminCtrl;
-import client.scenes.admin.AdminHomeCtrl;
 
 import static com.google.inject.Guice.createInjector;
 
@@ -66,6 +64,8 @@ public class Main extends Application {
         var adminHome = FXML.load(AdminHomeCtrl.class, "client", "scenes", "HomeAdmin.fxml");
         var activityAdmin = FXML.load(ActivityAdminCtrl.class, "client", "scenes", "ActivityAdmin.fxml");
         var editActivity = FXML.load(EditActivitiesCtrl.class, "client", "scenes", "EditActivity.fxml");
+        var questionAdmin = FXML.load(QuestionAdminCtrl.class, "client", "scenes", "QuestionAdmin.fxml");
+        var editQuestion = FXML.load(EditQuestionsCtrl.class, "client", "scenes", "EditQuestion.fxml");
 
 
         // Stylesheets are loaded using reflection
@@ -86,6 +86,7 @@ public class Main extends Application {
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, home, leaderboard, gameModeSelection, multiPlayerMenu,
                             estimationQuestion, gameMCQ, alternativeQuestion, gameOver,
-                waiting, tempLeaderboard, usernamePopUp, kickedPopUp, adminHome, editActivity, activityAdmin);
+                waiting, tempLeaderboard, usernamePopUp, kickedPopUp, adminHome,
+                editActivity, activityAdmin, questionAdmin, editQuestion);
     }
 }

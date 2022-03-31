@@ -14,6 +14,7 @@ public class AdminHomeCtrl {
     }
 
     public void questions(){
+        mainCtrl.showAdminQuestions();
     }
 
     public void activities(){

@@ -16,6 +16,7 @@
 package client.scenes;
 
 import client.game.Game;
+import client.scenes.admin.*;
 import client.scenes.leaderboards.LeaderboardCtrl;
 import client.scenes.leaderboards.TempLeaderboardCtrl;
 import client.scenes.menus.GameModeSelectionCtrl;
@@ -27,15 +28,13 @@ import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
 import client.utils.ClientUtils;
 import com.google.inject.Inject;
+import commons.Question;
 import jakarta.ws.rs.core.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-import client.scenes.admin.EditActivitiesCtrl;
-import client.scenes.admin.ActivityAdminCtrl;
-import client.scenes.admin.AdminHomeCtrl;
 import commons.Activity;
 
 public class MainCtrl extends Application {
@@ -87,6 +86,12 @@ public class MainCtrl extends Application {
     private ActivityAdminCtrl activityAdminCtrl;
     private Scene activityAdmin;
 
+    private QuestionAdminCtrl questionAdminCtrl;
+    private Scene questionAdmin;
+
+    private EditQuestionsCtrl editQuestionsCtrl;
+    private Scene editQuestion;
+
     private Stage incorrectUsernamePopUp;
 
     private Stage kickPopUp;
@@ -108,7 +113,9 @@ public class MainCtrl extends Application {
                            Pair<KickPopUpCtrl, Parent> kickedPopUp,
                            Pair<AdminHomeCtrl, Parent> adminHome,
                            Pair<EditActivitiesCtrl, Parent> editActivity,
-                           Pair<ActivityAdminCtrl, Parent> activityAdmin) {
+                           Pair<ActivityAdminCtrl, Parent> activityAdmin,
+                           Pair<QuestionAdminCtrl, Parent> questionAdmin,
+                           Pair<EditQuestionsCtrl, Parent> editQuestion) {
         this.primaryStage = primaryStage;
 
 
@@ -156,6 +163,12 @@ public class MainCtrl extends Application {
 
         this.activityAdminCtrl = activityAdmin.getKey();
         this.activityAdmin = new Scene(activityAdmin.getValue());
+
+        this.questionAdminCtrl = questionAdmin.getKey();
+        this.questionAdmin = new Scene(questionAdmin.getValue());
+
+        this.editQuestionsCtrl = editQuestion.getKey();
+        this.editQuestion = new Scene(editQuestion.getValue());
 
         primaryStage.setOnCloseRequest(e -> {
             if(client.isInLobby()){
@@ -215,6 +228,20 @@ public class MainCtrl extends Application {
         primaryStage.setTitle("AdminActivitiesScreen");
         primaryStage.setScene(activityAdmin);
         activityAdminCtrl.load();
+    }
+
+    public void showAdminQuestions(){
+        client.setCurrentSceneCtrl(questionAdminCtrl);
+        primaryStage.setTitle("AdminQuestionsScreen");
+        primaryStage.setScene(questionAdmin);
+        questionAdminCtrl.load();
+    }
+
+    public void showQuestionsEdit(Question q){
+        client.setCurrentSceneCtrl(editQuestionsCtrl);
+        primaryStage.setTitle("QuestionEditScreen");
+        primaryStage.setScene(editQuestion);
+        editQuestionsCtrl.load(q);
     }
 
     public void showHome(){
