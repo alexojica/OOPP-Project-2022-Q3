@@ -21,7 +21,12 @@ public class LoadActivities {
         return new ApplicationRunner() {
             @Override
             public void run(ApplicationArguments args) throws Exception {
-                saveIntoDatabase(repository);
+                //if this returns nothing there are be no activities in the db so we have to load
+                if(repository.findAll() == null || repository.findAll().size() == 0){
+                    saveIntoDatabase(repository);
+                    return;
+                }
+                System.out.println("Activities already in repo");
             }
         };
     }

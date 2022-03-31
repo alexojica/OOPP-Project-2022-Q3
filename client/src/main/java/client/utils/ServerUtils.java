@@ -144,12 +144,12 @@ public class ServerUtils {
                 .get(new GenericType<List<LeaderboardEntry>>() {});
     }
 
-    public LeaderboardEntry saveScore(LeaderboardEntry score) {
+    public LeaderboardEntry persistScore(LeaderboardEntry score) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("/api/leaderboard/saveScore")
+                .target(SERVER).path("/api/leaderboard/persistScore")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .put(Entity.entity(score, APPLICATION_JSON), LeaderboardEntry.class);
+                .post(Entity.entity(score, APPLICATION_JSON), LeaderboardEntry.class);
     }
 
     public Question getQuestion(long pointer, String lastLobby){
