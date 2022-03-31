@@ -108,4 +108,9 @@ public class ClientDataImpl implements ClientData {
     {
         unansweredQuestionCounter++;
     }
+
+    @Override
+    public void clearUnansweredQuestionCounter() {
+        unansweredQuestionCounter=0;
+    }
 }
