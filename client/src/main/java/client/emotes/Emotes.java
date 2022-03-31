@@ -1,4 +1,4 @@
-package emotes;
+package client.emotes;
 
 import javafx.scene.control.MenuItem;
 

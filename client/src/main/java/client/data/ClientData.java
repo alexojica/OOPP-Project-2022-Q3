@@ -44,4 +44,10 @@ public interface ClientData {
     void addJoker(JokerType joker);
 
     void resetJokers();
+
+    Integer getUnansweredQuestionCounter();
+
+    void setUnansweredQuestionCounter(Integer unansweredQuestionCounter);
+
+    void incrementUnansweredQuestionCounter();
 }

@@ -8,6 +8,7 @@ import commons.LeaderboardEntry;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/leaderboard")
@@ -15,6 +16,14 @@ public class LeaderboardController {
 
     @Autowired
     private LeaderboardRepository repository;
+
+    public LeaderboardController(LeaderboardRepository repository){
+        this.repository = repository;
+    }
+
+    public LeaderboardController(){
+
+    }
 
     /**
      * Find the top 10 entries in the leaderboard according to the score
@@ -37,4 +46,10 @@ public class LeaderboardController {
         repository.save(leaderboardEntry);
         return leaderboardEntry;
     }
+
+    @GetMapping("/getEntry")
+    public Optional<LeaderboardEntry> getEntryByName(@RequestBody String name) {
+        return repository.findByName(name);
+    }
+
 }

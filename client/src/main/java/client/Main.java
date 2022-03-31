@@ -16,6 +16,7 @@
 package client;
 
 import client.scenes.GameOverCtrl;
+import client.scenes.KickPopUpCtrl;
 import client.scenes.MainCtrl;
 import client.scenes.UsernamePopUpCtrl;
 import client.scenes.leaderboards.LeaderboardCtrl;
@@ -58,6 +59,7 @@ public class Main extends Application {
         var gameOver = FXML.load(GameOverCtrl.class, "client", "scenes", "GameOver.fxml");
         var multiPlayerMenu = FXML.load(MultiplayerMenuCtrl.class, "client", "scenes", "MultiplayerMenu.fxml");
         var usernamePopUp = FXML.load(UsernamePopUpCtrl.class, "client", "scenes", "UsernamePopUp.fxml");
+        var kickedPopUp = FXML.load(KickPopUpCtrl.class, "client", "scenes", "KickedPopUp.fxml");
 
 
         // Stylesheets are loaded using reflection
@@ -78,6 +80,6 @@ public class Main extends Application {
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, home, leaderboard, gameModeSelection, multiPlayerMenu,
                             estimationQuestion, gameMCQ, alternativeQuestion, gameOver,
-                waiting, tempLeaderboard, usernamePopUp);
+                waiting, tempLeaderboard, usernamePopUp, kickedPopUp);
     }
 }

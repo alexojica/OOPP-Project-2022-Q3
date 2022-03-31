@@ -44,7 +44,7 @@ public class ClientUtilsImpl implements ClientUtils {
 
     private Object currentSceneCtrl;
 
-    private StompSession.Subscription nextQuestionSubscription, updateLobbySubscription;
+    private StompSession.Subscription nextQuestionSubscription, updateLobbySubscription, messageSubscription;
 
     AtomicReference<Double> progress;
 
@@ -74,8 +74,10 @@ public class ClientUtilsImpl implements ClientUtils {
         this.estimationQuestionCtrl = estimationQuestionCtrl;
         System.out.println("Instance of client utils");
 
+        //why are these here?
         registerQuestionCommunication();
         registerLobbyCommunication();
+        registerMessageCommunication();
     }
 
 
@@ -118,6 +120,15 @@ public class ClientUtilsImpl implements ClientUtils {
                         game.initiateMultiplayerGame();
                     }
                 }
+            });
+        }
+        isSubscribed = true;
+    }
+
+    public void registerMessageCommunication(){
+        if(messageSubscription == null){
+            messageSubscription = server.registerForMessages("/topic/playerMessages", a -> {
+                updateMessages(a.getMessage(), a.getLobbyToken());
             });
         }
         isSubscribed = true;
@@ -278,10 +289,12 @@ public class ClientUtilsImpl implements ClientUtils {
         if(isSubscribed) {
             nextQuestionSubscription.unsubscribe();
             updateLobbySubscription.unsubscribe();
+            messageSubscription.unsubscribe();
 
             //I have to set to null
             nextQuestionSubscription = null;
             updateLobbySubscription = null;
+            messageSubscription = null;
 
             isSubscribed = false;
         }
@@ -313,6 +326,18 @@ public class ClientUtilsImpl implements ClientUtils {
             estimationQuestionCtrl.setMessageTxt2(estimationQuestionCtrl.getMessageTxt1().getText());
             estimationQuestionCtrl.setMessageTxt1(text);
         });
+    }
+
+    public void resetMessages(){
+        gameMCQCtrl.setMessageTxt1("");
+        gameMCQCtrl.setMessageTxt2("");
+        gameMCQCtrl.setMessageTxt3("");
+        estimationQuestionCtrl.setMessageTxt1("");
+        estimationQuestionCtrl.setMessageTxt2("");
+        estimationQuestionCtrl.setMessageTxt3("");
+        energyAlternativeQuestionCtrl.setMessageTxt1("");
+        energyAlternativeQuestionCtrl.setMessageTxt2("");
+        energyAlternativeQuestionCtrl.setMessageTxt3("");
     }
 
     public double getCoefficient() {

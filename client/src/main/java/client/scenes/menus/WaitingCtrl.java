@@ -109,12 +109,6 @@ public class WaitingCtrl implements Initializable{
             }
         });
 
-        //might need to be moved to clientutils
-        //registers the player for any messages communicated through this endpoint
-        server.registerForMessages("/topic/playerMessages", a -> {
-            client.updateMessages(a.getMessage(), a.getLobbyToken());
-        });
-
         server.send("/app/requestUpdate",
                 new WebsocketMessage(ResponseCodes.LOBBY_UPDATED, clientData.getClientLobby().getToken()));
     }
