@@ -76,20 +76,30 @@ public class HomeCtrl {
         }
     }
 
-    public void setServer(){
+    public boolean setServer(){
         try {
             String host = serverTextField.getText();
-            int port = Integer.parseInt(portTextField.getText());
-            incorrectServerText.setText("");
-            server.setHostAndPort(host, port);
+            String portString = portTextField.getText();
+            System.out.println("HOST: " + host + " PORT: " + portString);
+            if(host == "" || host == null || portString == "" || portString == null){
+                incorrectServerText.setText("You must enter both a host and a port!");
+                return false;
+            }else{
+                int port = Integer.parseInt(portString);
+                incorrectServerText.setText("");
+                server.setHostAndPort(host, port);
+            }
         }catch(NumberFormatException e){
             portTextField.clear();
             incorrectServerText.setText("Port must be a number!");
+            return false;
         }catch(InvalidServerException e){
             serverTextField.clear();
             portTextField.clear();
             incorrectServerText.setText("Can't find that server!");
+            return false;
         }
+        return true;
     }
 
     /**
@@ -98,7 +108,10 @@ public class HomeCtrl {
      * b) Sets the avatar chosen from the user
      */
     public void play(){
-        setServer();
+        boolean serverReady = setServer();
+        if(!serverReady){
+            return;
+        }
         try
         {
             Player p = getPlayer();
