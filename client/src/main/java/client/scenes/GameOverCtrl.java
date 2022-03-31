@@ -7,7 +7,6 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import com.talanlabs.avatargenerator.Avatar;
 import com.talanlabs.avatargenerator.eightbit.EightBitAvatar;
-import commons.Activity;
 import commons.LeaderboardEntry;
 import commons.Player;
 import commons.WebsocketMessage;
@@ -109,7 +108,8 @@ public class GameOverCtrl {
     private void loadLeaderboard()
     {
         if(clientData.getGameType() == GameType.MULTIPLAYER) {
-            currentTop10 = FXCollections.observableList(server.getTopByLobbyToken(clientData.getClientLobby().getToken()));
+            currentTop10 = FXCollections.observableList(server.getTopByLobbyToken(
+                    clientData.getClientLobby().getToken()));
         }
         if(clientData.getGameType() == GameType.SINGLEPLAYER) {
             currentTop10 = FXCollections.observableList(turnIntoPlayer(server.getTop10Scores()));
