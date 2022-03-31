@@ -69,6 +69,9 @@ public class ServerUtils {
                 .path("/websocket")
                 .build()
                 .toString();
+        if(port < 1024){
+            throw new InvalidServerException("Port cannot be accessed. Make sure the port is above 1023!");
+        }
         session = connect(sessionString);
     }
 

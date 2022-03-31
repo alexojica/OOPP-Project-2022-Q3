@@ -16,6 +16,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 
 import javax.inject.Inject;
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 public class HomeCtrl {
 
@@ -96,7 +98,7 @@ public class HomeCtrl {
         }catch(InvalidServerException e){
             serverTextField.clear();
             portTextField.clear();
-            incorrectServerText.setText("Can't find that server!");
+            incorrectServerText.setText(e.getMessage());
             return false;
         }
         return true;
