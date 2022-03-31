@@ -1,5 +1,6 @@
 package server.api;
 
+import commons.Lobby;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,24 @@ public class ActivityController {
     public List<Activity> getAll()
     {
         return repository.findAll();
+    }
+
+    @GetMapping("/delete/{activityID}")
+    public String deleteActivity(@PathVariable("activityID") String activityId) {
+        Optional<Activity> activity = repository.findByActivityID(activityId);
+        if (activity.isEmpty()) {
+            return "Activity not found";
+        }
+
+        repository.deleteActivityByActivityID(activityId);
+        return "Success";
+    }
+
+    @PostMapping("/add")
+    @ResponseBody
+    public Activity addActivity(@RequestBody Activity activity){
+        repository.save(activity);
+        return activity;
     }
 
     /**

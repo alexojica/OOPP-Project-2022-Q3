@@ -90,6 +90,10 @@ public class HomeCtrl {
         mainCtrl.showGameModeSelection();
     }
 
+    public void admin(){
+        mainCtrl.showAdminHome();
+    }
+
 
     private Player getPlayer()
     {

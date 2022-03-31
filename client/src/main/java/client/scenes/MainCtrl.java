@@ -33,6 +33,10 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import client.scenes.admin.EditActivitiesCtrl;
+import client.scenes.admin.ActivityAdminCtrl;
+import client.scenes.admin.AdminHomeCtrl;
+import commons.Activity;
 
 public class MainCtrl extends Application {
 
@@ -74,6 +78,15 @@ public class MainCtrl extends Application {
     private EnergyAlternativeQuestionCtrl energyAlternativeQuestionCtrl;
     private Scene energyAlternative;
 
+    private EditActivitiesCtrl editActivitiesCtrl;
+    private Scene editActivity;
+
+    private AdminHomeCtrl adminHomeCtrl;
+    private Scene adminHome;
+
+    private ActivityAdminCtrl activityAdminCtrl;
+    private Scene activityAdmin;
+
     private Stage incorrectUsernamePopUp;
 
     private Stage kickPopUp;
@@ -92,7 +105,10 @@ public class MainCtrl extends Application {
                            Pair<GameOverCtrl, Parent> gameOver, Pair<WaitingCtrl, Parent> waiting,
                            Pair<TempLeaderboardCtrl, Parent> tempLeaderboard,
                            Pair<UsernamePopUpCtrl, Parent> usernamePopUp,
-                           Pair<KickPopUpCtrl, Parent> kickedPopUp) {
+                           Pair<KickPopUpCtrl, Parent> kickedPopUp,
+                           Pair<AdminHomeCtrl, Parent> adminHome,
+                           Pair<EditActivitiesCtrl, Parent> editActivity,
+                           Pair<ActivityAdminCtrl, Parent> activityAdmin) {
         this.primaryStage = primaryStage;
 
 
@@ -132,6 +148,15 @@ public class MainCtrl extends Application {
         this.energyAlternativeQuestionCtrl = energyAlternative.getKey();
         this.energyAlternative = new Scene(energyAlternative.getValue());
 
+        this.editActivitiesCtrl = editActivity.getKey();
+        this.editActivity = new Scene(editActivity.getValue());
+
+        this.adminHomeCtrl = adminHome.getKey();
+        this.adminHome = new Scene(adminHome.getValue());
+
+        this.activityAdminCtrl = activityAdmin.getKey();
+        this.activityAdmin = new Scene(activityAdmin.getValue());
+
         primaryStage.setOnCloseRequest(e -> {
             if(client.isInLobby()){
                 game.leaveLobby();
@@ -169,6 +194,27 @@ public class MainCtrl extends Application {
         primaryStage.setTitle("GameScreen");
         primaryStage.setScene(estimation);
         estimationQuestionCtrl.load();
+    }
+
+    public void showActivityEdit(Activity act){
+        client.setCurrentSceneCtrl(editActivitiesCtrl);
+        primaryStage.setTitle("ActivityEditScreen");
+        primaryStage.setScene(editActivity);
+        editActivitiesCtrl.load(act);
+    }
+
+    public void showAdminHome(){
+        client.setCurrentSceneCtrl(adminHomeCtrl);
+        primaryStage.setTitle("AdminHomeScreen");
+        primaryStage.setScene(adminHome);
+        //adminHomeCtrl.load();
+    }
+
+    public void showAdminActivities(){
+        client.setCurrentSceneCtrl(activityAdminCtrl);
+        primaryStage.setTitle("AdminActivitiesScreen");
+        primaryStage.setScene(activityAdmin);
+        activityAdminCtrl.load();
     }
 
     public void showHome(){

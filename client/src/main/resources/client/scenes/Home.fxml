@@ -15,5 +15,6 @@
         <TextField fx:id="name" alignment="CENTER" layoutX="550.0" layoutY="360.0" promptText="Username" />
         <Button focusTraversable="false" layoutX="577.0" layoutY="400.0" mnemonicParsing="false" onAction="#play" prefHeight="26.0" prefWidth="123.0" styleClass="button1" text="Play" />
         <Label layoutX="590.0" layoutY="86.4" styleClass="header-section" text="Quizzz" AnchorPane.topAnchor="86.4" />
+        <Button focusTraversable="false" layoutX="1077.0" layoutY="59.0" mnemonicParsing="false" onAction="#admin" prefHeight="26.0" prefWidth="107.0" styleClass="button1" text="Admin" />
     </children>
 </AnchorPane>

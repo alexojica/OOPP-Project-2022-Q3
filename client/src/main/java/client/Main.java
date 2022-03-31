@@ -31,6 +31,9 @@ import client.scenes.questions.GameMCQCtrl;
 import com.google.inject.Injector;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import client.scenes.admin.EditActivitiesCtrl;
+import client.scenes.admin.ActivityAdminCtrl;
+import client.scenes.admin.AdminHomeCtrl;
 
 import static com.google.inject.Guice.createInjector;
 
@@ -60,6 +63,9 @@ public class Main extends Application {
         var multiPlayerMenu = FXML.load(MultiplayerMenuCtrl.class, "client", "scenes", "MultiplayerMenu.fxml");
         var usernamePopUp = FXML.load(UsernamePopUpCtrl.class, "client", "scenes", "UsernamePopUp.fxml");
         var kickedPopUp = FXML.load(KickPopUpCtrl.class, "client", "scenes", "KickedPopUp.fxml");
+        var adminHome = FXML.load(AdminHomeCtrl.class, "client", "scenes", "HomeAdmin.fxml");
+        var activityAdmin = FXML.load(ActivityAdminCtrl.class, "client", "scenes", "ActivityAdmin.fxml");
+        var editActivity = FXML.load(EditActivitiesCtrl.class, "client", "scenes", "EditActivity.fxml");
 
 
         // Stylesheets are loaded using reflection
@@ -80,6 +86,6 @@ public class Main extends Application {
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, home, leaderboard, gameModeSelection, multiPlayerMenu,
                             estimationQuestion, gameMCQ, alternativeQuestion, gameOver,
-                waiting, tempLeaderboard, usernamePopUp, kickedPopUp);
+                waiting, tempLeaderboard, usernamePopUp, kickedPopUp, adminHome, editActivity, activityAdmin);
     }
 }
