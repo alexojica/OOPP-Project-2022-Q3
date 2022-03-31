@@ -23,6 +23,7 @@ import client.emotes.Emotes;
 import client.emotes.EmotesImpl;
 import client.game.Game;
 import client.game.GameImpl;
+import client.joker.JokerUtils;
 import client.scenes.GameOverCtrl;
 import client.scenes.MainCtrl;
 import client.scenes.leaderboards.LeaderboardCtrl;
@@ -36,7 +37,7 @@ import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
 import client.utils.ClientUtils;
 import client.utils.ClientUtilsImpl;
-import client.joker.JokerUtils;
+import client.utils.ServerUtils;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
@@ -65,5 +66,6 @@ public class MyModule implements Module {
         binder.bind(Game.class).to(GameImpl.class).in(Scopes.SINGLETON);
         binder.bind(AvatarManager.class).to(AvatarManagerImpl.class).in(Scopes.SINGLETON);
         binder.bind(Emotes.class).to(EmotesImpl.class).in(Scopes.SINGLETON);
+        binder.bind(ServerUtils.class).in(Scopes.SINGLETON);
     }
 }

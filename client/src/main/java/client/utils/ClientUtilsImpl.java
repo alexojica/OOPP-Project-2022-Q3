@@ -71,11 +71,6 @@ public class ClientUtilsImpl implements ClientUtils {
         this.energyAlternativeQuestionCtrl = energyAlternativeQuestionCtrl;
         this.estimationQuestionCtrl = estimationQuestionCtrl;
         System.out.println("Instance of client utils");
-
-        //why are these here?
-        registerQuestionCommunication();
-        registerLobbyCommunication();
-        registerMessageCommunication();
     }
 
 
