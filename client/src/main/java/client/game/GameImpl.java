@@ -189,6 +189,8 @@ public class GameImpl implements Game{
 
         client.resetMessages();
 
+        clientData.clearUnansweredQuestionCounter();
+
         System.out.println("Left the lobby");
 
         clientData.setAsHost(false);
