@@ -21,3 +21,5 @@
         /saveScore
         /getTop10Scores
         /getTopByLobbyToken
+    /images
+        /getImageByActivityId
