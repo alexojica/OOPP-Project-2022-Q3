@@ -7,6 +7,7 @@ import client.scenes.menus.WaitingCtrl;
 import client.scenes.questions.EnergyAlternativeQuestionCtrl;
 import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
+import client.scenes.questions.GuessConsumptionCtrl;
 import commons.Question;
 import constants.QuestionTypes;
 import constants.ResponseCodes;
@@ -71,11 +72,6 @@ public class ClientUtilsImpl implements ClientUtils {
         this.energyAlternativeQuestionCtrl = energyAlternativeQuestionCtrl;
         this.estimationQuestionCtrl = estimationQuestionCtrl;
         System.out.println("Instance of client utils");
-
-        //why are these here?
-        registerQuestionCommunication();
-        registerLobbyCommunication();
-        registerMessageCommunication();
     }
 
 
@@ -189,6 +185,20 @@ public class ClientUtilsImpl implements ClientUtils {
                                 updateCoefficient.set(true);
                             }
                         }
+                        if(currentSceneCtrl instanceof GuessConsumptionCtrl){
+                            if(((GuessConsumptionCtrl) currentSceneCtrl).getAnswer1().isSelected()){
+                                coefficient = pb.getProgress();
+                                updateCoefficient.set(true);
+                            }
+                            if(((GuessConsumptionCtrl) currentSceneCtrl).getAnswer2().isSelected()){
+                                coefficient = pb.getProgress();
+                                updateCoefficient.set(true);
+                            }
+                            if(((GuessConsumptionCtrl) currentSceneCtrl).getAnswer3().isSelected()){
+                                coefficient = pb.getProgress();
+                                updateCoefficient.set(true);
+                            }
+                        }
                     }
                     if(progress.get() <= 0){
                         switch (questionType){
@@ -200,6 +210,9 @@ public class ClientUtilsImpl implements ClientUtils {
                                 break;
                             case ENERGY_ALTERNATIVE_QUESTION:
                                 ((EnergyAlternativeQuestionCtrl) me).disableAnswers();
+                                break;
+                            case GUESS_X:
+                                ( (GuessConsumptionCtrl) me).disableAnswers();
                                 break;
                         }
                     }
@@ -214,6 +227,8 @@ public class ClientUtilsImpl implements ClientUtils {
                                 ((EstimationQuestionCtrl) me).nextQuestion();
                             }else if(questionType == QuestionTypes.ENERGY_ALTERNATIVE_QUESTION){
                                 ((EnergyAlternativeQuestionCtrl) me).nextQuestion();
+                            }else if(questionType == GUESS_X){
+                                ((GuessConsumptionCtrl) me).nextQuestion();
                             }
                             //getQuestion(server,mainCtrl);
                             ok.set(true);
@@ -274,6 +289,10 @@ public class ClientUtilsImpl implements ClientUtils {
                 case ENERGY_ALTERNATIVE_QUESTION:
                     System.out.println("should appear scene");
                     mainCtrl.showEnergyAlternative();
+                    break;
+                case GUESS_X:
+                    System.out.println("should appear scene");
+                    mainCtrl.showGuessX();
                     break;
                 default:
                     break;
