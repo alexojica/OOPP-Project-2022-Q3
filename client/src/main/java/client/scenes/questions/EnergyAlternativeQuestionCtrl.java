@@ -16,11 +16,12 @@ import constants.ResponseCodes;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 import javax.inject.Inject;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -77,6 +78,17 @@ public class EnergyAlternativeQuestionCtrl implements JokerPowerUps {
     private Label messageTxt2;
     @FXML
     private Label messageTxt3;
+
+    @FXML
+    private ImageView imageView1;
+
+    @FXML
+    private ImageView imageView2;
+
+    @FXML
+    private ImageView imageView3;
+
+    @FXML ImageView bigImageView;
 
     @Inject
     public EnergyAlternativeQuestionCtrl(ClientData clientData, ClientUtils  client, ServerUtils server,
@@ -150,6 +162,8 @@ public class EnergyAlternativeQuestionCtrl implements JokerPowerUps {
             textMethod += " " + act.get().getTitle();
         }
         insteadOfText.setText(textMethod);
+        Image mainImage = server.getImageFromActivityId(question.getFoundActivities().get(0));
+        bigImageView.setImage(mainImage);
 
         if(answer1.isSelected()) answer1.setSelected(false);
         if(answer2.isSelected()) answer2.setSelected(false);
@@ -162,14 +176,17 @@ public class EnergyAlternativeQuestionCtrl implements JokerPowerUps {
             case 0:
                 //correct answer is first one
                 randomizeFields(answer1,answer2,answer3,question);
+                setImages(imageView1, imageView2, imageView3, question);
                 break;
             case 1:
                 //correct answer is second one
                 randomizeFields(answer2,answer1,answer3,question);
+                setImages(imageView2, imageView1, imageView3, question);
                 break;
             case 2:
                 //correct answer is third one
                 randomizeFields(answer3,answer1,answer2,question);
+                setImages(imageView3, imageView1, imageView2, question);
                 break;
             default:
                 break;
@@ -188,6 +205,19 @@ public class EnergyAlternativeQuestionCtrl implements JokerPowerUps {
         a.setText(list.get(1).getTitle());
         b.setText(list.get(2).getTitle());
         c.setText(list.get(3).getTitle());
+    }
+
+    private void setImages(ImageView a, ImageView b, ImageView c, Question question) {
+        List<Long> activitiesIds = question.getFoundActivities();
+
+        Image firstImage = server.getImageFromActivityId(activitiesIds.get(1));
+        a.setImage(firstImage);
+
+        Image secondImage = server.getImageFromActivityId(activitiesIds.get(2));
+        b.setImage(secondImage);
+
+        Image thirdImage = server.getImageFromActivityId(activitiesIds.get(3));
+        c.setImage(thirdImage);
     }
 
     public void nextQuestion(){

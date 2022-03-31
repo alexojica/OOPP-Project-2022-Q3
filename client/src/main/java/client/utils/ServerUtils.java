@@ -17,31 +17,35 @@ package client.utils;
 
 import commons.*;
 import constants.ConnectionStatusCodes;
-
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import commons.LeaderboardEntry;
-import org.glassfish.jersey.client.ClientConfig;
-
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.UriBuilder;
+import javafx.scene.image.Image;
+import org.glassfish.jersey.client.ClientConfig;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
-import org.springframework.messaging.simp.stomp.*;
+import org.springframework.messaging.simp.stomp.StompFrameHandler;
+import org.springframework.messaging.simp.stomp.StompHeaders;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import java.lang.reflect.Type;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+
 public class ServerUtils {
 
-    String SERVER = "http://localhost:8080/";
+    String host = "localhost";
+    int port = 8080;
+    String SERVER = "http://" + host + ":" + port + "/";
 
     public List<Player> getPlayers() {
         return ClientBuilder.newClient(new ClientConfig()) //
@@ -175,6 +179,36 @@ public class ServerUtils {
                 .get(new GenericType<>() {
                 });
     }
+
+    public Image getImageFromActivityId(Long id)
+    {
+        Activity act = getActivityByID(id).get();
+        String imagePath = act.getImagePath();
+        URI uri = UriBuilder.newInstance()
+                .scheme("http")
+                .host(host)
+                .port(port)
+                .path("api/images/getImageByActivityId")
+                .queryParam("path", imagePath)
+                .build();
+        Image image = new Image(uri.toString());
+        return image;
+    }
+
+    public Image getImageFromActivity(Activity activity)
+    {
+        String imagePath = activity.getImagePath();
+        URI uri = UriBuilder.newInstance()
+                .scheme("http")
+                .host(host)
+                .port(port)
+                .path("api/images/getImageByActivityId")
+                .queryParam("path", imagePath)
+                .build();
+        Image image = new Image(uri.toString());
+        return image;
+    }
+
 
 
     private StompSession session = connect("ws://localhost:8080/websocket");

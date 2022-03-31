@@ -17,6 +17,8 @@ import constants.ResponseCodes;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
@@ -79,6 +81,9 @@ public class EstimationQuestionCtrl implements JokerPowerUps{
     @FXML
     private Label messageTxt3;
 
+    @FXML
+    private ImageView bigImageView;
+
     @Inject
     public EstimationQuestionCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ClientData clientData,
                                   JokerUtils jokerUtils, Emotes emotes, Game game) {
@@ -135,6 +140,8 @@ public class EstimationQuestionCtrl implements JokerPowerUps{
 
         questionTxt.setText(question.getText());
         activityText.setText(polledActivity.getTitle());
+        Image image = server.getImageFromActivity(polledActivity);
+        bigImageView.setImage(image);
     }
 
     public void nextQuestion(){
