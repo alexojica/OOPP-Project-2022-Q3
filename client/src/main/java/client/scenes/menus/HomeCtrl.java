@@ -16,8 +16,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 
 import javax.inject.Inject;
-import java.io.IOException;
-import java.util.concurrent.ExecutionException;
 
 public class HomeCtrl {
 
