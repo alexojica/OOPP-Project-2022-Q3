@@ -254,9 +254,10 @@ public class GameImpl implements Game{
         client.unsubscribeFromMessages();
         client.killTimer();
         client.resetMessages();
-        clientData.setGameType(null);
         //uses the current lobby to load images, scores and names for the players
         mainCtrl.showGameOver();
+        //only done after loading the leaderboard, because it's still needed there to determine which one to display
+        clientData.setGameType(null);
     }
 
     public Integer getQuestionsToEndGame(){
