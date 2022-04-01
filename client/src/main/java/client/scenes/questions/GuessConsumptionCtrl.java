@@ -329,6 +329,59 @@ public class GuessConsumptionCtrl implements JokerPowerUps {
     }
 
     /**
+     * Returns the label corresponding to the position in the method name.
+     * @return label corresponding to the position
+     */
+    public Label getMessageTxt1() {
+        return messageTxt1;
+    }
+
+    public Label getMessageTxt2() {
+        return messageTxt2;
+    }
+
+    public Label getMessageTxt3() {
+        return messageTxt3;
+    }
+
+    /**
+     * Sets the label text to the given string and when said string is not empty,
+     * a background colour is also added to make the message stand out more.
+     * This background colour is removed however when the string is empty in order to reset.
+     * @param message message to be displayed in the label corresponding to the method name
+     */
+    //empty string check might be used later in order to make messages disappear after X time
+    public void setMessageTxt1(String message) {
+        messageTxt1.setText(message);
+        if(!(message.equals(""))){
+            messageTxt1.setStyle("-fx-background-color: darkgray; -fx-padding: 10px");
+        }
+        else{
+            messageTxt1.setStyle("-fx-background-color: none; -fx-padding: 0px");
+        }
+    }
+
+    public void setMessageTxt2(String message) {
+        messageTxt2.setText(message);
+        if(!(message.equals(""))){
+            messageTxt2.setStyle("-fx-background-color: darkgray; -fx-padding: 10px");
+        }
+        else{
+            messageTxt2.setStyle("-fx-background-color: none; -fx-padding: 0px");
+        }
+    }
+
+    public void setMessageTxt3(String message) {
+        messageTxt3.setText(message);
+        if(!(message.equals(""))){
+            messageTxt3.setStyle("-fx-background-color: darkgray; -fx-padding: 10px");
+        }
+        else{
+            messageTxt3.setStyle("-fx-background-color: none; -fx-padding: 0px");
+        }
+    }
+
+    /**
      * Sets up the emoteMenu menubutton by first clearing anything that might be left in it from previous calls.
      * This is done to prevent errors from occurring. Then all the emotes from the list in the EmotesImpl class are
      * added and set such they trigger the sendEmote method when clicked. There's also some padding added to make it
