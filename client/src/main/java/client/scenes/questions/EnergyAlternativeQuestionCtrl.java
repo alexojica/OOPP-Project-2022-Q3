@@ -48,7 +48,7 @@ public class EnergyAlternativeQuestionCtrl implements JokerPowerUps {
     private ProgressBar pb;
 
     @FXML
-    private Text insteadOfText;
+    private Text insteadOfText, actualWH1, actualWH2, actualWH3;
 
     final ToggleGroup radioGroup = new ToggleGroup();
 
@@ -136,6 +136,11 @@ public class EnergyAlternativeQuestionCtrl implements JokerPowerUps {
         answer1.setDisable(false);
         answer2.setDisable(false);
         answer3.setDisable(false);
+
+        actualWH1.setVisible(false);
+        actualWH2.setVisible(false);
+        actualWH3.setVisible(false);
+
         if(!clientData.getUsedJokers().contains(JokerType.DOUBLE_POINTS))
             joker1.setFill(rgb(30,144,255));
         else
@@ -205,6 +210,10 @@ public class EnergyAlternativeQuestionCtrl implements JokerPowerUps {
         a.setText(list.get(1).getTitle());
         b.setText(list.get(2).getTitle());
         c.setText(list.get(3).getTitle());
+
+        actualWH1.setText(list.get(1).getEnergyConsumption().toString());
+        actualWH2.setText(list.get(2).getEnergyConsumption().toString());
+        actualWH3.setText(list.get(3).getEnergyConsumption().toString());
     }
 
     private void setImages(ImageView a, ImageView b, ImageView c, Question question) {
@@ -260,6 +269,10 @@ public class EnergyAlternativeQuestionCtrl implements JokerPowerUps {
                     new WebsocketMessage(ResponseCodes.NEXT_QUESTION,
                             clientData.getClientLobby().getToken(), clientData.getClientPointer()));
         }
+
+        actualWH1.setVisible(true);
+        actualWH2.setVisible(true);
+        actualWH3.setVisible(true);
 
         switch (correctAnswer)
         {

@@ -333,7 +333,7 @@ public class ServerUtils {
 
     public Lobby addMeToLobby(String token, Player player){
         ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/lobby/addMeToLobby") //
+                .target(SERVER).path("/api/lobby/addMeToLobby") //
                 .queryParam("token", token)//
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON)
