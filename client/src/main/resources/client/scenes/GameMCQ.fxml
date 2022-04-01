@@ -71,5 +71,8 @@
          <items>
          </items>
       </MenuButton>
+      <Text fx:id="actualWH1" layoutX="359.0" layoutY="343.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1" textAlignment="CENTER" />
+      <Text fx:id="actualWH2" layoutX="669.0" layoutY="343.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2" textAlignment="CENTER" />
+      <Text fx:id="actualWH3" layoutX="969.0" layoutY="342.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3" textAlignment="CENTER" />
    </children>
 </AnchorPane>

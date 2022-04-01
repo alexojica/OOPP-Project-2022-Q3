@@ -49,7 +49,7 @@ public class GameMCQCtrl implements JokerPowerUps {
     private Text nQuestionsTxt;
 
     @FXML
-    private Text questionTxt;
+    private Text questionTxt, actualWH1, actualWH2, actualWH3;
 
     final ToggleGroup radioGroup = new ToggleGroup(); 
 
@@ -137,6 +137,10 @@ public class GameMCQCtrl implements JokerPowerUps {
         answer2.setStyle(" -fx-background-color: transparent; ");
         answer3.setStyle(" -fx-background-color: transparent; ");
 
+        actualWH1.setVisible(false);
+        actualWH2.setVisible(false);
+        actualWH3.setVisible(false);
+
 
         if(answer1.isSelected()) answer1.setSelected(false);
         if(answer2.isSelected()) answer2.setSelected(false);
@@ -177,6 +181,10 @@ public class GameMCQCtrl implements JokerPowerUps {
         a.setText(list.get(0).getTitle());
         b.setText(list.get(1).getTitle());
         c.setText(list.get(2).getTitle());
+
+        actualWH1.setText(list.get(0).getEnergyConsumption().toString());
+        actualWH2.setText(list.get(1).getEnergyConsumption().toString());
+        actualWH3.setText(list.get(2).getEnergyConsumption().toString());
     }
 
     private void setImages(ImageView a, ImageView b, ImageView c, Question question) {
@@ -241,6 +249,10 @@ public class GameMCQCtrl implements JokerPowerUps {
                     new WebsocketMessage(ResponseCodes.NEXT_QUESTION,
                             clientData.getClientLobby().token, clientData.getClientPointer()));
         }
+
+        actualWH1.setVisible(true);
+        actualWH2.setVisible(true);
+        actualWH3.setVisible(true);
 
         switch (correctAnswer)
         {
