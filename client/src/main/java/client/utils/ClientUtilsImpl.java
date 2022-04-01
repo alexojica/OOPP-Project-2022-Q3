@@ -394,6 +394,8 @@ public class ClientUtilsImpl implements ClientUtils {
         estimationQuestionCtrl.getEmotesMenu().setVisible(!bool);
         energyAlternativeQuestionCtrl.getEmotesMenu().setDisable(bool);
         energyAlternativeQuestionCtrl.getEmotesMenu().setVisible(!bool);
+        guessConsumptionCtrl.getEmotesMenu().setDisable(bool);
+        guessConsumptionCtrl.getEmotesMenu().setVisible(!bool);
 
         //swaps usability of halftime joker
         gameMCQCtrl.getHalfTimeJoker().setDisable(bool);
@@ -405,6 +407,9 @@ public class ClientUtilsImpl implements ClientUtils {
         energyAlternativeQuestionCtrl.getHalfTimeJoker().setDisable(bool);
         energyAlternativeQuestionCtrl.getHalfTimeJoker().setVisible(!bool);
         energyAlternativeQuestionCtrl.getHalfTimeText().setVisible(!bool);
+        guessConsumptionCtrl.getHalfTimeJoker().setDisable(bool);
+        guessConsumptionCtrl.getHalfTimeJoker().setVisible(!bool);
+        guessConsumptionCtrl.getHalfTimeText().setVisible(!bool);
     }
 
     public double getCoefficient() {
