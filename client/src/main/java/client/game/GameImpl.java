@@ -119,6 +119,7 @@ public class GameImpl implements Game{
                             new WebsocketMessage(ResponseCodes.NEXT_QUESTION,
                                     clientData.getClientLobby().getToken(), clientData.getClientPointer()));
 
+                    client.startSyncCountdown();
                     Thread.sleep(3000);
 
                     Platform.runLater(() -> client.getQuestion());
@@ -176,7 +177,8 @@ public class GameImpl implements Game{
             @Override
             public void run() {
                 try{
-                    Thread.sleep(300);
+                    client.startSyncCountdown();
+                    Thread.sleep(3000);
 
                     Platform.runLater(() -> client.getQuestion());
 
