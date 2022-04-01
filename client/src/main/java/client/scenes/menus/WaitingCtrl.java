@@ -23,20 +23,17 @@ import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import org.springframework.messaging.simp.stomp.StompSession;
 
 import javax.inject.Inject;
 import java.net.URL;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -48,6 +45,7 @@ public class WaitingCtrl implements Initializable{
     private final Game game;
 
     private final MainCtrl mainCtrl;
+
     private ObservableList<Player> playerData;
 
     @FXML
@@ -60,14 +58,30 @@ public class WaitingCtrl implements Initializable{
 
     @FXML
     private Text tip;
-
     @FXML
     private Text lobbyCode;
+    @FXML
+    private Button startGameButton;
+
+    // ----- admin panel controls
+    @FXML
+    private Pane parentPane;
+    @FXML
+    private TextField noOfQuestionsSetting;
+    @FXML
+    private TextField difficultySetting;
+    @FXML
+    private Text playerToBeKicked;
+
+    // ----- end of admin panel controls
 
     private List<Player> activePlayers;
 
     private Timer timer;
     private Avatar builder;
+    private  Player selectedPlayer;
+
+    private StompSession.Subscription lobbyStartSubscription;
 
     private JokerUtils jokerUtils;
 
@@ -88,29 +102,99 @@ public class WaitingCtrl implements Initializable{
     public void load(){
         clientData.resetJokers();
         clientData.setQuestionCounter(0);
-        tip.setText("Theres only one correct answer per question, get the most right to win.");
-        lobbyCode.setText(lobbyCode.getText() + 59864);
+
+        resetUI();
+
         builder = EightBitAvatar.newMaleAvatarBuilder().build();
         showActivePlayers();
 
         if(client.getClass().equals(ClientUtilsImpl.class)) {
             client.setCurrentSceneCtrl(this);
         }
-        server.registerForMessages("/topic/lobbyStart", a -> {
-            if(a.getCode() == ResponseCodes.START_GAME && a.getLobbyToken().equals(clientData.getClientLobby().token)) {
-                killTimer();
-                System.out.println("ishost:" + clientData.getIsHost());
-                clientData.setLobby(server.getLobbyByToken(a.getNewToken()));
-                if(clientData.getIsHost())
-                    server.send("/app/nextQuestion",
-                            new WebsocketMessage(ResponseCodes.NEXT_QUESTION,
-                                    clientData.getClientLobby().token, clientData.getClientPointer()));
-                jokerUtils.registerForJokerUpdates();
-            }
-        });
+
+        registerLobbyStartSubscription();
 
         server.send("/app/requestUpdate",
                 new WebsocketMessage(ResponseCodes.LOBBY_UPDATED, clientData.getClientLobby().getToken()));
+    }
+
+    public void registerLobbyStartSubscription()
+    {
+        if(lobbyStartSubscription == null) {
+            lobbyStartSubscription = server.registerForMessages("/topic/lobbyStart", a -> {
+                if (a.getCode() == ResponseCodes.START_GAME
+                                && a.getLobbyToken().equals(clientData.getClientLobby().token)) {
+                    killTimer();
+                    System.out.println("ishost:" + clientData.getIsHost());
+                    clientData.setLobby(server.getLobbyByToken(a.getNewToken()));
+                    if (clientData.getIsHost())
+                        server.send("/app/nextQuestion",
+                                new WebsocketMessage(ResponseCodes.NEXT_QUESTION,
+                                        clientData.getClientLobby().token, clientData.getClientPointer()));
+                    jokerUtils.registerForJokerUpdates();
+                }
+            });
+        }
+    }
+
+    /**
+     * Method used to update the UI according to specific
+     * lobbies/client info (i.e lobby codes, tips etc)
+     */
+    private void resetUI()
+    {
+        String token = clientData.getClientLobby().getToken();
+        if(token.equals("COMMON")) {
+            tip.setText("Theres only one correct answer per question, get the most right to win.");
+            //default value for normal game
+            game.setQuestionsToEndGame(20);
+        }
+        else
+        {
+            tip.setText("Share this lobby code to play with your friends! \n" + token);
+        }
+        lobbyCode.setText("Lobby code: " + token);
+
+        //enable admin UI
+        if(clientData.getClientLobby().getHostId() != null
+                && clientData.getClientPlayer().getId() == clientData.getClientLobby().getHostId())
+        {
+            //only the host is allowed to have access to these set of buttons (privileges)
+            enableAdminPanel(true);
+        }
+        else
+        {
+            //maybe he was an ex-host
+            enableAdminPanel(false);
+        }
+    }
+
+    /**
+     * Method that updates the UI according to the user's privileges
+     * If he is the host, he gains access to numerous control panels,
+     * which he can use to tweak his/her preferences
+     */
+    private void enableAdminPanel(boolean status)
+    {
+        if(status)
+        {
+            //only admins
+            parentPane.setVisible(true);
+            extractGameSettings();
+        }
+        else
+        {
+            parentPane.setVisible(false);
+            if(!Objects.equals(clientData.getClientLobby().getToken(), "COMMON"))
+            {
+                //if in a private lobby, disable start game
+                startGameButton.setVisible(false);
+            }
+            else
+            {
+                startGameButton.setVisible(true);
+            }
+        }
     }
 
     /**
@@ -187,6 +271,10 @@ public class WaitingCtrl implements Initializable{
         });
         avatarColumn.setCellValueFactory(cellData ->  new SimpleStringProperty(cellData.getValue().getAvatarCode()));
 
+        tableView.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e-> {
+            updateSelectedPlayer();
+        });
+
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -214,6 +302,12 @@ public class WaitingCtrl implements Initializable{
         {
             Lobby current = clientData.getClientLobby();
             clientData.setLobby(current);
+            if(current == null)
+            {
+                //the lobby/player has been killed
+                killTimer();
+                return;
+            }
             activePlayers = current.getPlayersInLobby();
             playerData = FXCollections.observableList(activePlayers);
             tableView.setItems(playerData);
@@ -226,5 +320,57 @@ public class WaitingCtrl implements Initializable{
 
     public void startGame(){
         game.startMultiplayerGame();
+    }
+
+    /**
+     * Method that adds listeners to value changes, and connects it
+     * to websockets for all other client
+     * In the admin panel (# players, # questions, difficultyLevel)
+     * Called only if admin (only in private lobbies)
+     */
+    private void extractGameSettings()
+    {
+        noOfQuestionsSetting.textProperty().addListener(((observable, oldValue, newValue) -> {
+            int newQuestionNumber = Integer.parseInt(newValue);
+            server.send("/app/setNoOfQuestions",
+                    new WebsocketMessage(clientData.getClientLobby().getToken(), newQuestionNumber));
+        }));
+
+        difficultySetting.textProperty().addListener(((observable, oldValue, newValue) -> {
+            int newDifficulty = Integer.parseInt(newValue);
+            server.send("/app/setDifficulty",
+                    new WebsocketMessage(clientData.getClientLobby().getToken(), newDifficulty));
+        }));
+    }
+
+    /**
+     * Method called on event handler,
+     * whenever a row from the table view is selected
+     * This method stores the information about the selected player
+     * TODO: highlight the row somehow
+     */
+    private void updateSelectedPlayer()
+    {
+        selectedPlayer = tableView.getSelectionModel().getSelectedItem();
+        playerToBeKicked.setText(selectedPlayer.getName());
+    }
+
+    /**
+     * Method that kicks a player from the lobby
+     * the player should be removed from the lobby,
+     * and his scene should change back to GameModeSelection Screen
+     */
+    public void kickPlayer()
+    {
+        if(clientData.getClientPlayer().equals(selectedPlayer))
+        {
+            //you cant kick yourself out easter-egg
+            tip.setText("Kicking yourself out might require " +
+                    "some thorough mental-check appointments (self love and all that)");
+        }
+        else {
+            server.send("/app/kickFromLobby", new WebsocketMessage(ResponseCodes.KICK_PLAYER,
+                    clientData.getClientLobby().getToken(), selectedPlayer));
+        }
     }
 }

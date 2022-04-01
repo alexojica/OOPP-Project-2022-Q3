@@ -3,13 +3,16 @@ package client.scenes.menus;
 import client.avatar.AvatarManager;
 import client.data.ClientData;
 import client.scenes.MainCtrl;
+import client.utils.ClientUtils;
 import client.utils.ServerUtils;
 import commons.Player;
+import exceptions.InvalidServerException;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 
 import javax.inject.Inject;
@@ -17,6 +20,7 @@ import javax.inject.Inject;
 public class HomeCtrl {
 
     private final ServerUtils server;
+    private final ClientUtils clientUtils;
     private final MainCtrl mainCtrl;
     private final ClientData clientData;
     private final AvatarManager avatarGenerator;
@@ -25,14 +29,25 @@ public class HomeCtrl {
     private TextField name;
 
     @FXML
+    private TextField serverTextField;
+
+    @FXML
+    private TextField portTextField;
+
+    @FXML
     private ImageView avatarImage;
 
+    @FXML
+    private Text incorrectServerText;
+
     @Inject
-    public HomeCtrl(ServerUtils server, MainCtrl mainCtrl, ClientData clientData, AvatarManager avatarGenerator) {
+    public HomeCtrl(ServerUtils server, MainCtrl mainCtrl, ClientData clientData, AvatarManager avatarGenerator,
+                    ClientUtils clientUtils) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.clientData = clientData;
         this.avatarGenerator = avatarGenerator;
+        this.clientUtils = clientUtils;
     }
 
     /**
@@ -61,12 +76,42 @@ public class HomeCtrl {
         }
     }
 
+    public boolean setServer(){
+        try {
+            String host = serverTextField.getText();
+            String portString = portTextField.getText();
+            System.out.println("HOST: " + host + " PORT: " + portString);
+            if(host == "" || host == null || portString == "" || portString == null){
+                incorrectServerText.setText("You must enter both a host and a port!");
+                return false;
+            }else{
+                int port = Integer.parseInt(portString);
+                incorrectServerText.setText("");
+                server.setHostAndPort(host, port);
+            }
+        }catch(NumberFormatException e){
+            portTextField.clear();
+            incorrectServerText.setText("Port must be a number!");
+            return false;
+        }catch(InvalidServerException e){
+            serverTextField.clear();
+            portTextField.clear();
+            incorrectServerText.setText(e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Method that is called when the play button is pressed, it:
      * a) Adds the player to the server and
      * b) Sets the avatar chosen from the user
      */
     public void play(){
+        boolean serverReady = setServer();
+        if(!serverReady){
+            return;
+        }
         try
         {
             Player p = getPlayer();
@@ -88,10 +133,6 @@ public class HomeCtrl {
         }
 
         mainCtrl.showGameModeSelection();
-    }
-
-    public void admin(){
-        mainCtrl.showAdminHome();
     }
 
 

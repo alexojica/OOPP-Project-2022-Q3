@@ -17,6 +17,7 @@ package client.utils;
 
 import commons.*;
 import constants.ConnectionStatusCodes;
+import exceptions.InvalidServerException;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -42,14 +43,41 @@ import java.util.function.Consumer;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
+    private String host;
+    private int port;
+    private String SERVER;
+    private StompSession session;
 
-    String host = "localhost";
-    int port = 8080;
-    String SERVER = "http://" + host + ":" + port + "/";
+    /**
+     * Setter for host, port and initiator of SERVER
+     * @param host
+     * @param port
+     */
+    public void setHostAndPort(String host, int port) throws InvalidServerException{
+        this.host = host;
+        this.port = port;
+        SERVER = UriBuilder.newInstance()
+                .scheme("http")
+                .host(host)
+                .port(port)
+                .build()
+                .toString();
+        String sessionString = UriBuilder.newInstance()
+                .scheme("ws")
+                .host(host)
+                .port(port)
+                .path("/websocket")
+                .build()
+                .toString();
+        if(port < 1024){
+            throw new InvalidServerException("Port cannot be accessed. Make sure the port is above 1023!");
+        }
+        session = connect(sessionString);
+    }
 
     public List<Player> getPlayers() {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/player/getAllPlayers") //
+                .target(SERVER).path("/api/player/getAllPlayers") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Player>>() {});
@@ -57,8 +85,9 @@ public class ServerUtils {
 
 
     public Player addPlayer(Player player) {
+        System.out.println("\n\n\n" + SERVER + "\n\n\n");
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/player/addPlayer") //
+                .target(SERVER).path("/api/player/addPlayer") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(player, APPLICATION_JSON), Player.class);
@@ -66,7 +95,7 @@ public class ServerUtils {
 
     public Lobby addLobby(Lobby lobby) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/lobby/addLobby") //
+                .target(SERVER).path("/api/lobby/addLobby") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(lobby, APPLICATION_JSON), Lobby.class);
@@ -74,7 +103,7 @@ public class ServerUtils {
 
     public Activity addActivity(Activity activity1) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/activity/add") //
+                .target(SERVER).path("/api/activity/add") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(activity1, APPLICATION_JSON), Activity.class);
@@ -82,7 +111,7 @@ public class ServerUtils {
 
     public Question addQuestion(Question question) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/question/add") //
+                .target(SERVER).path("/api/question/add") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(question, APPLICATION_JSON), Question.class);
@@ -90,7 +119,7 @@ public class ServerUtils {
 
     public List<Lobby> getAllLobbies() {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/lobby/getAllLobbies") //
+                .target(SERVER).path("/api/lobby/getAllLobbies") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Lobby>>() {});
@@ -98,7 +127,7 @@ public class ServerUtils {
 
     public Lobby getLobbyByToken(String token){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/lobby/getLobbyByToken")
+                .target(SERVER).path("/api/lobby/getLobbyByToken")
                 .queryParam("token", token)//
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
@@ -107,7 +136,7 @@ public class ServerUtils {
 
     public ConnectionStatusCodes getConnectPermission(String token, String playerUsername){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/lobby/getConnectPermission") //
+                .target(SERVER).path("/api/lobby/getConnectPermission") //
                 .queryParam("token", token)//
                 .queryParam("playerUsername", playerUsername)
                 .request(APPLICATION_JSON) //
@@ -117,7 +146,7 @@ public class ServerUtils {
 
     public Activity getRandomActivity() {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/activity/getRandomActivity")
+                .target(SERVER).path("/api/activity/getRandomActivity")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<Activity>() {});
@@ -125,23 +154,23 @@ public class ServerUtils {
 
     public List<LeaderboardEntry> getTop10Scores() {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/leaderboard/getTop10")
+                .target(SERVER).path("/api/leaderboard/getTop10")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<LeaderboardEntry>>() {});
     }
 
-    public LeaderboardEntry saveScore(LeaderboardEntry score) {
+    public LeaderboardEntry persistScore(LeaderboardEntry score) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/leaderboard/saveScore")
+                .target(SERVER).path("/api/leaderboard/persistScore")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .put(Entity.entity(score, APPLICATION_JSON), LeaderboardEntry.class);
+                .post(Entity.entity(score, APPLICATION_JSON), LeaderboardEntry.class);
     }
 
     public Question getQuestion(long pointer, String lastLobby){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/question/getQuestion") //
+                .target(SERVER).path("/api/question/getQuestion") //
                 .queryParam("pointer", pointer)//
                 .queryParam("lastLobby", lastLobby)//
                 .request(APPLICATION_JSON) //
@@ -151,7 +180,7 @@ public class ServerUtils {
 
     public List<Activity> getAllActivities() {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/activity/getAll")
+                .target(SERVER).path("/api/activity/getAll")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Activity>>() {});
@@ -159,7 +188,7 @@ public class ServerUtils {
 
     public String deleteActivity(String activityID) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/activity/delete/" + activityID) //
+                .target(SERVER).path("/api/activity/delete/" + activityID) //
                 //.queryParam("activityID", activityID)
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
@@ -168,7 +197,7 @@ public class ServerUtils {
 
     public List<Question> getAllQuestions() {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/question/getAll")
+                .target(SERVER).path("/api/question/getAll")
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Question>>() {});
@@ -176,7 +205,7 @@ public class ServerUtils {
 
     public String deleteQuestion(Long id) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/question/delete/" + id) //
+                .target(SERVER).path("/api/question/delete/" + id) //
                 //.queryParam("activityID", activityID)
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
@@ -185,7 +214,7 @@ public class ServerUtils {
 
     public ConnectionStatusCodes startLobby(String token) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/lobby/startLobby") //
+                .target(SERVER).path("/api/lobby/startLobby") //
                 .queryParam("token", token)//
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
@@ -194,7 +223,7 @@ public class ServerUtils {
 
     public List<Player> getTopByLobbyToken(String token) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/lobby/getTopByLobbyToken") //
+                .target(SERVER).path("/api/lobby/getTopByLobbyToken") //
                 .queryParam("token", token)//
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
@@ -203,7 +232,7 @@ public class ServerUtils {
 
     public Player updateScore(Player player) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/player/updateScore") //
+                .target(SERVER).path("/api/player/updateScore") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(player, APPLICATION_JSON), Player.class);
@@ -222,7 +251,7 @@ public class ServerUtils {
     public Optional<Activity> getActivityByID(Long id)
     {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/activity/getActivityByID") //
+                .target(SERVER).path("/api/activity/getActivityByID") //
                 .queryParam("id", id)//
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
@@ -238,7 +267,7 @@ public class ServerUtils {
                 .scheme("http")
                 .host(host)
                 .port(port)
-                .path("api/images/getImageByActivityId")
+                .path("/api/images/getImageByActivityId")
                 .queryParam("path", imagePath)
                 .build();
         Image image = new Image(uri.toString());
@@ -252,7 +281,7 @@ public class ServerUtils {
                 .scheme("http")
                 .host(host)
                 .port(port)
-                .path("api/images/getImageByActivityId")
+                .path("/api/images/getImageByActivityId")
                 .queryParam("path", imagePath)
                 .build();
         Image image = new Image(uri.toString());
@@ -260,10 +289,7 @@ public class ServerUtils {
     }
 
 
-
-    private StompSession session = connect("ws://localhost:8080/websocket");
-
-    private StompSession connect(String url){
+    private StompSession connect(String url) throws InvalidServerException {
         StandardWebSocketClient client = new StandardWebSocketClient();
         WebSocketStompClient stomp = new WebSocketStompClient(client);
 
@@ -282,7 +308,7 @@ public class ServerUtils {
         } catch (InterruptedException e) {
             System.out.println("not working");
             throw new RuntimeException(e);
-        } throw new IllegalStateException();
+        } throw new InvalidServerException("Cannot find server");
     }
 
 

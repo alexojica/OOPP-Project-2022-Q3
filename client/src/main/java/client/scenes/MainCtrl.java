@@ -26,6 +26,7 @@ import client.scenes.menus.WaitingCtrl;
 import client.scenes.questions.EnergyAlternativeQuestionCtrl;
 import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
+import client.scenes.questions.GuessConsumptionCtrl;
 import client.utils.ClientUtils;
 import com.google.inject.Inject;
 import commons.Question;
@@ -52,6 +53,9 @@ public class MainCtrl extends Application {
 
     private EstimationQuestionCtrl estimationQuestionCtrl;
     private Scene estimation;
+
+    private GuessConsumptionCtrl guessConsumptionCtrl;
+    private Scene guessXScene;
 
     private GameOverCtrl gameOverCtrl;
     private Scene gameOver;
@@ -107,6 +111,7 @@ public class MainCtrl extends Application {
                            Parent> multiplayerMenu, Pair<EstimationQuestionCtrl, Parent> estimationQuestion,
                            Pair<GameMCQCtrl, Parent> gameMCQ,
                            Pair<EnergyAlternativeQuestionCtrl, Parent> energyAlternative,
+                           Pair<GuessConsumptionCtrl, Parent> guessXQuestion,
                            Pair<GameOverCtrl, Parent> gameOver, Pair<WaitingCtrl, Parent> waiting,
                            Pair<TempLeaderboardCtrl, Parent> tempLeaderboard,
                            Pair<UsernamePopUpCtrl, Parent> usernamePopUp,
@@ -130,6 +135,9 @@ public class MainCtrl extends Application {
 
         this.estimationQuestionCtrl = estimationQuestion.getKey();
         this.estimation = new Scene(estimationQuestion.getValue());
+
+        this.guessConsumptionCtrl = guessXQuestion.getKey();
+        this.guessXScene = new Scene(guessXQuestion.getValue());
 
         this.gameOverCtrl = gameOver.getKey();
         this.gameOver = new Scene(gameOver.getValue());
@@ -190,23 +198,30 @@ public class MainCtrl extends Application {
 
     public void showGameMCQ(){
         client.setCurrentSceneCtrl(gameMCQCtrl);
+        gameMCQCtrl.load();
         primaryStage.setTitle("GameScreen");
         primaryStage.setScene(gameMCQ);
-        gameMCQCtrl.load();
     }
 
     public void showEnergyAlternative(){
         client.setCurrentSceneCtrl(energyAlternativeQuestionCtrl);
+        energyAlternativeQuestionCtrl.load();
         primaryStage.setTitle("GameScreen");
         primaryStage.setScene(energyAlternative);
-        energyAlternativeQuestionCtrl.load();
     }
 
     public void showGameEstimation(){
         client.setCurrentSceneCtrl(estimationQuestionCtrl);
+        estimationQuestionCtrl.load();
         primaryStage.setTitle("GameScreen");
         primaryStage.setScene(estimation);
-        estimationQuestionCtrl.load();
+    }
+
+    public void showGuessX(){
+        client.setCurrentSceneCtrl(guessConsumptionCtrl);
+        guessConsumptionCtrl.load();
+        primaryStage.setTitle("GameScreen");
+        primaryStage.setScene(guessXScene);
     }
 
     public void showActivityEdit(Activity act){

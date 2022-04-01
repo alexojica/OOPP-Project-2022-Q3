@@ -107,7 +107,7 @@ public class EstimationQuestionCtrl implements JokerPowerUps{
     public void resetUI(Question question)
     {
         scoreTxt.setText("Score:" + clientData.getClientScore());
-        nQuestionsTxt.setText(clientData.getQuestionCounter() + "/20");
+        nQuestionsTxt.setText(clientData.getQuestionCounter() + "/" + game.getQuestionsToEndGame());
 
         doublePoints = false;
         joker3.setDisable(clientData.getUsedJokers().contains(JokerType.HALF_TIME_FOR_ALL_LOBBY));
@@ -305,7 +305,7 @@ public class EstimationQuestionCtrl implements JokerPowerUps{
             messageTxt1.setStyle("-fx-background-color: darkgray; -fx-padding: 10px");
         }
         else{
-            messageTxt1.setStyle("-fx-background-color: none; -fx-padding: none");
+            messageTxt1.setStyle("-fx-background-color: none; -fx-padding: 0px");
         }
     }
 
@@ -315,7 +315,7 @@ public class EstimationQuestionCtrl implements JokerPowerUps{
             messageTxt2.setStyle("-fx-background-color: darkgray; -fx-padding: 10px");
         }
         else{
-            messageTxt2.setStyle("-fx-background-color: none; -fx-padding: none");
+            messageTxt2.setStyle("-fx-background-color: none; -fx-padding: 0px");
         }
     }
 
@@ -325,7 +325,7 @@ public class EstimationQuestionCtrl implements JokerPowerUps{
             messageTxt3.setStyle("-fx-background-color: darkgray; -fx-padding: 10px");
         }
         else{
-            messageTxt3.setStyle("-fx-background-color: none; -fx-padding: none");
+            messageTxt3.setStyle("-fx-background-color: none; -fx-padding: 0px");
         }
     }
 

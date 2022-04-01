@@ -25,10 +25,10 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Random;
 
-import static constants.QuestionTypes.MULTIPLE_CHOICE_QUESTION;
+import static constants.QuestionTypes.GUESS_X;
 import static javafx.scene.paint.Color.rgb;
 
-public class GameMCQCtrl implements JokerPowerUps {
+public class GuessConsumptionCtrl implements JokerPowerUps {
 
     private final ServerUtils server;
     private final ClientUtils client;
@@ -51,7 +51,7 @@ public class GameMCQCtrl implements JokerPowerUps {
     @FXML
     private Text questionTxt;
 
-    final ToggleGroup radioGroup = new ToggleGroup(); 
+    final ToggleGroup radioGroup = new ToggleGroup();
 
     @FXML
     private RadioButton answer1;
@@ -79,14 +79,13 @@ public class GameMCQCtrl implements JokerPowerUps {
     private Label messageTxt3;
 
     @FXML
-    private ImageView imageView1;
+    private ImageView imageView;
+
     @FXML
-    private ImageView imageView2;
-    @FXML
-    private ImageView imageView3;
+    private Text activityText;
 
     @Inject
-    public GameMCQCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ClientData clientData,
+    public GuessConsumptionCtrl(ServerUtils server, ClientUtils client, MainCtrl mainCtrl, ClientData clientData,
                        JokerUtils jokerUtils, Emotes emotes, Game game) {
         this.jokerUtils = jokerUtils;
         this.server = server;
@@ -112,7 +111,7 @@ public class GameMCQCtrl implements JokerPowerUps {
     public void resetUI(Question question)
     {
         scoreTxt.setText("Score:" + clientData.getClientScore());
-        nQuestionsTxt.setText(clientData.getQuestionCounter() + "/" + game.getQuestionsToEndGame());
+        nQuestionsTxt.setText(clientData.getQuestionCounter() + "/20");
         doublePoints = false;
         joker3.setDisable(clientData.getUsedJokers().contains(JokerType.HALF_TIME_FOR_ALL_LOBBY));
         joker1.setDisable(clientData.getUsedJokers().contains(JokerType.DOUBLE_POINTS));
@@ -142,7 +141,7 @@ public class GameMCQCtrl implements JokerPowerUps {
         if(answer2.isSelected()) answer2.setSelected(false);
         if(answer3.isSelected()) answer3.setSelected(false);
 
-        client.startTimer(pb,this, MULTIPLE_CHOICE_QUESTION);
+        client.startTimer(pb,this, GUESS_X);
 
         questionTxt.setText(question.getText());
 
@@ -154,42 +153,31 @@ public class GameMCQCtrl implements JokerPowerUps {
             case 0:
                 //correct answer is first one
                 randomizeFields(answer1,answer2,answer3,question);
-                setImages(imageView1, imageView2, imageView3, question);
                 break;
             case 1:
                 //correct answer is second one
                 randomizeFields(answer2,answer1,answer3,question);
-                setImages(imageView2, imageView1, imageView3, question);
                 break;
             case 2:
                 //correct answer is third one
                 randomizeFields(answer3,answer1,answer2,question);
-                setImages(imageView3, imageView1, imageView2, question);
                 break;
             default:
                 break;
         }
+        Activity polledActivity = server.getActivityByID(question.getFoundActivities().get(0)).get();
+        questionTxt.setText(question.getText());
+        activityText.setText(polledActivity.getTitle());
+        Image image = server.getImageFromActivity(polledActivity);
+        imageView.setImage(image);
     }
 
     public void randomizeFields(RadioButton a, RadioButton b, RadioButton c, Question question)
     {
         List<Activity> list = server.getActivitiesFromIDs(question.getFoundActivities());
-        a.setText(list.get(0).getTitle());
-        b.setText(list.get(1).getTitle());
-        c.setText(list.get(2).getTitle());
-    }
-
-    private void setImages(ImageView a, ImageView b, ImageView c, Question question) {
-        List<Long> activitiesIds = question.getFoundActivities();
-
-        Image firstImage = server.getImageFromActivityId(activitiesIds.get(0));
-        a.setImage(firstImage);
-
-        Image secondImage = server.getImageFromActivityId(activitiesIds.get(1));
-        b.setImage(secondImage);
-
-        Image thirdImage = server.getImageFromActivityId(activitiesIds.get(2));
-        c.setImage(thirdImage);
+        a.setText(String.valueOf(list.get(0).getEnergyConsumption()));
+        b.setText(String.valueOf(list.get(1).getEnergyConsumption()));
+        c.setText(String.valueOf(list.get(2).getEnergyConsumption()));
     }
 
     public void disableAnswers(){
@@ -278,7 +266,6 @@ public class GameMCQCtrl implements JokerPowerUps {
             clientData.incrementUnansweredQuestionCounter();
             if(clientData.getUnansweredQuestionCounter() >= 5){
                 leaveGame();
-                mainCtrl.showKickPopUp();
             }
         }
         scoreTxt.setText("Score:" + clientData.getClientScore());
@@ -332,7 +319,6 @@ public class GameMCQCtrl implements JokerPowerUps {
     public RadioButton getAnswer3() {
         return answer3;
     }
-
 
     /**
      * Returns the label corresponding to the position in the method name.

@@ -20,5 +20,6 @@
             <Font size="21.0" />
          </font>
       </Button>
+      <Button focusTraversable="false" layoutX="1077.0" layoutY="59.0" mnemonicParsing="false" onAction="#admin" prefHeight="26.0" prefWidth="107.0" styleClass="button1" text="Admin" />
    </children>
 </AnchorPane>

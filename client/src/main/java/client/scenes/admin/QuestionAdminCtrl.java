@@ -77,6 +77,6 @@ public class QuestionAdminCtrl {
     }
 
     public void home(){
-        mainCtrl.showHome();
+        mainCtrl.showGameModeSelection();
     }
 }

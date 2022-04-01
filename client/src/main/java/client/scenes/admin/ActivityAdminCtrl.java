@@ -20,7 +20,7 @@ public class ActivityAdminCtrl {
 
     private final MainCtrl mainCtrl;
 
-    public List<Activity> activities;
+    private List<Activity> activities;
 
     @FXML
     private Text text;
@@ -76,6 +76,6 @@ public class ActivityAdminCtrl {
     }
 
     public void home(){
-        mainCtrl.showHome();
+        mainCtrl.showGameModeSelection();
     }
 }

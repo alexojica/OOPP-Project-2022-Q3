@@ -7,6 +7,7 @@
         /delete
         /clear
         /getConnectPermission
+        /getTopByLobbyToken
     /player
         /addPlayer
         /getAllPlayers
@@ -18,8 +19,7 @@
         /getActivityByWh
         /getRandomActivity
     /leaderboard
-        /saveScore
+        /persistScore
         /getTop10Scores
-        /getTopByLobbyToken
     /images
         /getImageByActivityId
