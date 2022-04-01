@@ -214,9 +214,9 @@ public class GameImpl implements Game{
     }
 
     public void leaveLobby() {
+        emotes.sendDisconnect();
         //kill ongoing timers
         client.killTimer();
-
         server.send("/app/leaveLobby", new WebsocketMessage(ResponseCodes.LEAVE_LOBBY,
                 clientData.getClientLobby().getToken(), clientData.getClientPlayer(), clientData.getIsHost()));
 

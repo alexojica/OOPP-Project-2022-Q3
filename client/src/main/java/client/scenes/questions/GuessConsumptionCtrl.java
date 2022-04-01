@@ -408,6 +408,7 @@ public class GuessConsumptionCtrl implements JokerPowerUps {
             System.out.println("Time was halved");
             jokerUtils.setLobbyJoker(JokerType.HALF_TIME_FOR_ALL_LOBBY);
             jokerUtils.sendJoker();
+            emotes.sendJokerUsed();
         }
     }
 }
