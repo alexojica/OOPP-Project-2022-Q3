@@ -41,4 +41,8 @@ public class GameModeSelectionCtrl {
     public void leaderboard(){
         mainCtrl.showLeaderboard();
     }
+
+    public void admin(){
+        mainCtrl.showAdminHome();
+    }
 }
