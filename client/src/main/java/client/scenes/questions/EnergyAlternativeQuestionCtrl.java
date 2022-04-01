@@ -374,7 +374,7 @@ public class EnergyAlternativeQuestionCtrl implements JokerPowerUps {
             messageTxt1.setStyle("-fx-background-color: darkgray; -fx-padding: 10px");
         }
         else{
-            messageTxt1.setStyle("-fx-background-color: none; -fx-padding: none");
+            messageTxt1.setStyle("-fx-background-color: none; -fx-padding: 0px");
         }
     }
 
@@ -384,7 +384,7 @@ public class EnergyAlternativeQuestionCtrl implements JokerPowerUps {
             messageTxt2.setStyle("-fx-background-color: darkgray; -fx-padding: 10px");
         }
         else{
-            messageTxt2.setStyle("-fx-background-color: none; -fx-padding: none");
+            messageTxt2.setStyle("-fx-background-color: none; -fx-padding: 0px");
         }
     }
 
@@ -394,7 +394,7 @@ public class EnergyAlternativeQuestionCtrl implements JokerPowerUps {
             messageTxt3.setStyle("-fx-background-color: darkgray; -fx-padding: 10px");
         }
         else{
-            messageTxt3.setStyle("-fx-background-color: none; -fx-padding: none");
+            messageTxt3.setStyle("-fx-background-color: none; -fx-padding: 0px");
         }
     }
 

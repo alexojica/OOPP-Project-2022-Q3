@@ -34,6 +34,7 @@ public class ClientUtilsImpl implements ClientUtils {
     private GameMCQCtrl gameMCQCtrl;
     private EnergyAlternativeQuestionCtrl energyAlternativeQuestionCtrl;
     private EstimationQuestionCtrl estimationQuestionCtrl;
+    private GuessConsumptionCtrl guessConsumptionCtrl;
 
     private ClientData clientData;
 
@@ -65,7 +66,8 @@ public class ClientUtilsImpl implements ClientUtils {
     @Inject
     public ClientUtilsImpl(ClientData clientData, ServerUtils server, MainCtrl mainCtrl, GameMCQCtrl gameMCQCtrl,
                            EnergyAlternativeQuestionCtrl energyAlternativeQuestionCtrl,
-                           EstimationQuestionCtrl estimationQuestionCtrl, Game game) {
+                           EstimationQuestionCtrl estimationQuestionCtrl, GuessConsumptionCtrl guessConsumptionCtrl,
+                           Game game) {
         this.clientData = clientData;
         this.server = server;
         this.mainCtrl = mainCtrl;
@@ -73,6 +75,7 @@ public class ClientUtilsImpl implements ClientUtils {
         this.gameMCQCtrl = gameMCQCtrl;
         this.energyAlternativeQuestionCtrl = energyAlternativeQuestionCtrl;
         this.estimationQuestionCtrl = estimationQuestionCtrl;
+        this.guessConsumptionCtrl = guessConsumptionCtrl;
         System.out.println("Instance of client utils");
     }
 
@@ -361,6 +364,10 @@ public class ClientUtilsImpl implements ClientUtils {
             estimationQuestionCtrl.setMessageTxt3(estimationQuestionCtrl.getMessageTxt2().getText());
             estimationQuestionCtrl.setMessageTxt2(estimationQuestionCtrl.getMessageTxt1().getText());
             estimationQuestionCtrl.setMessageTxt1(text);
+
+            guessConsumptionCtrl.setMessageTxt3(guessConsumptionCtrl.getMessageTxt2().getText());
+            guessConsumptionCtrl.setMessageTxt2(guessConsumptionCtrl.getMessageTxt1().getText());
+            guessConsumptionCtrl.setMessageTxt1(text);
         });
     }
 
@@ -374,6 +381,9 @@ public class ClientUtilsImpl implements ClientUtils {
         energyAlternativeQuestionCtrl.setMessageTxt1("");
         energyAlternativeQuestionCtrl.setMessageTxt2("");
         energyAlternativeQuestionCtrl.setMessageTxt3("");
+        guessConsumptionCtrl.setMessageTxt1("");
+        guessConsumptionCtrl.setMessageTxt2("");
+        guessConsumptionCtrl.setMessageTxt3("");
     }
 
     public double getCoefficient() {

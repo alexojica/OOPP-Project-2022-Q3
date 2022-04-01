@@ -160,30 +160,30 @@ public class MainCtrl extends Application {
 
     public void showGameMCQ(){
         client.setCurrentSceneCtrl(gameMCQCtrl);
+        gameMCQCtrl.load();
         primaryStage.setTitle("GameScreen");
         primaryStage.setScene(gameMCQ);
-        gameMCQCtrl.load();
     }
 
     public void showEnergyAlternative(){
         client.setCurrentSceneCtrl(energyAlternativeQuestionCtrl);
+        energyAlternativeQuestionCtrl.load();
         primaryStage.setTitle("GameScreen");
         primaryStage.setScene(energyAlternative);
-        energyAlternativeQuestionCtrl.load();
     }
 
     public void showGameEstimation(){
         client.setCurrentSceneCtrl(estimationQuestionCtrl);
+        estimationQuestionCtrl.load();
         primaryStage.setTitle("GameScreen");
         primaryStage.setScene(estimation);
-        estimationQuestionCtrl.load();
     }
 
     public void showGuessX(){
         client.setCurrentSceneCtrl(guessConsumptionCtrl);
+        guessConsumptionCtrl.load();
         primaryStage.setTitle("GameScreen");
         primaryStage.setScene(guessXScene);
-        guessConsumptionCtrl.load();
     }
 
     public void showHome(){
