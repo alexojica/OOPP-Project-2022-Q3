@@ -15,10 +15,14 @@ import commons.WebsocketMessage;
 import constants.JokerType;
 import constants.ResponseCodes;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
@@ -170,6 +174,26 @@ public class EstimationQuestionCtrl implements JokerPowerUps{
             }
         });
         thread.start();
+    }
+
+    /**
+     * Method that binds the current scene to an
+     * onKeypress Event Handler
+     * Has to be called from the mainCntrl
+     * to have acces to the current scene
+     * @param scene
+     */
+    public void addEventListeners(Scene scene)
+    {
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if(event.getCode().equals(KeyCode.ENTER))
+                {
+                    submit();
+                }
+            }
+        });
     }
 
     private void updateCorrectAnswer() {

@@ -175,6 +175,7 @@ public class MainCtrl extends Application {
     public void showGameEstimation(){
         client.setCurrentSceneCtrl(estimationQuestionCtrl);
         estimationQuestionCtrl.load();
+        estimationQuestionCtrl.addEventListeners(estimation);
         primaryStage.setTitle("GameScreen");
         primaryStage.setScene(estimation);
     }
