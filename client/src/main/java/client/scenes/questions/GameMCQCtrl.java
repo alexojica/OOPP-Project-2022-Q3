@@ -290,6 +290,7 @@ public class GameMCQCtrl implements JokerPowerUps {
             clientData.incrementUnansweredQuestionCounter();
             if(clientData.getUnansweredQuestionCounter() >= 5){
                 leaveGame();
+                mainCtrl.showKickPopUp();
             }
         }
         scoreTxt.setText("Score:" + clientData.getClientScore());
