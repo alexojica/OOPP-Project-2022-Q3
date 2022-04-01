@@ -33,6 +33,8 @@ import commons.Question;
 import jakarta.ws.rs.core.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -185,6 +187,12 @@ public class MainCtrl extends Application {
         });
 
         showHome();
+        primaryStage.setOnCloseRequest(evt -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirm Close");
+            alert.setHeaderText("Do you want to close the game?");
+            alert.showAndWait().filter(r -> r != ButtonType.OK).ifPresent(r->evt.consume());
+        });
         primaryStage.show();
     }
 
