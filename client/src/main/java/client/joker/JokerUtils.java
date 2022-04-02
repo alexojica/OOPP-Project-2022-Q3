@@ -12,7 +12,6 @@ import javafx.scene.shape.Circle;
 import org.springframework.messaging.simp.stomp.StompSession;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 
 import static javafx.scene.paint.Color.rgb;
 
