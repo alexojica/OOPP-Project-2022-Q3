@@ -22,11 +22,3 @@
     -fx-text-fill: #ffffff;
     -fx-pdding: 10px;
 }
-
-.image-button:hover{
-    -fx-opacity: 0.7;
-}
-
-.image-button:pressed{
-    -fx-opacity: 0.3;
-}

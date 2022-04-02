@@ -73,8 +73,12 @@ public class Main extends Application {
         // Stylesheets are loaded using reflection
         home.getValue().getStylesheets()
                 .add(getClass().getResource("scenes/stylesheets/Home.css").toExternalForm());
+        home.getValue().getStylesheets()
+                .add(getClass().getResource("scenes/stylesheets/Button.css").toExternalForm());
         gameModeSelection.getValue().getStylesheets()
                 .add(getClass().getResource("scenes/stylesheets/GameModeSelection.css").toExternalForm());
+        gameModeSelection.getValue().getStylesheets()
+                .add(getClass().getResource("scenes/stylesheets/Button.css").toExternalForm());
         leaderboard.getValue().getStylesheets()
                 .add(getClass().getResource("scenes/stylesheets/Leaderboard.css").toExternalForm());
         multiPlayerMenu.getValue().getStylesheets()
