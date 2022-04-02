@@ -9,6 +9,7 @@ import client.utils.ServerUtils;
 import commons.WebsocketMessage;
 import constants.JokerType;
 import javafx.scene.shape.Circle;
+import org.springframework.messaging.simp.stomp.StompSession;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -33,6 +34,8 @@ public class JokerUtils {
 
     private ServerUtils server;
 
+    private StompSession.Subscription jokersSubscription;
+
     @Inject
     public JokerUtils(ClientUtils client, ServerUtils server, ClientData clientData) {
         this.client = client;
@@ -44,13 +47,16 @@ public class JokerUtils {
      * After just joining a lobby, the client registers for joker updates
      */
     public void registerForJokerUpdates(){
-        server.registerForMessages("/topic/updateJoker", msg -> {
-            if(msg.getLobbyToken().equals(clientData.getClientLobby().token)){
-                lobbyJoker = msg.getJokerType();
-                System.out.println("received joker " + lobbyJoker);
-                handleJokerCases(msg.getSenderName());
-            }
-        });
+        if(jokersSubscription == null) {
+            jokersSubscription = server.registerForMessages("/topic/updateJoker", msg -> {
+                if (msg.getLobbyToken().equals(clientData.getClientLobby().token)) {
+                    lobbyJoker = msg.getJokerType();
+                    System.out.println("received joker " + lobbyJoker);
+                    handleJokerCases(msg.getSenderName());
+                }
+            });
+        }
+        clientData.resetJokers();
     }
 
     /**
