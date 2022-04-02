@@ -61,9 +61,9 @@ public class GuessConsumptionCtrl implements JokerPowerUps {
     @FXML
     private RadioButton answer3;
     @FXML
-    private Circle joker1;
+    private Circle doublePointsJoker;
     @FXML
-    private Circle joker2;
+    private Circle eliminateAnswerJoker;
     @FXML
     private Circle halfTimeJoker;
     @FXML
@@ -116,16 +116,7 @@ public class GuessConsumptionCtrl implements JokerPowerUps {
         scoreTxt.setText("Score:" + clientData.getClientScore());
         nQuestionsTxt.setText(clientData.getQuestionCounter() + "/20");
         doublePoints = false;
-        halfTimeJoker.setDisable(clientData.getUsedJokers().contains(JokerType.HALF_TIME_FOR_ALL_LOBBY));
-        joker1.setDisable(clientData.getUsedJokers().contains(JokerType.DOUBLE_POINTS));
-        joker2.setDisable(clientData.getUsedJokers().contains(JokerType.ELIMINATE_ANSWERS));
-
-        if(!clientData.getUsedJokers().contains(JokerType.DOUBLE_POINTS))
-            joker1.setFill(rgb(30,144,255));
-        if(!clientData.getUsedJokers().contains(JokerType.ELIMINATE_ANSWERS))
-            joker2.setFill(rgb(30,144,255));
-        if(!clientData.getUsedJokers().contains(JokerType.HALF_TIME_FOR_ALL_LOBBY))
-            halfTimeJoker.setFill(rgb(30,144,255));
+        jokerUtils.resetJokerUI(halfTimeJoker, doublePointsJoker, eliminateAnswerJoker);
 
         answer1.setToggleGroup(radioGroup);
         answer2.setToggleGroup(radioGroup);
@@ -287,8 +278,8 @@ public class GuessConsumptionCtrl implements JokerPowerUps {
     public void eliminateRandomWrongAnswer(){
         if(!clientData.getUsedJokers().contains(JokerType.ELIMINATE_ANSWERS)) {
             clientData.addJoker(JokerType.ELIMINATE_ANSWERS);
-            joker2.setFill(rgb(235,235,228));
-            joker2.setDisable(true);
+            eliminateAnswerJoker.setFill(rgb(235,235,228));
+            eliminateAnswerJoker.setDisable(true);
             int indexToRemove = new Random().nextInt(3);
             if (indexToRemove == correctAnswer) {
                 indexToRemove++;
@@ -401,8 +392,8 @@ public class GuessConsumptionCtrl implements JokerPowerUps {
     public void doublePoints() {
         if(!clientData.getUsedJokers().contains(JokerType.DOUBLE_POINTS)) {
             doublePoints = true;
-            joker1.setDisable(true);
-            joker1.setFill(rgb(235,235,228));
+            doublePointsJoker.setDisable(true);
+            doublePointsJoker.setFill(rgb(235,235,228));
             clientData.addJoker(JokerType.DOUBLE_POINTS);
         }
     }
