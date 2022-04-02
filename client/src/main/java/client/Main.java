@@ -87,6 +87,8 @@ public class Main extends Application {
                 .add(getClass().getResource("scenes/stylesheets/TempLeaderboard.css").toExternalForm());
         waiting.getValue().getStylesheets()
                 .add(getClass().getResource("scenes/stylesheets/Waiting.css").toExternalForm());
+        waiting.getValue().getStylesheets()
+                .add(getClass().getResource("scenes/stylesheets/Button.css").toExternalForm());
 
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
