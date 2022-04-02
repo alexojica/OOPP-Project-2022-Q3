@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.Group?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -9,11 +7,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.menus.HomeCtrl">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #000;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.menus.HomeCtrl">
     <children>
-        <ImageView fx:id="bgImage" fitHeight="728.0" fitWidth="1288.0" pickOnBounds="true">
+        <ImageView fx:id="bgImage" fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <image>
-            <Image url="@../../images/bgImage.png" />
+            <Image url="@../../images/home_screen.png" />
          </image>
       </ImageView>
         <ImageView fx:id="avatarImage" fitHeight="128.0" fitWidth="175.0" layoutX="576.0" layoutY="300.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="300.0" AnchorPane.leftAnchor="580.0" AnchorPane.rightAnchor="580.0" AnchorPane.topAnchor="300.0">
@@ -21,21 +19,7 @@
             <Image url="@../../images/avatar/OOPPP0ad.png" />
          </image>
       </ImageView>
-        <TextField fx:id="name" alignment="CENTER" layoutX="565.0" layoutY="462.0" prefHeight="26.0" prefWidth="166.0" promptText="Username" AnchorPane.leftAnchor="560.0" AnchorPane.rightAnchor="560.0" />
-      <Group layoutX="591.0" layoutY="110.0" AnchorPane.bottomAnchor="565.0" AnchorPane.leftAnchor="590.43203125" AnchorPane.rightAnchor="591.16796875" AnchorPane.topAnchor="109.4">
-         <children>
-              <Label alignment="TOP_CENTER" focusTraversable="false" styleClass="header-section" text="Qui" textFill="WHITE">
-               <font>
-                  <Font size="40.0" />
-               </font>
-            </Label>
-            <Label alignment="TOP_CENTER" focusTraversable="false" layoutX="57.0" styleClass="header-section" text="zzz" textFill="#0ab8ec">
-               <font>
-                  <Font size="40.0" />
-               </font>
-            </Label>
-         </children>
-      </Group>
+        <TextField fx:id="name" alignment="CENTER" layoutX="565.0" layoutY="462.0" prefHeight="26.0" prefWidth="166.0" promptText="Username" />
         <TextField fx:id="serverTextField" layoutX="432.0" layoutY="508.0" prefHeight="26.0" prefWidth="123.0" promptText="Server" text="localhost" />
         <TextField fx:id="portTextField" layoutX="756.0" layoutY="508.0" prefHeight="26.0" prefWidth="58.0" promptText="Port" text="8080" />
          <Text fx:id="incorrectServerText" fill="#ff4141" layoutX="494.0" layoutY="389.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="291.9999877929688">
@@ -43,17 +27,17 @@
                 <Font size="19.0" />
             </font>
          </Text>
-      <ImageView fx:id="previousAvatar" fitHeight="76.0" fitWidth="77.0" layoutX="463.0" layoutY="326.0" onMouseClicked="#decrementSeed" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="463.0">
+      <ImageView fx:id="previousAvatar" fitHeight="76.0" fitWidth="77.0" layoutX="463.0" layoutY="326.0" onMouseClicked="#decrementSeed" pickOnBounds="true" preserveRatio="true" styleClass="image-button" AnchorPane.bottomAnchor="326.0" AnchorPane.leftAnchor="463.0" AnchorPane.rightAnchor="463.0" AnchorPane.topAnchor="326.0">
          <image>
             <Image url="@../../images/left-arrow.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="nextAvatar" fitHeight="76.0" fitWidth="77.0" layoutX="748.0" layoutY="326.0" onMouseClicked="#incrementSeed" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="464.0">
+      <ImageView fx:id="nextAvatar" fitHeight="76.0" fitWidth="77.0" layoutX="747.0" layoutY="326.0" onMouseClicked="#incrementSeed" pickOnBounds="true" preserveRatio="true" styleClass="image-button" AnchorPane.bottomAnchor="326.0" AnchorPane.leftAnchor="741.0" AnchorPane.rightAnchor="463.0" AnchorPane.topAnchor="326.0">
          <image>
-            <Image url="@../../images/right-arrow%20(1).png" />
+            <Image url="@../../images/right-arrow.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="playButtonImage" fitHeight="106.0" fitWidth="108.0" layoutX="595.0" layoutY="521.0" onMouseClicked="#play" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="playButtonImage" fitHeight="106.0" fitWidth="108.0" layoutX="595.0" layoutY="521.0" onMouseClicked="#play" pickOnBounds="true" preserveRatio="true" styleClass="image-button" AnchorPane.bottomAnchor="93.0" AnchorPane.leftAnchor="594.6" AnchorPane.rightAnchor="579.0" AnchorPane.topAnchor="521.0">
          <image>
             <Image url="@../../images/play.png" />
          </image>

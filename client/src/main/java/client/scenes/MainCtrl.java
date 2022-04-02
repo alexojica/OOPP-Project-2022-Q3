@@ -194,6 +194,7 @@ public class MainCtrl extends Application {
             alert.showAndWait().filter(r -> r != ButtonType.OK).ifPresent(r->evt.consume());
         });
         primaryStage.show();
+        System.out.println(primaryStage.getHeight() + " " + primaryStage.getWidth());
     }
 
 
