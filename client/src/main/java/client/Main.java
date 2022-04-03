@@ -69,6 +69,7 @@ public class Main extends Application {
         var editActivity = FXML.load(EditActivitiesCtrl.class, "client", "scenes", "EditActivity.fxml");
         var questionAdmin = FXML.load(QuestionAdminCtrl.class, "client", "scenes", "QuestionAdmin.fxml");
         var editQuestion = FXML.load(EditQuestionsCtrl.class, "client", "scenes", "EditQuestion.fxml");
+        var addActivity = FXML.load(AddActivityCtrl.class, "client", "scenes", "AddActivity.fxml");
 
         // Stylesheets are loaded using reflection
         home.getValue().getStylesheets()
@@ -89,6 +90,6 @@ public class Main extends Application {
         mainCtrl.initialize(primaryStage, home, leaderboard, gameModeSelection, multiPlayerMenu,
                             estimationQuestion, gameMCQ, alternativeQuestion, guessMultipleChoiceQuestion, gameOver,
                 waiting, tempLeaderboard, usernamePopUp, kickedPopUp, adminHome,
-                editActivity, activityAdmin, questionAdmin, editQuestion);
+                editActivity, activityAdmin, questionAdmin, editQuestion, addActivity);
     }
 }

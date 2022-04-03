@@ -39,6 +39,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import commons.Activity;
+import org.apache.catalina.filters.AddDefaultCharsetFilter;
 
 public class MainCtrl extends Application {
 
@@ -98,6 +99,9 @@ public class MainCtrl extends Application {
     private EditQuestionsCtrl editQuestionsCtrl;
     private Scene editQuestion;
 
+    private AddActivityCtrl addActivityCtrl;
+    private Scene addActivity;
+
     private Stage incorrectUsernamePopUp;
 
     private Stage kickPopUp;
@@ -122,7 +126,8 @@ public class MainCtrl extends Application {
                            Pair<EditActivitiesCtrl, Parent> editActivity,
                            Pair<ActivityAdminCtrl, Parent> activityAdmin,
                            Pair<QuestionAdminCtrl, Parent> questionAdmin,
-                           Pair<EditQuestionsCtrl, Parent> editQuestion) {
+                           Pair<EditQuestionsCtrl, Parent> editQuestion,
+                           Pair<AddActivityCtrl, Parent> addActivity) {
         this.primaryStage = primaryStage;
 
 
@@ -179,6 +184,9 @@ public class MainCtrl extends Application {
 
         this.editQuestionsCtrl = editQuestion.getKey();
         this.editQuestion = new Scene(editQuestion.getValue());
+
+        this.addActivityCtrl = addActivity.getKey();
+        this.addActivity = new Scene(addActivity.getValue());
 
         primaryStage.setOnCloseRequest(e -> {
             if(client.isInLobby()){
@@ -238,6 +246,13 @@ public class MainCtrl extends Application {
         primaryStage.setTitle("ActivityEditScreen");
         primaryStage.setScene(editActivity);
         editActivitiesCtrl.load(act);
+    }
+
+    public void showAddActivity(){
+        client.setCurrentSceneCtrl(activityAdminCtrl);
+        primaryStage.setTitle("AddActivityScreen");
+        primaryStage.setScene(addActivity);
+        addActivityCtrl.load();
     }
 
     public void showAdminHome(){
