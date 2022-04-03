@@ -26,10 +26,12 @@ public class QuestionProvider {
     private Random random;
 
     private HashMap<String, HashSet<Question>> lobbyToQuestionsUsed;
+    private HashMap<String, HashSet<Activity>> lobbyToActivitiesUsed;
 
     public QuestionProvider() {
         random = new Random();
         lobbyToQuestionsUsed = new HashMap<>();
+        lobbyToActivitiesUsed = new HashMap<>();
     }
 
     /**
@@ -45,7 +47,7 @@ public class QuestionProvider {
         System.out.println("[LOBBY] " + lastLobby + " has used: ");
         if(lobbyToQuestionsUsed.containsKey(lastLobby)) {
             for (Question q : lobbyToQuestionsUsed.get(lastLobby)) {
-                System.out.println(q.id);
+                System.out.print(q.id + " ");
             }
         }
         updatePointer();
@@ -100,7 +102,38 @@ public class QuestionProvider {
         lobbyToQuestionsUsed.put(lastLobby, set);
     }
 
+    /**
+     * Check using the lobbyToActivitiesUsed hash map whether the next activity has already been used in the lobby
+     */
+    public boolean activityAlreadyUsed(Activity activity){
+        HashSet<Activity> activitiesUsed = lobbyToActivitiesUsed.get(lastLobby);
+        if(activitiesUsed != null){
+            return activitiesUsed.contains(activity);
+        }
+        return false;
+    }
 
+    /**
+     * Update the set containing all activities used in a given lobby
+     */
+    public void updateSetOfActivities(Activity activity){
+        HashSet<Activity> set = lobbyToActivitiesUsed.get(lastLobby);
+        if(set == null){
+            set = new HashSet<>();
+        }
+        set.add(activity);
+        System.out.println("Attempted to update activities....");
+        lobbyToActivitiesUsed.put(lastLobby, set);
+    }
+
+
+    /**
+     * Updates the pointer based on some probability
+     * Currently the "threshold" on the server for the number of questions is \
+     * 45000, when the chance of generating a new question gets close to 1%
+     * at 5000 questions, the chance of generating a new question is 10%
+     * The pointer is used to indicate the next question (similar to a linked list)
+     */
     public void updatePointer() {
         long questionPool = questionRepository.count();
         double probabilityOfReusingExisingQuestion = clamp(1 + (49729.0 / (questionPool + 1)),0,100);
@@ -179,7 +212,13 @@ public class QuestionProvider {
 
     public Activity getActivityPivot() {
         List<Activity> activities = activitiesRepository.findAll();
-        return activities.get(random.nextInt(activities.size()));
+        Activity act = activities.get(random.nextInt(activities.size()));
+        if(activityAlreadyUsed(act)) return getActivityPivot();
+        else {
+            //add the used pivot activity
+            updateSetOfActivities(act);
+            return act;
+        }
     }
 
     /**
@@ -192,10 +231,22 @@ public class QuestionProvider {
      */
     public List<Long> getMultipleChoiceQuestionActivities(Activity activityPivot) {
         List<Long> activitiesIDs = new ArrayList<>();
-        Activity activityLeft = (activitiesRepository.findByEnergyConsumptionDesc(
-                activityPivot.getEnergyConsumption() * (100 - difficulty) / 100)).get(0);
-        Activity activityRight = (activitiesRepository.findByEnergyConsumptionDesc(
-                activityPivot.getEnergyConsumption() * (100 + difficulty) / 100)).get(0);
+        Activity activityLeft, activityRight;
+        int i = 0;
+        do {
+             activityLeft = (activitiesRepository.findByEnergyConsumptionDesc(
+                    activityPivot.getEnergyConsumption() * (100 - difficulty) / 100)).get(i);
+             i++;
+        }while (activityAlreadyUsed(activityLeft));
+        updateSetOfActivities(activityLeft);
+
+        i = 0;
+        do {
+            activityRight = (activitiesRepository.findByEnergyConsumptionDesc(
+                    activityPivot.getEnergyConsumption() * (100 + difficulty) / 100)).get(i);
+            i++;
+        }while (activityAlreadyUsed(activityRight));
+        updateSetOfActivities(activityRight);
 
         activitiesIDs.add(activityRight.getId());
         activitiesIDs.add(activityPivot.getId());
@@ -214,17 +265,27 @@ public class QuestionProvider {
         List<Long> activitiesIDs = new ArrayList<>();
         activitiesIDs.add(activityPivot.getId());
 
+        int j = 0;
         for(int i = 0; i < 2; i++)
         {
             Activity activity;
             if(new Random().nextBoolean()) {
-                activity = (activitiesRepository.findByEnergyConsumptionDesc(
-                        activityPivot.getEnergyConsumption() * (100 - difficulty) / 100)).get(0);
+                do {
+                    activity = (activitiesRepository.findByEnergyConsumptionDesc(
+                            activityPivot.getEnergyConsumption() * (100 - difficulty) / 100)).get(j);
+                    j++;
+                }while (activityAlreadyUsed(activity));
+                updateSetOfActivities(activity);
             }
             else
             {
-                activity = (activitiesRepository.findByEnergyConsumptionDesc(
-                        activityPivot.getEnergyConsumption() * (100 + difficulty) / 100)).get(0);
+                j = 0;
+                do {
+                    activity = (activitiesRepository.findByEnergyConsumptionDesc(
+                            activityPivot.getEnergyConsumption() * (100 + difficulty) / 100)).get(j);
+                    j++;
+                }while (activityAlreadyUsed(activity));
+                updateSetOfActivities(activity);
             }
             activitiesIDs.add(activity.getId());
         }
@@ -260,15 +321,19 @@ public class QuestionProvider {
 
     /**
      * Loop through alternative candidate activities until one that is not the pivot is found (chances are very small
-     * it will have to loop through but it could have been a weird bug)
-     * If by some weird reason there is no activity in the range of [small, big] then we recursivelly look in a
-     * biggger range
+     * it will have to loop through, but it could have been a weird bug)
+     * If by some weird reason there is no activity in the range of [small, big] then we recursively look in a
+     * bigger range
      */
     private Activity getCorrectAlternative(Activity activityPivot, long small, long big){
         List<Activity> alternatives = activitiesRepository.findActivitiesInRange(small, big).get();
         for(Activity activity : alternatives){
             if(!activity.equals(activityPivot)){
-                return activity;
+                if(activityAlreadyUsed(activity)) return getCorrectAlternative(activityPivot, small / 2, big * 2);
+                else {
+                    updateSetOfActivities(activity);
+                    return activity;
+                }
             }
         }
         return getCorrectAlternative(activityPivot, small / 2, big * 2);
@@ -285,15 +350,31 @@ public class QuestionProvider {
         List<Activity> wrongActivities = new ArrayList<>();
 
         // Get wrong, lower consumptions, alternative(s)
-        List<Activity> lowerWrongAlternatives =activitiesRepository.findActivitiesInRange(small / 100, small / 2).get();
+        List<Activity> lowerWrongAlternatives = activitiesRepository.findActivitiesInRange(small / 100, small / 2).get();
         for(int i=0; i<numActivitiesLower; i++){
-            wrongActivities.add(lowerWrongAlternatives.get(i));
+            if(activityAlreadyUsed(lowerWrongAlternatives.get(i)))
+            {
+                //skip one
+                numActivitiesLower ++;
+            }
+            else {
+                wrongActivities.add(lowerWrongAlternatives.get(i));
+                updateSetOfActivities(lowerWrongAlternatives.get(i));
+            }
         }
 
         // Get wrong, higher consumption, alternative(s)
         List<Activity> higherWrongAlternatives = activitiesRepository.findActivitiesInRange(big * 2, small * 100).get();
         for(int i=0; i<numActivitiesHigher; i++){
-            wrongActivities.add(higherWrongAlternatives.get(i));
+            if(activityAlreadyUsed(higherWrongAlternatives.get(i)))
+            {
+                //skip one
+                numActivitiesHigher ++;
+            }
+            else {
+                wrongActivities.add(higherWrongAlternatives.get(i));
+                updateSetOfActivities(higherWrongAlternatives.get(i));
+            }
         }
         return wrongActivities;
     }
@@ -305,12 +386,21 @@ public class QuestionProvider {
     }
 
     /**
-     * Clears all questions which have been assined to a certain lobby
+     * Clears all questions which have been assigned to a certain lobby
      * @param lobbyId
      */
     public void clearAllQuestionsFromLobby(String lobbyId){
         lobbyToQuestionsUsed.remove(lobbyId);
         System.out.println("DELETED ALL QUESTIONS OF LOBBY " + lobbyId);
+    }
+
+    /**
+     * Clears all activities which have been assigned to a certain lobby
+     * @param lobbyId
+     */
+    public void clearAllActivitiesFromLobby(String lobbyId){
+        lobbyToActivitiesUsed.remove(lobbyId);
+        System.out.println("DELETED ALL ACTIVITIES OF LOBBY " + lobbyId);
     }
 
     /**
