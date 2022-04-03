@@ -2,6 +2,7 @@ package client.game;
 
 import client.data.ClientData;
 import client.emotes.Emotes;
+import client.joker.JokerUtils;
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
@@ -24,19 +25,22 @@ public class GameImpl implements Game{
     private final ClientUtils client;
     private final ClientData clientData;
     private final MainCtrl mainCtrl;
-    private  final Emotes emotes;
+    private final Emotes emotes;
+    private final JokerUtils jokerUtils;
 
     private final String COMMON_CODE = "COMMON";
     private Integer questionsToEndGame = 20;
     private Integer questionsToDisplayLeaderboard = 10;
 
     @Inject
-    public GameImpl(ServerUtils server, ClientUtils client, ClientData clientData, MainCtrl mainCtrl, Emotes emotes) {
+    public GameImpl(ServerUtils server, ClientUtils client, ClientData clientData, MainCtrl mainCtrl, Emotes emotes,
+                    JokerUtils jokerUtils) {
         this.server = server;
         this.client = client;
         this.clientData = clientData;
         this.mainCtrl = mainCtrl;
         this.emotes = emotes;
+        this.jokerUtils = jokerUtils;
     }
 
     /**
@@ -111,6 +115,7 @@ public class GameImpl implements Game{
         clientData.setGameType(GameType.SINGLEPLAYER);
         client.swapEmoteJokerUsability(true);
         server.addMeToLobby(clientData.getClientLobby().getToken(),clientData.getClientPlayer());
+        jokerUtils.registerForJokerUpdates();
 
         //add delay until game starts
         Thread thread = new Thread(new Runnable() {
