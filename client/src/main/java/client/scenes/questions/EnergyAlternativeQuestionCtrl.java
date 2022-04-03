@@ -178,21 +178,26 @@ public class EnergyAlternativeQuestionCtrl implements JokerPowerUps {
 
         client.startTimer(pb,this, ENERGY_ALTERNATIVE_QUESTION);
 
+        List<Activity> list = server.getActivitiesFromIDs(question.getFoundActivities());
+
         switch (correctAnswer)
         {
             case 0:
                 //correct answer is first one
-                randomizeFields(answer1,answer2,answer3,question);
+                randomizeFields(answer1, answer2, answer3, list);
+                setWHText(actualWH1, actualWH2, actualWH3, list);
                 setImages(imageView1, imageView2, imageView3, question);
                 break;
             case 1:
                 //correct answer is second one
-                randomizeFields(answer2,answer1,answer3,question);
+                randomizeFields(answer2, answer1, answer3, list);
+                setWHText(actualWH2, actualWH1, actualWH3, list);
                 setImages(imageView2, imageView1, imageView3, question);
                 break;
             case 2:
                 //correct answer is third one
-                randomizeFields(answer3,answer1,answer2,question);
+                randomizeFields(answer3, answer1, answer2, list);
+                setWHText(actualWH3, actualWH1, actualWH2, list);
                 setImages(imageView3, imageView1, imageView2, question);
                 break;
             default:
@@ -206,16 +211,18 @@ public class EnergyAlternativeQuestionCtrl implements JokerPowerUps {
         answer3.setDisable(true);
     }
 
-    public void randomizeFields(RadioButton a, RadioButton b, RadioButton c, Question question)
+    public void randomizeFields(RadioButton a, RadioButton b, RadioButton c, List<Activity> list)
     {
-        List<Activity> list = server.getActivitiesFromIDs(question.getFoundActivities());
         a.setText(list.get(1).getTitle());
         b.setText(list.get(2).getTitle());
         c.setText(list.get(3).getTitle());
+    }
 
-        actualWH1.setText(list.get(1).getEnergyConsumption().toString());
-        actualWH2.setText(list.get(2).getEnergyConsumption().toString());
-        actualWH3.setText(list.get(3).getEnergyConsumption().toString());
+    private void setWHText(Text a, Text b, Text c, List<Activity> list)
+    {
+        a.setText(list.get(1).getEnergyConsumption().toString());
+        b.setText(list.get(2).getEnergyConsumption().toString());
+        c.setText(list.get(3).getEnergyConsumption().toString());
     }
 
     private void setImages(ImageView a, ImageView b, ImageView c, Question question) {

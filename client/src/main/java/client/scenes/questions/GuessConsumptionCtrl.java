@@ -151,19 +151,21 @@ public class GuessConsumptionCtrl implements JokerPowerUps {
         Random random = new Random();
         correctAnswer = random.nextInt(3);
 
+        List<Activity> list = server.getActivitiesFromIDs(question.getFoundActivities());
+
         switch (correctAnswer)
         {
             case 0:
                 //correct answer is first one
-                randomizeFields(answer1,answer2,answer3,question);
+                randomizeFields(answer1, answer2, answer3, list);
                 break;
             case 1:
                 //correct answer is second one
-                randomizeFields(answer2,answer1,answer3,question);
+                randomizeFields(answer2, answer1, answer3, list);
                 break;
             case 2:
                 //correct answer is third one
-                randomizeFields(answer3,answer1,answer2,question);
+                randomizeFields(answer3, answer1, answer2, list);
                 break;
             default:
                 break;
@@ -175,9 +177,8 @@ public class GuessConsumptionCtrl implements JokerPowerUps {
         imageView.setImage(image);
     }
 
-    public void randomizeFields(RadioButton a, RadioButton b, RadioButton c, Question question)
+    public void randomizeFields(RadioButton a, RadioButton b, RadioButton c, List<Activity> list)
     {
-        List<Activity> list = server.getActivitiesFromIDs(question.getFoundActivities());
         a.setText(String.valueOf(list.get(0).getEnergyConsumption()));
         b.setText(String.valueOf(list.get(1).getEnergyConsumption()));
         c.setText(String.valueOf(list.get(2).getEnergyConsumption()));

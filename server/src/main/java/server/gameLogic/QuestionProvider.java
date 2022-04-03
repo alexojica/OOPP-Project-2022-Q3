@@ -158,8 +158,7 @@ public class QuestionProvider {
             default:
                 activitiesIDS = null;
         }
-
-        Set<Long> activitySet = new HashSet<>(activitiesIDS);
+        Set<Long> activitySet = new LinkedHashSet<>(activitiesIDS);
         Question question = new Question(pointer, questionType, newPointer, activitySet, lastLobby);
         updateSetOfQuestions(question);
         questionRepository.save(question);
@@ -190,9 +189,10 @@ public class QuestionProvider {
         Activity activityRight = (activitiesRepository.findByEnergyConsumptionDesc(
                 activityPivot.getEnergyConsumption() * (100 + difficulty) / 100)).get(0);
 
-        activitiesIDs.add(activityLeft.getId());
-        activitiesIDs.add(activityPivot.getId());
         activitiesIDs.add(activityRight.getId());
+        activitiesIDs.add(activityPivot.getId());
+        activitiesIDs.add(activityLeft.getId());
+
         return activitiesIDs;
     }
 
