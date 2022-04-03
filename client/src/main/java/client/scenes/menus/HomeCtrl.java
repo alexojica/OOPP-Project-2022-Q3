@@ -81,9 +81,9 @@ public class HomeCtrl {
         previousAvatar.setImage(new Image("images/left-arrow.png"));
         FadeTransition ft = new FadeTransition();
         ft.setNode(bgImage);
-        ft.setDuration(new Duration(1500));
+        ft.setDuration(new Duration(1700));
         ft.setFromValue(1.0);
-        ft.setToValue(0.0);
+        ft.setToValue(0.4);
         ft.setCycleCount(6);
         ft.setOnFinished(a -> {
             ft.playFromStart();
