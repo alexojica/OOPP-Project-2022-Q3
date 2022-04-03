@@ -153,7 +153,7 @@ public class QuestionProvider {
                 activitiesIDS = getAlternativeEnergyQuestionActivities(activityPivot);
                 break;
             case GUESS_X:
-                activitiesIDS = getMultipleChoiceQuestionActivities(activityPivot);
+                activitiesIDS = getGuessXQuestionActivities(activityPivot);
                 break;
             default:
                 activitiesIDS = null;
@@ -182,6 +182,14 @@ public class QuestionProvider {
         return activities.get(random.nextInt(activities.size()));
     }
 
+    /**
+     * Method that uses an activity pivot, and a range determined by it
+     * and the chosen difficulty to find 3 activities, 1 larger than the pivot
+     * and 1 smaller. The arraylist is returned in decreasing order, and
+     * the shuffling is done client-sided
+     * @param activityPivot - the pivot around the other two activities are chosen
+     * @return arrayList of activities IDS
+     */
     public List<Long> getMultipleChoiceQuestionActivities(Activity activityPivot) {
         List<Long> activitiesIDs = new ArrayList<>();
         Activity activityLeft = (activitiesRepository.findByEnergyConsumptionDesc(
@@ -196,6 +204,41 @@ public class QuestionProvider {
         return activitiesIDs;
     }
 
+    /**
+     * Method that makes use of a pivot, and a chance of looking for
+     * a bigger or smaller activity (by WH), to create an arrayList of activities IDS
+     * @param activityPivot - the pivot around the other two activities are chosen
+     * @return arrayList of activities IDS
+     */
+    public List<Long> getGuessXQuestionActivities(Activity activityPivot) {
+        List<Long> activitiesIDs = new ArrayList<>();
+        activitiesIDs.add(activityPivot.getId());
+
+        for(int i = 0; i < 2; i++)
+        {
+            Activity activity;
+            if(new Random().nextBoolean()) {
+                activity = (activitiesRepository.findByEnergyConsumptionDesc(
+                        activityPivot.getEnergyConsumption() * (100 - difficulty) / 100)).get(0);
+            }
+            else
+            {
+                activity = (activitiesRepository.findByEnergyConsumptionDesc(
+                        activityPivot.getEnergyConsumption() * (100 + difficulty) / 100)).get(0);
+            }
+            activitiesIDs.add(activity.getId());
+        }
+
+        return activitiesIDs;
+    }
+
+    /**
+     * Method that uses an activity pivot, and a range determined by it
+     * and the chosen difficulty to poll an approximate (correct answer)
+     * activity, and 2 others that are wrong
+     * @param activityPivot - the pivot around the other two activities are chosen
+     * @return arrayList of activities IDS
+     */
     public List<Long> getAlternativeEnergyQuestionActivities(Activity activityPivot) {
         long small = activityPivot.getEnergyConsumption() * (100 - difficulty) / 100;
         long big = activityPivot.getEnergyConsumption() * (100 + difficulty) / 100;
