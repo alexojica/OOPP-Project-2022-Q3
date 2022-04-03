@@ -350,7 +350,8 @@ public class QuestionProvider {
         List<Activity> wrongActivities = new ArrayList<>();
 
         // Get wrong, lower consumptions, alternative(s)
-        List<Activity> lowerWrongAlternatives = activitiesRepository.findActivitiesInRange(small / 100, small / 2).get();
+        List<Activity> lowerWrongAlternatives = activitiesRepository.
+                                                findActivitiesInRange(small / 100, small / 2).get();
         for(int i=0; i<numActivitiesLower; i++){
             if(activityAlreadyUsed(lowerWrongAlternatives.get(i)))
             {
@@ -364,7 +365,8 @@ public class QuestionProvider {
         }
 
         // Get wrong, higher consumption, alternative(s)
-        List<Activity> higherWrongAlternatives = activitiesRepository.findActivitiesInRange(big * 2, small * 100).get();
+        List<Activity> higherWrongAlternatives = activitiesRepository.
+                                                findActivitiesInRange(big * 2, small * 100).get();
         for(int i=0; i<numActivitiesHigher; i++){
             if(activityAlreadyUsed(higherWrongAlternatives.get(i)))
             {
