@@ -34,6 +34,7 @@ class GameTest {
         client = mock(ClientUtils.class);
         clientData = mock(ClientData.class);
         mainCtrl = mock(MainCtrl.class);
+        emotes = mock(Emotes.class);
         defineMethodsForServer();
         defineMethodsForClientData();
 
