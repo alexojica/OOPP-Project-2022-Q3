@@ -39,7 +39,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import commons.Activity;
-import org.apache.catalina.filters.AddDefaultCharsetFilter;
 
 public class MainCtrl extends Application {
 
