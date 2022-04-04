@@ -154,7 +154,7 @@ public class WaitingCtrl implements Initializable{
         {
             tip.setText("Share this lobby code to play with your friends! \n" + token);
         }
-        lobbyCode.setText("Lobby code: " + token);
+        lobbyCode.setText("WELCOME TO LOBBY: " + token);
         countDownLabel.setText("Currently waiting...");
 
         //enable admin UI

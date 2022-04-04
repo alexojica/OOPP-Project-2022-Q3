@@ -105,6 +105,9 @@ public class MainCtrl extends Application {
 
     private Stage kickPopUp;
 
+    private JokerPopUpCtrl jokerPopUpCtrl;
+    private Scene jokerPopUp;
+
     @Inject
     private ClientUtils client;
 
@@ -126,7 +129,9 @@ public class MainCtrl extends Application {
                            Pair<ActivityAdminCtrl, Parent> activityAdmin,
                            Pair<QuestionAdminCtrl, Parent> questionAdmin,
                            Pair<EditQuestionsCtrl, Parent> editQuestion,
-                           Pair<AddActivityCtrl, Parent> addActivity) {
+                           Pair<AddActivityCtrl, Parent> addActivity,
+                           Pair<JokerPopUpCtrl, Parent> jokerPopUpCtrlParentPair) {
+
         this.primaryStage = primaryStage;
 
 
@@ -187,6 +192,10 @@ public class MainCtrl extends Application {
         this.addActivityCtrl = addActivity.getKey();
         this.addActivity = new Scene(addActivity.getValue());
 
+        this.jokerPopUpCtrl = jokerPopUpCtrlParentPair.getKey();
+        this.jokerPopUp = new Scene(jokerPopUpCtrlParentPair.getValue());
+
+
         primaryStage.setOnCloseRequest(e -> {
             if(client.isInLobby()){
                 game.leaveLobby();
@@ -201,6 +210,7 @@ public class MainCtrl extends Application {
             alert.showAndWait().filter(r -> r != ButtonType.OK).ifPresent(r->evt.consume());
         });
         primaryStage.show();
+        System.out.println(primaryStage.getHeight() + " " + primaryStage.getWidth());
     }
 
 
