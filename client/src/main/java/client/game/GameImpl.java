@@ -2,15 +2,19 @@ package client.game;
 
 import client.data.ClientData;
 import client.emotes.Emotes;
+import client.joker.JokerUtils;
 import client.scenes.MainCtrl;
 import client.utils.ClientUtils;
 import client.utils.ServerUtils;
+import commons.LeaderboardEntry;
 import commons.Lobby;
 import commons.Player;
 import commons.WebsocketMessage;
 import constants.ConnectionStatusCodes;
+import constants.GameType;
 import constants.ResponseCodes;
 import javafx.application.Platform;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -21,19 +25,22 @@ public class GameImpl implements Game{
     private final ClientUtils client;
     private final ClientData clientData;
     private final MainCtrl mainCtrl;
-    private  final Emotes emotes;
+    private final Emotes emotes;
+    private final JokerUtils jokerUtils;
 
     private final String COMMON_CODE = "COMMON";
-    private final Integer questionsToEndGame = 20;
-    private final Integer questionsToDisplayLeaderboard = 10;
+    private Integer questionsToEndGame = 20;
+    private Integer questionsToDisplayLeaderboard = 10;
 
     @Inject
-    public GameImpl(ServerUtils server, ClientUtils client, ClientData clientData, MainCtrl mainCtrl, Emotes emotes) {
+    public GameImpl(ServerUtils server, ClientUtils client, ClientData clientData, MainCtrl mainCtrl, Emotes emotes,
+                    JokerUtils jokerUtils) {
         this.server = server;
         this.client = client;
         this.clientData = clientData;
         this.mainCtrl = mainCtrl;
         this.emotes = emotes;
+        this.jokerUtils = jokerUtils;
     }
 
     /**
@@ -67,18 +74,48 @@ public class GameImpl implements Game{
         }
     }
 
+    public void instantiatePrivateLobby()
+    {
+        //instantiate a new lobby with a random token,using as host id the host player's id
+        Lobby newLobby = new Lobby(RandomStringUtils.randomAlphabetic(5), (int) clientData.getClientPlayer().getId());
+        server.addLobby(newLobby);
+        clientData.setLobby(newLobby);
+        clientData.setPointer(clientData.getClientPlayer().getId());
+        clientData.setClientScore(0);
+        clientData.setQuestionCounter(0);
+        clientData.setAsHost(true);
+
+        joinPrivateLobby(newLobby.getToken());
+
+    }
+
+    public boolean joinPrivateLobby(String token)
+    {
+        return joinLobby(token);
+    }
+
     /**
      * Method that starts a single-player game
      */
-    public void startSingleplayer(){
-        Lobby mainLobby = new Lobby("SINGLE_PLAYER");
+    public void startSinglePlayer(){
+
+        String lobbyCode = "SINGLE_PLAYER" +
+                            clientData.getClientPlayer().getAvatarCode() +
+                            RandomStringUtils.randomAlphabetic(5);
+
+        Lobby mainLobby = new Lobby(lobbyCode);
         server.addLobby(mainLobby);
         clientData.setLobby(mainLobby);
         clientData.setPointer(clientData.getClientPlayer().getId());
         clientData.setClientScore(0);
         clientData.setQuestionCounter(0);
+        //default value
+        setQuestionsToEndGame(20);
         clientData.setAsHost(true);
+        clientData.setGameType(GameType.SINGLEPLAYER);
+        client.swapEmoteJokerUsability(true);
         server.addMeToLobby(clientData.getClientLobby().getToken(),clientData.getClientPlayer());
+        jokerUtils.registerForJokerUpdates();
 
         //add delay until game starts
         Thread thread = new Thread(new Runnable() {
@@ -91,6 +128,7 @@ public class GameImpl implements Game{
                             new WebsocketMessage(ResponseCodes.NEXT_QUESTION,
                                     clientData.getClientLobby().getToken(), clientData.getClientPointer()));
 
+                    client.startSyncCountdown();
                     Thread.sleep(3000);
 
                     Platform.runLater(() -> client.getQuestion());
@@ -105,13 +143,18 @@ public class GameImpl implements Game{
     }
 
     /**
-     * Method that joins the client to a public lobby
+     * Method that joins the client to a public lobby (token = "COMMON")
      */
-    public void joinPublicLobby(){
+    public void joinPublicLobby()
+    {
+        joinLobby(COMMON_CODE);
+    }
 
+    private boolean joinLobby(String token)
+    {
         Player clientPlayer = clientData.getClientPlayer();
 
-        ConnectionStatusCodes permissionCode = server.getConnectPermission("COMMON", clientPlayer.name);
+        ConnectionStatusCodes permissionCode = server.getConnectPermission(token, clientPlayer.getName());
 
         switch(permissionCode){
             case USERNAME_ALREADY_USED:
@@ -119,14 +162,15 @@ public class GameImpl implements Game{
                 break;
             case LOBBY_NOT_FOUND:
                 //lobby not found
-                break;
+                return false;
             case CONNECTION_PERMISSION_GRANTED:
                 //set client lobby static variable
-                clientData.setLobby(server.addMeToLobby("COMMON", clientPlayer));
+                clientData.setLobby(server.addMeToLobby(token, clientPlayer));
 
                 if(clientData.getClientLobby().playersInLobby.contains(clientPlayer))
                     mainCtrl.showWaiting();
         }
+        return true;
     }
 
     /**
@@ -137,12 +181,15 @@ public class GameImpl implements Game{
         System.out.println("game initiated");
         clientData.setClientScore(0);
         clientData.setQuestionCounter(0);
+        clientData.setGameType(GameType.MULTIPLAYER);
+        client.swapEmoteJokerUsability(false);
         //add delay until game starts
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try{
-                    Thread.sleep(300);
+                    client.startSyncCountdown();
+                    Thread.sleep(3000);
 
                     Platform.runLater(() -> client.getQuestion());
 
@@ -173,14 +220,14 @@ public class GameImpl implements Game{
 
             //start the game for the other players as well
             server.send("/app/lobbyStart",
-                    new WebsocketMessage(ResponseCodes.START_GAME, clientData.getClientLobby().token));
+                    new WebsocketMessage(ResponseCodes.START_GAME, clientData.getClientLobby().getToken()));
         }
     }
 
     public void leaveLobby() {
+        emotes.sendDisconnect();
         //kill ongoing timers
         client.killTimer();
-
         server.send("/app/leaveLobby", new WebsocketMessage(ResponseCodes.LEAVE_LOBBY,
                 clientData.getClientLobby().getToken(), clientData.getClientPlayer(), clientData.getIsHost()));
 
@@ -189,11 +236,14 @@ public class GameImpl implements Game{
 
         client.resetMessages();
 
+        clientData.clearUnansweredQuestionCounter();
+
         System.out.println("Left the lobby");
 
         clientData.setAsHost(false);
         //set client lobby to exited
         clientData.setLobby(null);
+        clientData.setGameType(null);
 
         mainCtrl.showGameModeSelection();
     }
@@ -201,6 +251,11 @@ public class GameImpl implements Game{
     public void endGame()
     {
         System.out.println("Game ended");
+        //if we've come to the end of a singleplayergame the player's avatarCode, score and name are stored in the repo
+        if(clientData.getGameType() == GameType.SINGLEPLAYER){
+            Player temp = clientData.getClientPlayer();
+            server.persistScore(new LeaderboardEntry(temp.getScore(), temp.getName(), temp.getAvatarCode()));
+        }
         server.send("/app/lobbyEnd", new WebsocketMessage(ResponseCodes.END_GAME,
                 clientData.getClientLobby().getToken()));
         client.unsubscribeFromMessages();
@@ -208,10 +263,17 @@ public class GameImpl implements Game{
         client.resetMessages();
         //uses the current lobby to load images, scores and names for the players
         mainCtrl.showGameOver();
+        //only done after loading the leaderboard, because it's still needed there to determine which one to display
+        clientData.setGameType(null);
     }
 
     public Integer getQuestionsToEndGame(){
         return questionsToEndGame;
+    }
+
+    public void setQuestionsToEndGame(Integer value)
+    {
+        questionsToEndGame = value;
     }
 
     public Integer getQuestionsToDisplayLeaderboard()

@@ -145,9 +145,11 @@ public class LobbyController {
     @SendTo("/topic/lobbyStart")
     public WebsocketMessage startGame(WebsocketMessage message){
         Lobby lobby = repository.findByToken(message.getLobbyToken()).get();
-        lobby.setToken(RandomStringUtils.randomAlphabetic(5));
-        repository.save(lobby);
-        repository.save(new Lobby(message.getLobbyToken()));
+        if(lobby.getToken().equals("COMMON")) {
+            lobby.setToken(RandomStringUtils.randomAlphabetic(5));
+            repository.save(lobby);
+            repository.save(new Lobby(message.getLobbyToken()));
+        }
             return new WebsocketMessage(ResponseCodes.START_GAME, message.getLobbyToken(), lobby.getToken());
     }
 
@@ -165,6 +167,7 @@ public class LobbyController {
             Lobby lobbyToTerminate = found.get();
             lobbyToTerminate.setIsStarted(false);
             questionProvider.clearAllQuestionsFromLobby(lobbyToTerminate.getToken());
+            questionProvider.clearAllActivitiesFromLobby(lobbyToTerminate.getToken());
             repository.save(lobbyToTerminate);
         }
         return new WebsocketMessage(ResponseCodes.END_GAME, message.getLobbyToken());
@@ -210,6 +213,46 @@ public class LobbyController {
         return new WebsocketMessage(ResponseCodes.LEAVE_LOBBY, message.getLobbyToken());
     }
 
+    @MessageMapping("/kickFromLobby")
+    @SendTo("/topic/updateLobby")
+    public WebsocketMessage kickFromLobby(WebsocketMessage message){
+        Optional<Lobby> found = getLobbyByToken(message.getLobbyToken());
+        if(found.isPresent()){
+            Player playerToRemove = message.getPlayer();
+            Lobby currentLobby = found.get();
+            currentLobby.removePlayerFromLobby(playerToRemove);
+
+            //removed the player from the repo as well
+            repository.save(currentLobby);
+
+            System.out.println("Player " + playerToRemove.getName()
+                    + " has been kicked from lobby: " + message.getLobbyToken());
+        }
+
+        return new WebsocketMessage(ResponseCodes.KICK_PLAYER, message.getLobbyToken(), message.getPlayer());
+    }
+
+    /**
+     * Websocket mapping that updates for each client the
+     * appropriate no of questions, imposed by the admin (for private lobbies)
+     * and redirects it to all clients subscribed to /topic/updateLobby
+     * @param message received from the client containing the Response code and lobby token.
+     * @return
+     */
+    @MessageMapping("/setNoOfQuestions")
+    @SendTo("/topic/updateLobby")
+    public WebsocketMessage setNoOfQuestions(WebsocketMessage message){
+        return new WebsocketMessage(ResponseCodes.UPDATE_QUESTION_NUMBER,
+                                    message.getLobbyToken(),message.getDifficultySetting());
+    }
+
+
+    /**
+     * Websocket mapping that updates a player's score on the repo
+     * and redirects it to all clients subscribed to /topic/updateLobby
+     * @param message received from the client containing the Response code and lobby token.
+     * @return
+     */
     @MessageMapping("/updateScore")
     @SendTo("/topic/updateLobby")
     public WebsocketMessage updateScore(WebsocketMessage message){

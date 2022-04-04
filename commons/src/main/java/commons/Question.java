@@ -50,6 +50,8 @@ public class Question {
                 break;
             case ENERGY_ALTERNATIVE_QUESTION: this.text = "Instead of ";
                 break;
+            case GUESS_X: this.text = "How much energy does this consume?";
+                break;
             default: this.text = "This question has no type.";
         }
         this.pointer = pointer;
@@ -58,6 +60,10 @@ public class Question {
         {
             this.foundActivities.add(new LongWrapper(l));
         }
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public QuestionTypes getType() {

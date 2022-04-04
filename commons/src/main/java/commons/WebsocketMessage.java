@@ -27,6 +27,8 @@ public class WebsocketMessage {
 
     private String senderName;
 
+    private Integer difficultySetting;
+
     public JokerType getJokerType() {
         return jokerType;
     }
@@ -68,6 +70,9 @@ public class WebsocketMessage {
         return lobbyToken;
     }
 
+    public Integer getDifficultySetting(){
+        return difficultySetting;
+    }
     /**
      * Constructor used for a message that represents the start game.
      * @param startGame
@@ -167,6 +172,33 @@ public class WebsocketMessage {
         this.lobbyToken = lobbyToken;
     }
 
+    /**
+     * Constructor for setting difficulty level on a particular lobby (using the token)
+     * !difficultySetting! - used both for question numbers (client-sided)
+     *                     AND for difficulty Level (QuestionProvider class)
+     * @param lobbyToken
+     * @param difficultySetting
+     */
+    public WebsocketMessage(String lobbyToken, Integer difficultySetting)
+    {
+        this.lobbyToken = lobbyToken;
+        this.difficultySetting = difficultySetting;
+    }
+
+    /**
+     * Constructor for setting no of questions on a particular lobby (using the token)
+     * !difficultySetting! - used both for question numbers (client-sided)
+     *                     AND for difficulty Level (QuestionProvider class)
+     * @param lobbyToken
+     * @param difficultySetting
+     */
+    public WebsocketMessage(ResponseCodes code, String lobbyToken, Integer difficultySetting)
+    {
+        this.code = code;
+        this.lobbyToken = lobbyToken;
+        this.difficultySetting = difficultySetting;
+    }
+
     public WebsocketMessage(){
 
     }
@@ -185,10 +217,4 @@ public class WebsocketMessage {
     public int hashCode() {
         return Objects.hash(code, lobbyToken, message, question, pointer, player, jokerType);
     }
-
-//    public ResponseMessage(ResponseCodes code, String lobbyToken, Lobby lobby){
-//        this.code = code;
-//        this.lobbyToken = lobbyToken;
-//        this.lobby = lobby;
-//    }
 }

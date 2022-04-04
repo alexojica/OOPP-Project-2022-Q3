@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import server.database.LeaderboardRepository;
 import commons.LeaderboardEntry;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,9 +39,10 @@ public class LeaderboardController {
      * @param leaderboardEntry
      * @return the leaderboard entry object that was saved to the repository
      */
-    @PutMapping("/saveScore")
+    @PostMapping("/persistScore")
     @ResponseBody
-    public LeaderboardEntry saveScore(@RequestBody LeaderboardEntry leaderboardEntry) {
+    @Transactional
+    public LeaderboardEntry persistScore(@RequestBody LeaderboardEntry leaderboardEntry) {
         repository.save(leaderboardEntry);
         return leaderboardEntry;
     }

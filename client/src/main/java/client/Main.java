@@ -15,10 +15,8 @@
  */
 package client;
 
-import client.scenes.GameOverCtrl;
-import client.scenes.KickPopUpCtrl;
-import client.scenes.MainCtrl;
-import client.scenes.UsernamePopUpCtrl;
+import client.scenes.*;
+import client.scenes.admin.*;
 import client.scenes.leaderboards.LeaderboardCtrl;
 import client.scenes.leaderboards.TempLeaderboardCtrl;
 import client.scenes.menus.GameModeSelectionCtrl;
@@ -28,6 +26,7 @@ import client.scenes.menus.WaitingCtrl;
 import client.scenes.questions.EnergyAlternativeQuestionCtrl;
 import client.scenes.questions.EstimationQuestionCtrl;
 import client.scenes.questions.GameMCQCtrl;
+import client.scenes.questions.GuessConsumptionCtrl;
 import com.google.inject.Injector;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -55,18 +54,30 @@ public class Main extends Application {
         var estimationQuestion = FXML.load(EstimationQuestionCtrl.class, "client", "scenes", "EstimationQuestion.fxml");
         var alternativeQuestion = FXML.load(
                 EnergyAlternativeQuestionCtrl.class, "client", "scenes", "EnergyAlternativeQuestion.fxml");
+        var guessMultipleChoiceQuestion = FXML.load(
+                GuessConsumptionCtrl.class, "client", "scenes", "GuessConsumptionQuestion.fxml");
         var tempLeaderboard = FXML.load(TempLeaderboardCtrl.class, "client", "scenes", "TempLeaderboard.fxml");
         var gameOver = FXML.load(GameOverCtrl.class, "client", "scenes", "GameOver.fxml");
         var multiPlayerMenu = FXML.load(MultiplayerMenuCtrl.class, "client", "scenes", "MultiplayerMenu.fxml");
         var usernamePopUp = FXML.load(UsernamePopUpCtrl.class, "client", "scenes", "UsernamePopUp.fxml");
         var kickedPopUp = FXML.load(KickPopUpCtrl.class, "client", "scenes", "KickedPopUp.fxml");
-
+        var adminHome = FXML.load(AdminHomeCtrl.class, "client", "scenes", "HomeAdmin.fxml");
+        var activityAdmin = FXML.load(ActivityAdminCtrl.class, "client", "scenes", "ActivityAdmin.fxml");
+        var editActivity = FXML.load(EditActivitiesCtrl.class, "client", "scenes", "EditActivity.fxml");
+        var questionAdmin = FXML.load(QuestionAdminCtrl.class, "client", "scenes", "QuestionAdmin.fxml");
+        var editQuestion = FXML.load(EditQuestionsCtrl.class, "client", "scenes", "EditQuestion.fxml");
+        var addActivity = FXML.load(AddActivityCtrl.class, "client", "scenes", "AddActivity.fxml");
+        var jokerPopUp = FXML.load(JokerPopUpCtrl.class, "client", "scenes", "jokerPopup.fxml");
 
         // Stylesheets are loaded using reflection
         home.getValue().getStylesheets()
                 .add(getClass().getResource("scenes/stylesheets/Home.css").toExternalForm());
+        home.getValue().getStylesheets()
+                .add(getClass().getResource("scenes/stylesheets/Button.css").toExternalForm());
         gameModeSelection.getValue().getStylesheets()
                 .add(getClass().getResource("scenes/stylesheets/GameModeSelection.css").toExternalForm());
+        gameModeSelection.getValue().getStylesheets()
+                .add(getClass().getResource("scenes/stylesheets/Button.css").toExternalForm());
         leaderboard.getValue().getStylesheets()
                 .add(getClass().getResource("scenes/stylesheets/Leaderboard.css").toExternalForm());
         multiPlayerMenu.getValue().getStylesheets()
@@ -75,11 +86,21 @@ public class Main extends Application {
                 .add(getClass().getResource("scenes/stylesheets/TempLeaderboard.css").toExternalForm());
         waiting.getValue().getStylesheets()
                 .add(getClass().getResource("scenes/stylesheets/Waiting.css").toExternalForm());
+        waiting.getValue().getStylesheets()
+                .add(getClass().getResource("scenes/stylesheets/Button.css").toExternalForm());
+        kickedPopUp.getValue().getStylesheets().
+                add(getClass().getResource("scenes/stylesheets/Button.css").toExternalForm());
+        usernamePopUp.getValue().getStylesheets().
+                add(getClass().getResource("scenes/stylesheets/Button.css").toExternalForm());
+        jokerPopUp.getValue().getStylesheets()
+                .add(getClass().getResource("scenes/stylesheets/Button.css").toExternalForm());
 
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         mainCtrl.initialize(primaryStage, home, leaderboard, gameModeSelection, multiPlayerMenu,
-                            estimationQuestion, gameMCQ, alternativeQuestion, gameOver,
-                waiting, tempLeaderboard, usernamePopUp, kickedPopUp);
+                            estimationQuestion, gameMCQ, alternativeQuestion, guessMultipleChoiceQuestion,gameOver,
+                waiting, tempLeaderboard, usernamePopUp, kickedPopUp, adminHome,
+                editActivity, activityAdmin, questionAdmin, editQuestion, addActivity, jokerPopUp);
+
     }
 }
