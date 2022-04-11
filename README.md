@@ -7,6 +7,7 @@ Add your own name (do not add the names for others!) to the section below.
 ## Description of project
 
 ## Group members
+Play a quiz game about energy that will hopefully raise your energy awareness!
 
 | Profile Picture                                                                                         | Name                    | Email                           |
 |---------------------------------------------------------------------------------------------------------|-------------------------|---------------------------------|
